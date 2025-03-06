@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Core\microsoft-hackathon-roi-calculator.Core.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.ServiceDefaults\microsoft-hackathon-roi-calculator.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
   </ItemGroup>
 
 </Project>
