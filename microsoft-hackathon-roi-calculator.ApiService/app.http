@@ -1,23 +1,9 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 @host = http://localhost:5508
 
-POST {{host}}/api/roi/analyze
+POST {{host}}/api/roi
 Content-Type: application/json
 {
-  "compliantProcesses": 80,
-  "totalProcesses": 100,
-  "totalHoursWorked": 500,
-  "totalEmployees": 50,
-  "netBenefit": 10000,
-  "costOfInvestment": 5000,
-  "completedTraining": 40,
-  "enrolledTraining": 50,
-  "employeesUsingNewTool": 45,
-  "sumOfAllScores": 400,
-  "totalResponses": 100,
-  "positiveResponses": 85,
-  "preTrainingScore": 60,
-  "postTrainingScore": 80,
-  "totalChangeImplementationTime": 20,
-  "totalPlannedImplementationTime": 25
+  "netBenefit": 5000.00,
+  "costOfInvestment": 1000.00
 }

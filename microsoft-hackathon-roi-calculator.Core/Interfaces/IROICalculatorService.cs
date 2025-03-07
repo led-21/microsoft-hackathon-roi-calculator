@@ -1,16 +1,15 @@
-﻿using microsoft_hackathon_roi_calculator.Core.Models;
+﻿using microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 
-namespace microsoft_hackathon_roi_calculator.Core.Interfaces
+namespace microsoft_hackathon_roi_calculator.Core.Interfaces;
+public interface IROICalculatorService
 {
-    public interface IROICalculatorService
-    {
-        decimal CalculateROI(ROICalculationMetrics metrics);
-        decimal CalculateProcessComplianceRate(ROICalculationMetrics metrics);
-        decimal CalculateTrainingCompletionRate(ROICalculationMetrics metrics);
-        decimal CalculateEmployeeAdoptionRate(ROICalculationMetrics metrics);
-        decimal CalculateAverageScore(ROICalculationMetrics metrics);
-        decimal CalculatePositiveResponseRate(ROICalculationMetrics metrics);
-        int CalculateTrainingScoreImprovement(ROICalculationMetrics metrics);
-        decimal CalculateImplementationEfficiency(ROICalculationMetrics metrics);
-    }
+    decimal CalculateROI(CostBenefitMetrics metrics);
+    decimal CalculateProcessComplianceRate(ProcessMetrics metrics);
+    decimal CalculateTrainingCompletionRate(TrainingMetrics metrics);
+    decimal CalculateEmployeeAdoptionRate(EmployeeMetrics metrics);
+    decimal CalculateAverageScore(ResponseMetrics metrics);
+    decimal CalculatePositiveResponseRate(ResponseMetrics metrics);
+    int CalculateTrainingScoreImprovement(TrainingMetrics metrics);
+    decimal CalculateImplementationEfficiency(ImplementationMetrics metrics);
 }
+

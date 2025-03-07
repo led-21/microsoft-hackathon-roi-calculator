@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Core\microsoft-hackathon-roi-calculator.Core.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.ServiceDefaults\microsoft-hackathon-roi-calculator.ServiceDefaults.csproj" />
   </ItemGroup>
 

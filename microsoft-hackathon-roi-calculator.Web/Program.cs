@@ -1,4 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
 using microsoft_hackathon_roi_calculator.Web.Components;
+using microsoft_hackathon_roi_calculator.Web.Services;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,12 +15,10 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddMudServices();
 
-//builder.Services.AddHttpClient<WeatherApiClient>(client =>
-//    {
-//        // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
-//        // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
-//        client.BaseAddress = new("https+http://apiservice");
-//    });
+builder.Services.AddScoped<ROIApiService>(client => new(new HttpClient()
+{
+    BaseAddress = new Uri("https://localhost:7488")
+}));
 
 var app = builder.Build();
 
