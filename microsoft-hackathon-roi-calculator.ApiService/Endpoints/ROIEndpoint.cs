@@ -1,5 +1,4 @@
-﻿using microsoft_hackathon_roi_calculator.Core.Models;
-using microsoft_hackathon_roi_calculator.Core.Interfaces;
+﻿using microsoft_hackathon_roi_calculator.Core.Interfaces;
 using microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 using Microsoft.AspNetCore.Mvc;
 
