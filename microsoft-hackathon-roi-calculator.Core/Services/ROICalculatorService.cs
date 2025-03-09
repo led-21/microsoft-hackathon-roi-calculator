@@ -1,101 +1,85 @@
 ﻿using microsoft_hackathon_roi_calculator.Core.Interfaces;
-using microsoft_hackathon_roi_calculator.Core.Models.Metrics;
+using microsoft_hackathon_roi_calculator.Core.Models;
 
 namespace microsoft_hackathon_roi_calculator.Core.Services;
 
 public class ROICalculatorService : IROICalculatorService
 {
-    private const decimal PERCENTAGE_MULTIPLIER = 100m;
-    private const decimal DEFAULT_RESULT = 0m;
-
-    private decimal CalculatePercentage(decimal numerator, decimal denominator)
+    public ROICalculatorResult CalculateROI(ProjectInput input)
     {
-        return denominator == 0 ? DEFAULT_RESULT : (numerator / denominator) * PERCENTAGE_MULTIPLIER;
-    }
-
-    private void ValidateMetrics<T>(T metrics)
-    {
-        ArgumentNullException.ThrowIfNull(metrics, nameof(metrics));
-
-        // Validações específicas para cada tipo de métrica
-        switch (metrics)
+        // Validações básicas
+        if (input.ProjectBudget <= 0 || input.NumberOfEmployees <= 0 || input.ProjectDurationMonths <= 0)
         {
-            case CostBenefitMetrics costBenefit:
-                // Não aplicamos validação aqui, pois o cálculo de ROI pode aceitar valores negativos ou quaisquer relações
-                break;
-
-            case ProcessMetrics process:
-                if (process.CompliantProcesses > process.TotalProcesses)
-                    throw new ArgumentException("O número de processos conformes não pode ser maior que o total de processos.", nameof(process));
-                break;
-
-            case TrainingMetrics training:
-                if (training.CompletedTraining > training.EnrolledTraining)
-                    throw new ArgumentException("O número de treinamentos concluídos não pode ser maior que o número de treinamentos inscritos.", nameof(training));
-                break;
-
-            case EmployeeMetrics employee:
-                if (employee.EmployeesUsingNewTool > employee.TotalEmployees)
-                    throw new ArgumentException("O número de funcionários usando a nova ferramenta não pode ser maior que o total de funcionários.", nameof(employee));
-                break;
-
-            case ResponseMetrics response:
-                if (response.PositiveResponses > response.TotalResponses)
-                    throw new ArgumentException("O número de respostas positivas não pode ser maior que o total de respostas.", nameof(response));
-                break;
-
-            case ImplementationMetrics implementation:
-                if (implementation.TotalChangeImplementationTime > implementation.TotalPlannedImplementationTime)
-                    throw new ArgumentException("O tempo total de implementação de mudança não pode ser maior que o tempo planejado.", nameof(implementation));
-                break;
+            throw new ArgumentException("Os valores de entrada devem ser positivos");
         }
+
+        // Cálculo dos custos potenciais de falha
+        double potentialFailureCost = input.ProjectBudget * input.BudgetLossRate * input.FailureRate;
+
+        // Cálculo do custo de desengajamento
+        double budgetPerEmployee = input.ProjectBudget / input.NumberOfEmployees;
+        double disengagementCost = budgetPerEmployee * input.ExpectedDisengagementRate * input.NumberOfEmployees;
+
+        // Cálculo dos benefícios
+        // Ganho de produtividade (aplicado apenas aos funcionários engajados)
+        double engagedEmployees = input.NumberOfEmployees * (1 - input.ExpectedDisengagementRate);
+        double productivitySavings = budgetPerEmployee * input.ExpectedProductivityGain * engagedEmployees;
+
+        // Economia com redução de risco (baseada no custo potencial de falha evitado)
+        double riskReductionSavings = potentialFailureCost * input.ProjectedRiskReduction;
+
+        // Investimento total
+        // Inclui o orçamento do projeto, custos de mitigação de desengajamento e outros custos relacionados
+        double mitigationCost = disengagementCost * 0.5; // Assume 50% do custo de desengajamento como mitigação
+        double totalInvestment = input.ProjectBudget + mitigationCost;
+
+        // Benefícios totais
+        double totalBenefits = productivitySavings + riskReductionSavings;
+
+        // Cálculo do ROI
+        double roiPercentage = ((totalBenefits - totalInvestment) / totalInvestment) * 100;
+
+        // Resultado final
+        return new ROICalculatorResult
+        {
+            TotalInvestment = totalInvestment,
+            TotalBenefits = totalBenefits,
+            RoiPercentage = roiPercentage,
+            PotentialFailureCost = potentialFailureCost,
+            DisengagementCost = disengagementCost,
+            ProductivitySavings = productivitySavings,
+            RiskReductionSavings = riskReductionSavings
+        };
+
     }
 
-    public decimal CalculateROI(CostBenefitMetrics metrics)
+    // Método para gerar relatório detalhado
+    public string GenerateReport(ROICalculatorResult result, ProjectInput input)
     {
-        ValidateMetrics(metrics);
-        return CalculatePercentage(metrics.NetBenefit - metrics.CostOfInvestment, metrics.CostOfInvestment);
+        return $@"
+        Relatório de ROI do Projeto
+        -------------------------
+        Orçamento do Projeto: R$ {input.ProjectBudget:N2}
+        Funcionários Impactados: {input.NumberOfEmployees}
+        Duração: {input.ProjectDurationMonths} meses
+        
+        Análise de Riscos:
+        - Custo Potencial de Falha: R$ {result.PotentialFailureCost:N2}
+        - Custo de Desengajamento: R$ {result.DisengagementCost:N2}
+        
+        Benefícios Projetados:
+        - Economia com Produtividade: R$ {result.ProductivitySavings:N2}
+        - Economia com Redução de Risco: R$ {result.RiskReductionSavings:N2}
+        
+        Resultado Final:
+        - Investimento Total: R$ {result.TotalInvestment:N2}
+        - Benefícios Totais: R$ {result.TotalBenefits:N2}
+        - ROI: {result.RoiPercentage:N2}%
+        
+        Interpretação: {(result.RoiPercentage > 0 ?
+            "O projeto apresenta retorno positivo" :
+            "O projeto apresenta risco de retorno negativo")}
+        ";
     }
 
-    public decimal CalculateProcessComplianceRate(ProcessMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return CalculatePercentage(metrics.CompliantProcesses, metrics.TotalProcesses);
-    }
-
-    public decimal CalculateTrainingCompletionRate(TrainingMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return CalculatePercentage(metrics.CompletedTraining, metrics.EnrolledTraining);
-    }
-
-    public decimal CalculateEmployeeAdoptionRate(EmployeeMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return CalculatePercentage(metrics.EmployeesUsingNewTool, metrics.TotalEmployees);
-    }
-
-    public decimal CalculateAverageScore(ResponseMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return metrics.TotalResponses == 0 ? DEFAULT_RESULT : (decimal)metrics.SumOfAllScores / metrics.TotalResponses;
-    }
-
-    public decimal CalculatePositiveResponseRate(ResponseMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return CalculatePercentage(metrics.PositiveResponses, metrics.TotalResponses);
-    }
-
-    public int CalculateTrainingScoreImprovement(TrainingMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return metrics.PostTrainingScore - metrics.PreTrainingScore;
-    }
-
-    public decimal CalculateImplementationEfficiency(ImplementationMetrics metrics)
-    {
-        ValidateMetrics(metrics);
-        return CalculatePercentage(metrics.TotalChangeImplementationTime, metrics.TotalPlannedImplementationTime);
-    }
 }
