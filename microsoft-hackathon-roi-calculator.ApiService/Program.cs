@@ -2,7 +2,6 @@ using microsoft_hackathon_roi_calculator.Core.Services;
 using microsoft_hackathon_roi_calculator.Core.Interfaces;
 using microsoft_hackathon_roi_calculator.ApiService.Endpoints;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
@@ -26,8 +25,6 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
-
-
 
 if (app.Environment.IsDevelopment())
 {

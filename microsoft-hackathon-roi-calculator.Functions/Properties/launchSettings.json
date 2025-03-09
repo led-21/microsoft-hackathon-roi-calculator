@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "microsoft_hackathon_roi_calculator.Functions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7173",
+      "launchBrowser": false
+    }
+  }
+}

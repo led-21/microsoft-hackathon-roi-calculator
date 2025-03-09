@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />
+<FluentMenuProvider />
+
+<FluentLayout>
+    <FluentHeader>
+        Calculadora ROI
+    </FluentHeader>
+
+    <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
+        <FluentNavMenu Width="250">
+            <FluentNavLink Match="NavLinkMatch.All"
+                           Tooltip="Home"
+                           Href="/"                           
+                           Icon="@(new Icons.Regular.Size20.Home())">Home</FluentNavLink>
+
+            <FluentNavLink Match="NavLinkMatch.Prefix"
+                           Href="/dashboard"
+                           Tooltip="Dashboard"
+                           Icon="@(new Icons.Regular.Size20.Database())">Dashboard</FluentNavLink>
+        </FluentNavMenu>
+
+        <FluentBodyContent>
+            <div class="content">
+                @Body
+            </div>
+        </FluentBodyContent>
+    </FluentStack>
+
+    <FluentFooter>
+        <span>&copy; 2025 - Criado por Adriano e Danillo.</span>
+    </FluentFooter>
+</FluentLayout>
+
+@code
+{
+    private bool _menuOpen = false;
+
+    private void Toggle()
+    {
+        _menuOpen = !_menuOpen;
+    }
+}

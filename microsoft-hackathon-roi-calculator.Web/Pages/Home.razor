@@ -1,0 +1,198 @@
+﻿@page "/"
+@using microsoft_hackathon_roi_calculator.Web.Pages.Charts
+@using microsoft_hackathon_roi_calculator.Web.Pages.Components
+@inject IDialogService DialogService
+
+<h2>Dashboard de Gráficos Radzen</h2>
+
+<FluentGrid Spacing="1" Style="padding: 1rem;">
+    <!-- Area Chart -->
+    <FluentGridItem xs="12" md="6">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton></Skeleton>
+            }
+            else
+            {
+                <h3>Area Chart</h3>
+                <RadzenChart>
+                    <RadzenAreaSeries Data="@chartData"
+                                      CategoryProperty="Month"
+                                      ValueProperty="Sales"
+                                      Title="Vendas"
+                                      LineType="LineType.Solid" />
+                    <RadzenCategoryAxis />
+                    <RadzenValueAxis />
+                </RadzenChart>
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Bar Chart -->
+    <FluentGridItem xs="12" md="6">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton></Skeleton>
+            }
+            else
+            {
+                <h3>Bar Chart</h3>
+                <RadzenChart>
+                    <RadzenBarSeries Data="@chartData"
+                                     CategoryProperty="Month"
+                                     ValueProperty="Sales"
+                                     Title="Vendas" />
+                    <RadzenCategoryAxis />
+                    <RadzenValueAxis />
+                </RadzenChart>
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Column Chart -->
+    <FluentGridItem xs="12" md="6">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton></Skeleton>
+            }
+            else
+            {
+                <h3>Column Chart</h3>
+                <RadzenChart>
+                    <RadzenColumnSeries Data="@chartData"
+                                        CategoryProperty="Month"
+                                        ValueProperty="Sales"
+                                        Title="Vendas" />
+                    <RadzenCategoryAxis />
+                    <RadzenValueAxis />
+                </RadzenChart>
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Donut Chart -->
+    <FluentGridItem xs="12" md="6">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton></Skeleton>
+            }
+            else
+            {
+                <h3>Donut Chart</h3>
+                <RadzenChart>
+                    <RadzenDonutSeries Data="@chartData"
+                                       CategoryProperty="Month"
+                                       ValueProperty="Sales"
+                                       Title="Vendas" />
+                </RadzenChart>
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Line Chart -->
+    <FluentGridItem xs="12" md="6">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton></Skeleton>
+            }
+            else
+            {
+                <h3>Line Chart</h3>
+                <RadzenChart>
+                    <RadzenLineSeries Data="@chartData"
+                                      CategoryProperty="Month"
+                                      ValueProperty="Sales"
+                                      Title="Vendas"
+                                      LineType="LineType.Solid" />
+                    <RadzenCategoryAxis />
+                    <RadzenValueAxis />
+                </RadzenChart>
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Pie Chart -->
+    <FluentGridItem xs="12" md="6">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton />
+            }
+            else
+            {
+                <h3>Pie Chart</h3>
+                <RadzenChart>
+                    <RadzenPieSeries Data="@chartData"
+                                     CategoryProperty="Month"
+                                     ValueProperty="Sales"
+                                     Title="Vendas" />
+                </RadzenChart>
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Area Chart -->
+    <FluentGridItem xs="12" md="12">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton />
+            }
+            else
+            {
+                <Area />
+            }
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Series Chart -->
+    <FluentGridItem xs="12" md="12">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton />
+            }
+            else
+            {
+                <h3>Pie Chart</h3>
+                <Series />
+            }
+        </FluentCard>
+    </FluentGridItem>
+</FluentGrid>
+
+@code {
+
+    bool isLoading = true;
+    static bool firstTime = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (firstTime)
+            await DialogSplashScreen.ShowSplashScreen(DialogService);
+        firstTime = false;
+
+        await Task.Delay(1000);
+        isLoading = false;
+    }
+
+    public class ChartData
+    {
+        public string? Month { get; set; }
+        public double Sales { get; set; }
+    }
+
+    List<ChartData> chartData = new()
+    {
+        new ChartData { Month = "Jan", Sales = 10 },
+        new ChartData { Month = "Feb", Sales = 20 },
+        new ChartData { Month = "Mar", Sales = 15 },
+        new ChartData { Month = "Apr", Sales = 25 },
+        new ChartData { Month = "May", Sales = 30 }
+    };
+}

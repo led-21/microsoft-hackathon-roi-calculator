@@ -8,11 +8,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-cal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.ApiService", "microsoft-hackathon-roi-calculator.ApiService\microsoft-hackathon-roi-calculator.ApiService.csproj", "{A1184622-9773-F88B-35B7-A79DF0CD0AC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Web", "microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj", "{5147521F-914C-155A-79E7-0F421348BF01}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Tests", "microsoft-hackathon-roi-calculator.Tests\microsoft-hackathon-roi-calculator.Tests.csproj", "{12282E79-6E19-D8B3-CFBB-A88A957BEB7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Core", "microsoft-hackathon-roi-calculator.Core\microsoft-hackathon-roi-calculator.Core.csproj", "{7387FB13-BF11-40F7-960C-2F01621F2FD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Web", "microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj", "{EA403AEA-91AD-4211-AD24-1850A474C2EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Mobile", "microsoft-hackathon-roi-calculator.Mobile\microsoft-hackathon-roi-calculator.Mobile.csproj", "{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Functions", "microsoft-hackathon-roi-calculator.Functions\microsoft-hackathon-roi-calculator.Functions.csproj", "{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +36,6 @@ Global
 		{A1184622-9773-F88B-35B7-A79DF0CD0AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1184622-9773-F88B-35B7-A79DF0CD0AC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1184622-9773-F88B-35B7-A79DF0CD0AC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5147521F-914C-155A-79E7-0F421348BF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5147521F-914C-155A-79E7-0F421348BF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5147521F-914C-155A-79E7-0F421348BF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5147521F-914C-155A-79E7-0F421348BF01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{12282E79-6E19-D8B3-CFBB-A88A957BEB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{12282E79-6E19-D8B3-CFBB-A88A957BEB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12282E79-6E19-D8B3-CFBB-A88A957BEB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,6 +44,18 @@ Global
 		{7387FB13-BF11-40F7-960C-2F01621F2FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7387FB13-BF11-40F7-960C-2F01621F2FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7387FB13-BF11-40F7-960C-2F01621F2FD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,45 +1,17 @@
-using Microsoft.Extensions.DependencyInjection;
-using microsoft_hackathon_roi_calculator.Web.Components;
-using microsoft_hackathon_roi_calculator.Web.Services;
-using MudBlazor.Services;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.FluentUI.AspNetCore.Components;
+using microsoft_hackathon_roi_calculator.Web;
+using Radzen;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// Add service defaults & Aspire client integrations.
-builder.AddServiceDefaults();
-builder.AddRedisOutputCache("cache");
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddRadzenComponents();
+builder.Services.AddFluentUIComponents();
 
-builder.Services.AddMudServices();
 
-builder.Services.AddScoped<ROIApiService>(client => new(new HttpClient()
-{
-    BaseAddress = new Uri("https://localhost:7488")
-}));
-
-var app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAntiforgery();
-
-app.UseOutputCache();
-
-app.MapStaticAssets();
-
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
-
-app.MapDefaultEndpoints();
-
-app.Run();
+await builder.Build().RunAsync();

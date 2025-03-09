@@ -1,0 +1,73 @@
+﻿@page "/dashboard"
+@using Microsoft.FluentUI.AspNetCore.Components
+
+<h2>Dashboard</h2>
+
+<FluentGrid Spacing="1" Style="padding: 1rem;">
+    <!-- Seção de Estatísticas -->
+    <FluentGridItem xs="12" sm="6" md="4" lg="3"
+                    Style="display: flex; flex-direction: column; gap: 20px;">
+        @for (int i = 0; i < 3; i++)
+        {
+            <FluentCard>
+                <FluentSkeleton Shape="SkeletonShape.Rect"
+                                Width="180px"
+                                Height="20px"
+                                Style="margin-bottom: 10px" />
+                <FluentSkeleton Shape="SkeletonShape.Rect"
+                                Width="120px"
+                                Height="30px" />
+            </FluentCard>
+        }
+    </FluentGridItem>
+
+    <!-- Gráfico -->
+    <FluentGridItem xs="12" md="8" lg="9">
+        <FluentCard>
+            <h3>
+                <FluentSkeleton Shape="SkeletonShape.Rect"
+                                Width="150px"
+                                Height="20px" />
+            </h3>
+            <FluentSkeleton Shape="SkeletonShape.Rect"
+                            Width="100%"
+                            Height="200px" />
+        </FluentCard>
+    </FluentGridItem>
+
+    <!-- Tabela -->
+    <FluentGridItem xs="12">
+        <FluentCard>
+            <h3>
+                <FluentSkeleton Shape="SkeletonShape.Rect"
+                                Width="120px"
+                                Height="20px" />
+            </h3>
+            <FluentGrid Spacing="5">
+                @for (int i = 0; i < 5; i++)
+                {
+                    <FluentGridItem xs="12">
+                        <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal"
+                                     HorizontalGap="10">
+                            <FluentSkeleton Shape="SkeletonShape.Circle"
+                                            Width="30px"
+                                            Height="30px" />
+                            <FluentSkeleton Shape="SkeletonShape.Rect"
+                                            Width="200px"
+                                            Height="20px" />
+                            <FluentSkeleton Shape="SkeletonShape.Rect"
+                                            Width="100px"
+                                            Height="20px" />
+                        </FluentStack>
+                    </FluentGridItem>
+                }
+            </FluentGrid>
+        </FluentCard>
+    </FluentGridItem>
+</FluentGrid>
+
+@code {
+    // Simulação de carregamento (opcional)
+    private bool isLoading = true;
+
+}

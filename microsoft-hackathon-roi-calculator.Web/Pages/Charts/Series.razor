@@ -1,0 +1,30 @@
+﻿<div class="rz-p-0 rz-p-md-12">
+    <RadzenChart>
+        <RadzenColumnSeries Data="@revenue1" CategoryProperty="Quarter" ValueProperty="Revenue" />
+        <RadzenColumnSeries Data="@revenue2" CategoryProperty="Quarter" ValueProperty="Revenue" />
+    </RadzenChart>
+</div>
+
+@code {
+    class DataItem
+    {
+        public string? Quarter { get; set; }
+        public double Revenue { get; set; }
+    }
+
+    DataItem[] revenue1 = new DataItem[]
+    {
+      new DataItem { Quarter = "Q1", Revenue = 234000 },
+      new DataItem { Quarter = "Q2", Revenue = 284000 },
+      new DataItem { Quarter = "Q3", Revenue = 274000 },
+      new DataItem { Quarter = "Q4", Revenue = 294000 }
+    };
+
+    DataItem[] revenue2 = new DataItem[]
+    {
+      new DataItem { Quarter = "Q1", Revenue = 324000 },
+      new DataItem { Quarter = "Q2", Revenue = 224000 },
+      new DataItem { Quarter = "Q3", Revenue = 444000 },
+      new DataItem { Quarter = "Q4", Revenue = 564000 }
+    };
+}
