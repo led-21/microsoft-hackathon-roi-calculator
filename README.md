@@ -13,8 +13,7 @@ Considerar:
 - Riscos financeiros de falha do projeto
 - Desengajamento dos funcionários
 - Economias potenciais de produtividade aumentada
-- Redução de risco
-- Entrega bem-sucedida
+- Redução de risco do projeto
 
 ## Fórmula do ROI (Retorno sobre Investimento)
 
