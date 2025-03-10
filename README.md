@@ -32,7 +32,7 @@ $$\text{ROI (\%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento T
 
 #### Custo Médio Mensal por Funcionário
 
-$$\text{averageEmployeeCostPerMonth} = \frac{\text{input.ProjectBudget}}{\text{input.NumberOfEmployees} \times \text{input.ProjectDurationMonths}}$$
+$$\text{AverageEmployeeCostPerMonth} = \frac{\text{ProjectBudget}}{\text{NumberOfEmployees} \times \text{ProjectDurationMonths}}$$
 
 #### 1. Economia por Produtividade Aumentada
 
