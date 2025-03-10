@@ -32,38 +32,26 @@ $$\text{ROI (\%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento T
 
 #### Custo Médio Mensal por Funcionário
 
-$$\text{AverageEmployeeCostPerMonth} = \frac{\text{ProjectBudget}}{\text{NumberOfEmployees} \times \text{ProjectDurationMonths}}$$
+$$\text{Custo Médio por Funcionário} = \frac{\text{Orçamento do Projeto}}{\text{Número de Funcionários} \times \text{Duração do Projeto em Meses}}$$
 
 #### 1. Economia por Produtividade Aumentada
 
-##### Ganho Bruto:
+$$\text{Ganho de Produtividade} = (\text{Custo Médio Mensal por Funcionário} \times (\text{Ganho de Produtividade Esperado} - 1)) \times \text{Número de Funcionários} \times \text{Duração do Projeto em Meses}$$
 
-$$\text{ProductivityGainValue} = (\text{AverageEmployeeCostPerMonth} \times (\text{ExpectedProductivityGain} - 1)) \times \text{NumberOfEmployees} \times \text{ProjectDurationMonths}$$
-
-##### Ganho Ajustado:
-
-$$\text{AdjustedProductivityGain} = \text{ProductivityGainValue} \times (1 - \text{ExpectedDisengagementRate})$$
+$$\text{Ganho de Produtividade Ajustado} = \text{Ganho de Produtividade} \times (1 - \text{Taxa de Desenganjamento Esperada})$$
 
 #### 2. Redução de Risco
 
-##### Valor Bruto:
+$$\text{Redução de Risco} = (\text{Orçamento do Projeto} \times \text{Taxa de Perda do Orçamento em caso de falha}) \times \text{Redução de Risco Projetada}$$
 
-$$\text{RiskReductionValue} = (\text{ProjectBudget} \times \text{BudgetLossRate}) \times \text{ProjectedRiskReduction}$$
-
-#### Valor Ajustado:
-
-$$\text{AdjustedRiskReduction} = \text{RiskReductionValue} \times (1 - \text{FailureRate})$$
+$$\text{Redução de Risco Ajustado} = \text{Redução de Risco} \times (1 - \text{Taxa de Falha})$$
 
 #### 3. Benefício de Sucesso
 
-##### Valor Bruto:
+$$\text{Benefícios de Sucesso} = \text{Orçamento do Projeto} \times \text{SuccessBenefit}$$
 
-$$\text{SuccessBenefitValue} = \text{ProjectBudget} \times \text{SuccessBenefit}$$
-
-##### Valor Ajustado:
-
-$$\text{AdjustedSuccessBenefit} = \text{SuccessBenefitValue} \times (1 - \text{FailureRate})$$
+$$\text{Benefícios de Sucesso Ajustado} = \text{Benefícios de Sucesso} \times (1 - \text{Taxa de Falha})$$
 
 #### Soma dos Benefícios Ajustados
 
-$$\text{TotalBenefits} = \text{AdjustedProductivityGain} + \text{AdjustedRiskReduction} + \text{AdjustedSuccessBenefit}$$
+$$\text{Benefícios Totais} = \text{Ganho de Produtividade Ajustado} + \text{Redução de Risco Ajustado} + \text{AdjustedSuccessBenefit}$$
