@@ -30,11 +30,11 @@ $$\text{ROI (\%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento T
 
 ### Componentes dos Cálculos
 
-#### 1. Custo Médio Mensal por Funcionário
+#### Custo Médio Mensal por Funcionário
 
-$$\text{AverageEmployeeCostPerMonth} = \text{ProjectBudget} \times \text{NumberOfEmployees} \times \text{ProjectDurationMonths}$$
+$$\text{averageEmployeeCostPerMonth} = \frac{\text{input.ProjectBudget}}{\text{input.NumberOfEmployees} \times \text{input.ProjectDurationMonths}}$$
 
-#### 2. Economia por Produtividade Aumentada
+#### 1. Economia por Produtividade Aumentada
 
 ##### Ganho Bruto:
 
@@ -44,7 +44,7 @@ $$\text{ProductivityGainValue} = (\text{AverageEmployeeCostPerMonth} \times (\te
 
 $$\text{AdjustedProductivityGain} = \text{ProductivityGainValue} \times (1 - \text{ExpectedDisengagementRate})$$
 
-#### 3. Redução de Risco
+#### 2. Redução de Risco
 
 ##### Valor Bruto:
 
@@ -54,7 +54,7 @@ $$\text{RiskReductionValue} = (\text{ProjectBudget} \times \text{BudgetLossRate}
 
 $$\text{AdjustedRiskReduction} = \text{RiskReductionValue} \times (1 - \text{FailureRate})$$
 
-#### 4. Benefício de Sucesso
+#### 3. Benefício de Sucesso
 
 ##### Valor Bruto:
 
@@ -64,6 +64,6 @@ $$\text{SuccessBenefitValue} = \text{ProjectBudget} \times \text{SuccessBenefit}
 
 $$\text{AdjustedSuccessBenefit} = \text{SuccessBenefitValue} \times (1 - \text{FailureRate})$$
 
-#### 5. Soma dos Benefícios Ajustados
+#### Soma dos Benefícios Ajustados
 
 $$\text{TotalBenefits} = \text{AdjustedProductivityGain} + \text{AdjustedRiskReduction} + \text{AdjustedSuccessBenefit}$$
