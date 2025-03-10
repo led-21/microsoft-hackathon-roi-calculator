@@ -30,23 +30,23 @@ $$\text{ROI (\%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento T
 
 ### Componentes dos Cálculos
 
-#### Custo Médio Mensal por Funcionário
+#### 1. Custo Médio Mensal por Funcionário
 
 $$\text{Custo Médio por Funcionário} = \frac{\text{Orçamento do Projeto}}{\text{Número de Funcionários} \times \text{Duração do Projeto em Meses}}$$
 
-#### 1. Economia por Produtividade Aumentada
+#### 2. Economia por Produtividade Aumentada
 
 $$\text{Ganho de Produtividade} = (\text{Custo Médio Mensal por Funcionário} \times (\text{Ganho de Produtividade Esperado} - 1)) \times \text{Número de Funcionários} \times \text{Duração do Projeto em Meses}$$
 
 $$\text{Ganho de Produtividade Ajustado} = \text{Ganho de Produtividade} \times (1 - \text{Taxa de Desenganjamento Esperada})$$
 
-#### 2. Redução de Risco
+#### 3. Redução de Risco
 
 $$\text{Redução de Risco} = (\text{Orçamento do Projeto} \times \text{Taxa de Perda do Orçamento em caso de falha}) \times \text{Redução de Risco Projetada}$$
 
 $$\text{Redução de Risco Ajustado} = \text{Redução de Risco} \times (1 - \text{Taxa de Falha})$$
 
-#### 3. Benefício de Sucesso
+#### 4. Benefício de Sucesso
 
 $$\text{Benefícios de Sucesso} = \text{Orçamento do Projeto} \times \text{SuccessBenefit}$$
 
