@@ -16,5 +16,6 @@ namespace microsoft_hackathon_roi_calculator.Core.Models
         public double ExpectedDisengagementRate { get; set; } = 0.15; // Taxa de desengajamento
         public double ExpectedProductivityGain { get; set; } = 1.5; // Ganho de produtividade esperado
         public double ProjectedRiskReduction { get; set; } = 0.7; // Redução de risco projetada
+        public double SuccessBenefit { get; set; } = 2; // Benefício de sucesso
     }
 }
