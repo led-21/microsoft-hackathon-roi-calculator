@@ -17,62 +17,53 @@ Considerar:
 - Entrega bem-sucedida do projeto
 
 ## Retorno sobre Investimento (ROI)
-O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento. 
 
-### Fórmula do ROI (Retorno sobre Investimento)
+O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.
 
-**ROI (%) = [(Benefícios Totais - Investimento Total) / Investimento Total] × 100**
+### Fórmula do ROI
 
-### Onde:
+$$\text{ROI (\%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento Total}}{\text{Investimento Total}}\right] \times 100$$
+
+#### Onde:
 - **Benefícios Totais**: Soma das economias projetadas (aumento de produtividade, redução de riscos, sucesso do projeto).
 - **Investimento Total**: Custo total do projeto, incluindo orçamento, mitigação de riscos e outros gastos relacionados.
 
 ### Componentes dos Cálculos
 
 #### 1. Custo Médio Mensal por Funcionário
-**Custo Médio Mensal por Funcionário**  
-`AverageEmployeeCostPerMonth = ProjectBudgetNumberOfEmployees × ProjectDurationMonths`
+
+$$\text{AverageEmployeeCostPerMonth} = \text{ProjectBudget} \times \text{NumberOfEmployees} \times \text{ProjectDurationMonths}$$
 
 #### 2. Economia por Produtividade Aumentada
-- **Ganho Bruto:**  
-`ProductivityGainValue = (AverageEmployeeCostPerMonth × (ExpectedProductivityGain − 1)) × NumberOfEmployees × ProjectDurationMonths`
 
-- **Ganho Ajustado:**  
-`AdjustedProductivityGain = ProductivityGainValue × (1 − ExpectedDisengagementRate)`
+##### Ganho Bruto:
+
+$$\text{ProductivityGainValue} = (\text{AverageEmployeeCostPerMonth} \times (\text{ExpectedProductivityGain} - 1)) \times \text{NumberOfEmployees} \times \text{ProjectDurationMonths}$$
+
+##### Ganho Ajustado:
+
+$$\text{AdjustedProductivityGain} = \text{ProductivityGainValue} \times (1 - \text{ExpectedDisengagementRate})$$
 
 #### 3. Redução de Risco
-- **Valor Bruto:**  
-`RiskReductionValue = (ProjectBudget × BudgetLossRate) × ProjectedRiskReduction`
 
-- **Valor Ajustado:**  
-`AdjustedRiskReduction = RiskReductionValue × (1 − FailureRate)`
+##### Valor Bruto:
+
+$$\text{RiskReductionValue} = (\text{ProjectBudget} \times \text{BudgetLossRate}) \times \text{ProjectedRiskReduction}$$
+
+#### Valor Ajustado:
+
+$$\text{AdjustedRiskReduction} = \text{RiskReductionValue} \times (1 - \text{FailureRate})$$
 
 #### 4. Benefício de Sucesso
-- **Valor Bruto:**  
-`SuccessBenefitValue = ProjectBudget × SuccessBenefit`
 
-- **Valor Ajustado:**  
-`AdjustedSuccessBenefit = SuccessBenefitValue × (1 − FailureRate)`
+##### Valor Bruto:
+
+$$\text{SuccessBenefitValue} = \text{ProjectBudget} \times \text{SuccessBenefit}$$
+
+##### Valor Ajustado:
+
+$$\text{AdjustedSuccessBenefit} = \text{SuccessBenefitValue} \times (1 - \text{FailureRate})$$
 
 #### 5. Soma dos Benefícios Ajustados
-`TotalBenefits = AdjustedProductivityGain + AdjustedRiskReduction + AdjustedSuccessBenefit`
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$$\text{TotalBenefits} = \text{AdjustedProductivityGain} + \text{AdjustedRiskReduction} + \text{AdjustedSuccessBenefit}$$
