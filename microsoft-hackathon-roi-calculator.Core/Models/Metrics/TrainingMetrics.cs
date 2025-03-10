@@ -5,21 +5,25 @@
 /// </summary>
 public class TrainingMetrics
 {
+    private int _completedTraining;
     public int EnrolledTraining { get; set; }
     public int CompletedTraining
     {
-        get => CompletedTraining; set
+        get => _completedTraining; 
+        set
         {
             if (value > EnrolledTraining)
-                throw new ArgumentException("Completed training cannot be greater than enrolled training");
+                throw new ArgumentException("O treinamento concluído não pode ser maior que o número de inscrição.");
+
+            _completedTraining = value;
         }
     }
     public int PreTrainingScore { get; set; }
     public int PostTrainingScore { get; set; }
 
     // Employee training completion rate (%) = (Number of employees who completed training ÷ total number of employees enrolled) × 100
-    public double EmployeeTrainingCompletionRate => (double)CompletedTraining / EnrolledTraining * 100;
+    public double EmployeeTrainingCompletionRate { get => (double)CompletedTraining / EnrolledTraining * 100; }
 
     // Training effectiveness (%) = [(Post-training score − pre-training score) ÷ pre-training score] × 100
-    public double TrainingEffectiveness => ((double)(PostTrainingScore - PreTrainingScore) / PreTrainingScore) * 100;
+    public double TrainingEffectiveness { get => ((double)(PostTrainingScore - PreTrainingScore) / PreTrainingScore) * 100; }
 }

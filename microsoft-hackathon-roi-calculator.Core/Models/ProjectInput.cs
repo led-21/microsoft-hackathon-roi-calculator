@@ -13,9 +13,9 @@ namespace microsoft_hackathon_roi_calculator.Core.Models
         public int ProjectDurationMonths { get; set; } // Duração do projeto em meses
         public double BudgetLossRate { get; set; } = 0.5; // Percentual do orçamento que seria perdido caso o projeto falhe
         public double FailureRate { get; set; } = 0.7; // Taxa de falha do projeto
-        public double ExpectedDisengagementRate { get; set; } = 0.15; // Taxa de desengajamento
+        public double ExpectedDisengagementRate { get; set; } = 0.25; // Taxa de desengajamento
         public double ExpectedProductivityGain { get; set; } = 1.5; // Ganho de produtividade esperado
-        public double ProjectedRiskReduction { get; set; } = 0.7; // Redução de risco projetada
+        public double ProjectedRiskReduction { get; set; } = 0.5; // Redução de risco projetada
         public double SuccessBenefit { get; set; } = 2; // Benefício de sucesso
     }
 }

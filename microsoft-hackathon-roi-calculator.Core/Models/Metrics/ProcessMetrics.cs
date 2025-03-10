@@ -5,17 +5,20 @@
 /// </summary>
 public class ProcessMetrics
 {
+    private int _compliantProcesses;
     public int TotalProcesses { get; set; }
     public int CompliantProcesses
     {
-        get => CompliantProcesses;
+        get => _compliantProcesses;
         set
         {
             if (value > TotalProcesses)
-                throw new ArgumentException("Compliant processes cannot be greater than total processes");
+                throw new ArgumentException("Os processos em conformidade não podem ser maiores que os processos totais.");
+
+            _compliantProcesses = value;
         }
     }
     // Process compliance rating (%) = (Number of compliant processes ÷ total number of processes) × 100
-    public double GetComplianceRate() => (double) CompliantProcesses / TotalProcesses * 100;
+    public double ComplianceRate { get => (double)CompliantProcesses / TotalProcesses * 100; }
 }
 

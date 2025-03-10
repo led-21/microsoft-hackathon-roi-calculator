@@ -9,5 +9,5 @@ public class ImplementationMetrics
     public int TotalPlannedImplementationTime { get; set; }
 
     // Speed of change (%) = (Total change implementation time ÷ total planned implementation time​) × 100
-    public double GetSpeedOfChange() => (double)TotalChangeImplementationTime / TotalPlannedImplementationTime * 100;
+    public double SpeedOfChange { get => (double)TotalChangeImplementationTime / TotalPlannedImplementationTime * 100; }
 }

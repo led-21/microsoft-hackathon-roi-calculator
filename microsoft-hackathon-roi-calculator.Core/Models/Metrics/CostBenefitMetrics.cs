@@ -9,5 +9,5 @@ public class CostBenefitMetrics
     public decimal CostOfInvestment { get; set; }
 
     // ROI (%) = (Net benefit* ÷ cost of investment) × 100
-    public decimal GetReturnOnInvestment() => NetBenefit / CostOfInvestment * 100;
+    public decimal ReturnOnInvestment { get => NetBenefit / CostOfInvestment * 100; }
 }
