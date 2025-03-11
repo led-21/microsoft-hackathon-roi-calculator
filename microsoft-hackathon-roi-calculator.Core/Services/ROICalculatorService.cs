@@ -5,7 +5,7 @@ namespace microsoft_hackathon_roi_calculator.Core.Services;
 
 public class ROICalculatorService : IROICalculatorService
 {
-    public ROICalculatorResult CalculateROI(ProjectInput input)
+    public ROICalculationResults CalculateROI(ROIInputParameters input)
     {
         // Validação básica dos parâmetros
         if (input.ProjectBudget <= 0 || input.NumberOfEmployees <= 0 || input.ProjectDurationMonths <= 0)
@@ -42,7 +42,7 @@ public class ROICalculatorService : IROICalculatorService
         double roiPercentage = ((totalBenefits - totalInvestment) / totalInvestment) * 100;
 
         // Resultado final
-        return new ROICalculatorResult
+        return new ROICalculationResults
         {
             TotalInvestment = totalInvestment,
             TotalBenefits = totalBenefits,
@@ -56,7 +56,7 @@ public class ROICalculatorService : IROICalculatorService
         };
     }
 
-    private double CalculateProductivityGain(ProjectInput input, double averageEmployeeCostPerMonth)
+    private double CalculateProductivityGain(ROIInputParameters input, double averageEmployeeCostPerMonth)
     {
         // Calcula o ganho de produtividade com base no custo dos funcionários, ganho esperado e duração
         double monthlyProductivityGainPerEmployee = averageEmployeeCostPerMonth * (input.ExpectedProductivityGain - 1); // Ganho acima do baseline (1)
@@ -64,7 +64,7 @@ public class ROICalculatorService : IROICalculatorService
         return totalProductivityGain;
     }
 
-    private double CalculateRiskReduction(ProjectInput input)
+    private double CalculateRiskReduction(ROIInputParameters input)
     {
         // Calcula o valor do risco evitado (percentual do orçamento que seria perdido)
         double potentialLoss = input.ProjectBudget * input.BudgetLossRate;
@@ -72,7 +72,7 @@ public class ROICalculatorService : IROICalculatorService
         return riskReduction;
     }
 
-    private double CalculateSuccessBenefit(ProjectInput input)
+    private double CalculateSuccessBenefit(ROIInputParameters input)
     {
         // Calcula o benefício do sucesso como um múltiplo do orçamento
         double successBenefit = input.ProjectBudget * input.SuccessBenefit;
@@ -80,7 +80,7 @@ public class ROICalculatorService : IROICalculatorService
     }
 
     // Método para gerar relatório detalhado
-    public string GenerateReport(ROICalculatorResult result, ProjectInput input)
+    public string GenerateReport(ROICalculationResults result, ROIInputParameters input)
     {
         return $@"
              Relatório de ROI do Projeto
@@ -112,6 +112,7 @@ public class ROICalculatorService : IROICalculatorService
              Resultado Final:
              - Investimento Total: R$ {input.ProjectBudget:N2}
              - Retorno sobre Investimento (ROI): {result.RoiPercentage:F2}%
+             - Viabilidade: {(result.RoiPercentage > 0 ? "Positiva" : "Negativa")}
              -------------------------
              ";
     }

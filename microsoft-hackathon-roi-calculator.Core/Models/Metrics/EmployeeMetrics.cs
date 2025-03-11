@@ -1,10 +1,14 @@
-﻿namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 
 /// <summary>
 /// Métricas relacionadas a funcionários
 /// </summary>
 public class EmployeeMetrics
 {
+    [Key]
+    public int Id { get; set; }
     private int _employeesUsingNewTool;
     public int TotalEmployees { get; set; }
     public int TotalHoursWorkedWeekly { get; set; }

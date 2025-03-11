@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.1.0" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,11 +13,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.ApiService\microsoft-hackathon-roi-calculator.ApiService.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.MigrationService\microsoft-hackathon-roi-calculator.MigrationService.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.Azure.Sql" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.Redis" Version="9.0.0" />
   </ItemGroup>
 

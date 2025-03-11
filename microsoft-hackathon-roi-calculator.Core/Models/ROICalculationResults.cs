@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace microsoft_hackathon_roi_calculator.Core.Models
 {
-    public class ROICalculatorResult
+    public class ROICalculationResults
     {
         public double TotalInvestment { get; set; }
         public double TotalBenefits { get; set; }

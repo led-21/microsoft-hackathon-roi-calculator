@@ -3,7 +3,7 @@
 namespace microsoft_hackathon_roi_calculator.Core.Interfaces;
 public interface IROICalculatorService
 {
-    public ROICalculatorResult CalculateROI(ProjectInput input);
-    public string GenerateReport(ROICalculatorResult result, ProjectInput input);
+    public ROICalculationResults CalculateROI(ROIInputParameters input);
+    public string GenerateReport(ROICalculationResults result, ROIInputParameters input);
 }
 

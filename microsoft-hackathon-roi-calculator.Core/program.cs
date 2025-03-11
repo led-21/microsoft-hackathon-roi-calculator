@@ -5,7 +5,7 @@ using microsoft_hackathon_roi_calculator.Core.Services;
 
 var calculator = new ROICalculatorService();
 
-var input = new ProjectInput
+var input = new ROIInputParameters
 {
     ProjectBudget = 1000000, // R$ 1 milhão
     NumberOfEmployees = 50,

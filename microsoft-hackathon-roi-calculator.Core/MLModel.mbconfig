@@ -14,6 +14,11 @@
     "TrainingTime": 0,
     "UseCrossValidation": false,
     "Horizon": 10,
-    "UseDefaultIndex": false
+    "UseDefaultIndex": false,
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "CrossValidationValidationOption",
+      "NumberOfFolds": 5
+    }
   }
 }

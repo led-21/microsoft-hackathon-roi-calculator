@@ -4,6 +4,8 @@
 POST {{host}}/api/roi
 Content-Type: application/json
 {
-  "netBenefit": 5000.00,
-  "costOfInvestment": 1000.00
+  "projectName": "TesteProje",
+  "projectBudget": 1000,
+  "numberOfEmployees": 1,
+  "projectDurationMonths": 1
 }

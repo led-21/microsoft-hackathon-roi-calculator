@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace microsoft_hackathon_roi_calculator.Core.Models
 {
-    public class ProjectInput
+    public class ROIInputParameters
     {
         public double ProjectBudget { get; set; } // Orçamento do projeto em reais
         public int NumberOfEmployees { get; set; } // Número de funcionários impactados

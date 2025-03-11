@@ -1,6 +1,7 @@
 using microsoft_hackathon_roi_calculator.Core.Services;
 using microsoft_hackathon_roi_calculator.Core.Interfaces;
 using microsoft_hackathon_roi_calculator.ApiService.Endpoints;
+using microsoft_hackathon_roi_calculator.ApiService.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddProblemDetails();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.AddSqlServerDbContext<CalculatorDbContext>("TesteDB");
 
 // Add Swagger services
 builder.Services.AddSwaggerGen(c =>

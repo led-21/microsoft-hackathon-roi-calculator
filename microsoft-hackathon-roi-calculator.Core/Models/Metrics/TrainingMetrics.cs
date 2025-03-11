@@ -1,4 +1,6 @@
-﻿namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 
 /// <summary>
 /// Métricas relacionadas a treinamento
@@ -6,6 +8,9 @@
 public class TrainingMetrics
 {
     private int _completedTraining;
+
+    [Key]
+    public int Id { get; set; }
     public int EnrolledTraining { get; set; }
     public int CompletedTraining
     {

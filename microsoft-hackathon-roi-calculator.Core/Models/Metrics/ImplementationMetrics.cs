@@ -1,10 +1,14 @@
-﻿namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 
 /// <summary>
 /// Métricas relacionadas a implementação
 /// </summary>
 public class ImplementationMetrics
 {
+    [Key]
+    public int Id { get; set; }
     public int TotalChangeImplementationTime { get; set; }
     public int TotalPlannedImplementationTime { get; set; }
 

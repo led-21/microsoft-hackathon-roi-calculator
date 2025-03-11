@@ -1,10 +1,14 @@
-﻿namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 
 /// <summary>
 /// Métricas relacionadas a processos
 /// </summary>
 public class ProcessMetrics
 {
+    [Key]
+    public int Id { get; set; }
     private int _compliantProcesses;
     public int TotalProcesses { get; set; }
     public int CompliantProcesses

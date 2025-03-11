@@ -6,6 +6,21 @@
 <h2>Dashboard de Gráficos Radzen</h2>
 
 <FluentGrid Spacing="1" Style="padding: 1rem;">
+
+    <!-- Area Chart -->
+    <FluentGridItem xs="12" md="12">
+        <FluentCard>
+            @if (isLoading)
+            {
+                <Skeleton />
+            }
+            else
+            {
+                <Area />
+            }
+        </FluentCard>
+    </FluentGridItem>
+    
     <!-- Area Chart -->
     <FluentGridItem xs="12" md="6">
         <FluentCard>
@@ -132,20 +147,6 @@
                                      ValueProperty="Sales"
                                      Title="Vendas" />
                 </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
-
-    <!-- Area Chart -->
-    <FluentGridItem xs="12" md="12">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton />
-            }
-            else
-            {
-                <Area />
             }
         </FluentCard>
     </FluentGridItem>
