@@ -71,7 +71,7 @@ $$
 - **Orçamento**: Valor total do projeto em reais.
 - **Taxa de Perda**: Percentual do orçamento perdido em caso de falha (ex.: 0,3 para 30%).
 - **Redução Projetada**: Percentual de risco mitigado (ex.: 0,5 para 50%).
-- **Taxa de Falha**: Probabilidade de falha do projeto (ex.: 0,2 para 20%).
+- **Taxa de Falha**: Probabilidade de falha do projeto (ex.: 0,7 para 70%).
 
 #### 4. Benefício de Sucesso
 $$
@@ -85,7 +85,7 @@ $$
 ##### Onde:
 - **Orçamento**: Valor total do projeto em reais.
 - **Fator de Sucesso**: Multiplicador de benefícios adicionais (ex.: 0,4 para 40%).
-- **Taxa de Falha**: Probabilidade de falha do projeto (ex.: 0,2 para 20%).
+- **Taxa de Falha**: Probabilidade de falha do projeto (ex.: 0,7 para 70%).
 
 #### Soma dos Benefícios Ajustados
 $$
