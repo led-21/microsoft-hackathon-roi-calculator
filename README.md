@@ -34,27 +34,65 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 ### Componentes dos Cálculos
 
 #### 1. Custo Médio Mensal por Funcionário
+$$
+\text{Custo Médio} = \frac{\text{Orçamento}}{\text{Número de Funcionários} \times \text{Duração (meses)}}
+$$
 
-$$\text{Custo Médio por Funcionário} = \frac{\text{Orçamento do Projeto}}{\text{Número de Funcionários} \times \text{Duração do Projeto em Meses}}$$
+#### Onde:
+- **Orçamento**: Valor total do projeto em reais.
+- **Número de Funcionários**: Total de colaboradores impactados.
+- **Duração (meses)**: Tempo estimado do projeto.
 
 #### 2. Economia por Produtividade Aumentada
 
-$$\text{Ganho de Produtividade} = (\text{Custo Médio Mensal por Funcionário} \times (\text{Ganho de Produtividade Esperado} - 1)) \times \text{Número de Funcionários} \times \text{Duração do Projeto em Meses}$$
+$$
+\text{Ganho de Produtividade} = (\text{Custo Médio} \times (\text{Ganho Esperado} - 1)) \times \text{Número de Funcionários} \times \text{Duração (meses)}
+$$
 
-$$\text{Ganho de Produtividade Ajustado} = \text{Ganho de Produtividade} \times (1 - \text{Taxa de Desenganjamento Esperada})$$
+$$
+\text{Ganho Ajustado} = \text{Ganho de Produtividade} \times (1 - \text{Taxa de Desengajamento})
+$$
+
+##### Onde:
+- **Custo Médio**: Custo médio mensal por funcionário (calculado acima).
+- **Ganho Esperado**: Fator de aumento de produtividade (ex.: 1,2 para 20%).
+- **Taxa de Desengajamento**: Percentual de perda por desengajamento (ex.: 0,1 para 10%).
 
 #### 3. Redução de Risco
+$$
+\text{Redução de Risco} = (\text{Orçamento} \times \text{Taxa de Perda}) \times \text{Redução Projetada}
+$$
 
-$$\text{Redução de Risco} = (\text{Orçamento do Projeto} \times \text{Taxa de Perda do Orçamento em caso de falha}) \times \text{Redução de Risco Projetada}$$
+$$
+\text{Redução Ajustada} = \text{Redução de Risco} \times (1 - \text{Taxa de Falha})
+$$
 
-$$\text{Redução de Risco Ajustado} = \text{Redução de Risco} \times (1 - \text{Taxa de Falha})$$
+##### Onde:
+- **Orçamento**: Valor total do projeto em reais.
+- **Taxa de Perda**: Percentual do orçamento perdido em caso de falha (ex.: 0,3 para 30%).
+- **Redução Projetada**: Percentual de risco mitigado (ex.: 0,5 para 50%).
+- **Taxa de Falha**: Probabilidade de falha do projeto (ex.: 0,2 para 20%).
 
 #### 4. Benefício de Sucesso
+$$
+\text{Benefícios de Sucesso} = \text{Orçamento} \times \text{Fator de Sucesso}
+$$
 
-$$\text{Benefícios de Sucesso} = \text{Orçamento do Projeto} \times \text{Fator de Benefícios de Sucesso}$$
+$$
+\text{Benefícios Ajustados} = \text{Benefícios de Sucesso} \times (1 - \text{Taxa de Falha})
+$$
 
-$$\text{Benefícios de Sucesso Ajustado} = \text{Benefícios de Sucesso} \times (1 - \text{Taxa de Falha})$$
+##### Onde:
+- **Orçamento**: Valor total do projeto em reais.
+- **Fator de Sucesso**: Multiplicador de benefícios adicionais (ex.: 0,4 para 40%).
+- **Taxa de Falha**: Probabilidade de falha do projeto (ex.: 0,2 para 20%).
 
 #### Soma dos Benefícios Ajustados
+$$
+\text{Benefícios Totais} = \text{Ganho Ajustado} + \text{Redução Ajustada} + \text{Benefícios Ajustados}
+$$
 
-$$\text{Benefícios Totais} = \text{Ganho de Produtividade Ajustado} + \text{Redução de Risco Ajustado} + \text{Benefícios de Sucesso Ajustado}$$
+##### Onde:
+- **Ganho Ajustado**: Economia por produtividade ajustada.
+- **Redução Ajustada**: Redução de risco ajustada.
+- **Benefícios Ajustados**: Benefícios de sucesso ajustados.
