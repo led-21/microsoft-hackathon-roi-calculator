@@ -13,12 +13,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.ApiService\microsoft-hackathon-roi-calculator.ApiService.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Functions\microsoft-hackathon-roi-calculator.Functions.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.MigrationService\microsoft-hackathon-roi-calculator.MigrationService.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.Azure.Functions" Version="9.1.0-preview.1.25121.10" />
     <PackageReference Include="Aspire.Hosting.Azure.Sql" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.Redis" Version="9.0.0" />
   </ItemGroup>

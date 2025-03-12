@@ -26,7 +26,7 @@ catch (Exception ex)
 
 try
 {
-    EmployeeMetrics employeeMetrics = new() { TotalEmployees = 100, TotalHoursWorkedWeekly = 500, EmployeesUsingNewTool = 120 };
+    EmployeeMetrics employeeMetrics = new() { TotalEmployees = 100, TotalHoursWorkedWeekly = 500, EmployeesUsingNewTool = 10 };
 
     Console.WriteLine(employeeMetrics.EmployeeAdoptionRate);
 }

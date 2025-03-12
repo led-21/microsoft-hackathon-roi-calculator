@@ -16,9 +16,9 @@ namespace microsoft_hackathon_roi_calculator.Core.Models
         //Metricas 
         public CostBenefitMetrics? CostBenefitMetrics { get; set; }
         public EmployeeMetrics? EmployeeMetrics { get; set; }
-        public ImplementationMetrics? ImplementationMetrics { get; set; }
         public TrainingMetrics? TrainingMetrics { get; set; }
-        public ResponseMetrics? ResponseMetrics { get; set; }
+        public ImplementationMetrics? ImplementationMetrics { get; set; }
         public ProcessMetrics? ProcessMetrics { get; set; }
+        public ResponseMetrics? ResponseMetrics { get; set; }
     }
 }
