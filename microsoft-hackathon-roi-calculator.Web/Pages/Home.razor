@@ -20,7 +20,7 @@
             }
         </FluentCard>
     </FluentGridItem>
-    
+
     <!-- Area Chart -->
     <FluentGridItem xs="12" md="6">
         <FluentCard>
@@ -176,9 +176,10 @@
     {
         if (firstTime)
             await DialogSplashScreen.ShowSplashScreen(DialogService);
+
         firstTime = false;
 
-        await Task.Delay(1000);
+        await Task.Delay(500);
         isLoading = false;
     }
 

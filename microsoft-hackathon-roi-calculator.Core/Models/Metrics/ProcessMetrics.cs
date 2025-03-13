@@ -7,8 +7,6 @@ namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 /// </summary>
 public class ProcessMetrics
 {
-    [Key]
-    public int Id { get; set; }
     private int _compliantProcesses;
     public int TotalProcesses { get; set; }
     public int CompliantProcesses

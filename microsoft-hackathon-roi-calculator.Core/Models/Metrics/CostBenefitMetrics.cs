@@ -7,8 +7,6 @@ namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 /// </summary>
 public class CostBenefitMetrics
 {
-    [Key]
-    public int Id { get; set; }
     public double NetBenefit { get; set; } // *Net benefit = Total benefits − total costs
     public double CostOfInvestment { get; set; }
 

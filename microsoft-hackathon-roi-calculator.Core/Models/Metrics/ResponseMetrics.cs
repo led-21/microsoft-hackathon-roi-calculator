@@ -7,8 +7,6 @@ namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 /// </summary>
 public class ResponseMetrics
 {
-    [Key]
-    public int Id { get; set; }
     private int _positiveResponses;
     public int SumOfAllScores { get; set; }
     public int TotalResponses { get; set; }

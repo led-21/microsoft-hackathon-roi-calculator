@@ -11,7 +11,7 @@ public static class DialogSplashScreen
             Content = new SplashScreenContent
             {
                 Title = "Loading...",
-                SubTitle = "Olá danilo tudo bom??.",
+                SubTitle = "Olá danilo! Tudo bom??.",
                 LoadingText = "Loading...",
                 Message = (MarkupString)"<strong>Loading</strong> aguarde um pouco...",
                 Logo = FluentSplashScreen.LOGO
@@ -25,7 +25,7 @@ public static class DialogSplashScreen
         var dialog = await DialogService.ShowSplashScreenAsync(parameters);
 
         // Simulate a loading process
-        await Task.Delay(4000);
+        await Task.Delay(3000);
 
         await dialog.CloseAsync();
     }

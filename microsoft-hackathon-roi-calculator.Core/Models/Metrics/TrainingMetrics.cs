@@ -5,16 +5,14 @@ namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 /// <summary>
 /// Métricas relacionadas a treinamento
 /// </summary>
+/// 
 public class TrainingMetrics
 {
     private int _completedTraining;
-
-    [Key]
-    public int Id { get; set; }
     public int EnrolledTraining { get; set; }
     public int CompletedTraining
     {
-        get => _completedTraining; 
+        get => _completedTraining;
         set
         {
             if (value > EnrolledTraining)

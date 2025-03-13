@@ -4,7 +4,7 @@
 GET {{host}}/api/CalculateROI
 Content-Type: application/json
 {
-  "ProjectBudget": 1000000,
+  "ProjectBudget": 20000,
   "NumberOfEmployees": 100,
   "ProjectDurationMonths": 5
 }

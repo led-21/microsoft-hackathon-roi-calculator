@@ -5,6 +5,7 @@ using microsoft_hackathon_roi_calculator.Web;
 using Radzen;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 

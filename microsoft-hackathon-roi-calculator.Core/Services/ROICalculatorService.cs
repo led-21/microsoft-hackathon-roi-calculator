@@ -18,7 +18,7 @@ public class ROICalculatorService : IROICalculatorService
         // Cálculo dos benefícios
 
         //Custo médio mensal por funcionário
-        double averageEmployeeCostPerMonth = input.ProjectBudget / input.NumberOfEmployees / input.ProjectDurationMonths;
+        double averageEmployeeCostPerMonth = CalculateAverageEmployeeCostPerMonth(input);
 
         // 1. Economia por Produtividade Aumentada
         double productivityGainValue = CalculateProductivityGain(input, averageEmployeeCostPerMonth);
@@ -56,6 +56,11 @@ public class ROICalculatorService : IROICalculatorService
         };
     }
 
+    private double CalculateAverageEmployeeCostPerMonth(ROIInputParameters input)
+    {
+        return input.ProjectBudget / input.NumberOfEmployees / input.ProjectDurationMonths;
+    }
+
     private double CalculateProductivityGain(ROIInputParameters input, double averageEmployeeCostPerMonth)
     {
         // Calcula o ganho de produtividade com base no custo dos funcionários, ganho esperado e duração
@@ -77,6 +82,24 @@ public class ROICalculatorService : IROICalculatorService
         // Calcula o benefício do sucesso como um múltiplo do orçamento
         double successBenefit = input.ProjectBudget * input.ExpectedSuccessBenefit;
         return successBenefit;
+    }
+
+    public double EstimateFailureRate(double expectedROI, ROIInputParameters input)
+    {
+        double averageEmployeeCostPerMonth = CalculateAverageEmployeeCostPerMonth(input);
+
+        double productivityGainValue = CalculateProductivityGain(input, averageEmployeeCostPerMonth);
+        double adjustedProductivityGain = productivityGainValue * (1 - input.ExpectedDisengagementRate);
+
+        double riskReduction = CalculateRiskReduction(input);
+        double successBenefit = CalculateSuccessBenefit(input);
+
+        double totalBenefits = expectedROI * input.ProjectBudget + input.ProjectBudget;
+        double benefitsToAdjust = riskReduction + successBenefit;
+
+        double failureRate = (benefitsToAdjust - totalBenefits + adjustedProductivityGain) / benefitsToAdjust;
+
+        return failureRate;
     }
 
     // Método para gerar relatório detalhado

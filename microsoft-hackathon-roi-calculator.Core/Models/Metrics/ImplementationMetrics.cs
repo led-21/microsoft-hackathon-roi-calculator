@@ -7,8 +7,6 @@ namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 /// </summary>
 public class ImplementationMetrics
 {
-    [Key]
-    public int Id { get; set; }
     public int TotalChangeImplementationTime { get; set; }
     public int TotalPlannedImplementationTime { get; set; }
 

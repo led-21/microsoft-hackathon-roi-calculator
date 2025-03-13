@@ -7,8 +7,6 @@ namespace microsoft_hackathon_roi_calculator.Core.Models.Metrics;
 /// </summary>
 public class EmployeeMetrics
 {
-    [Key]
-    public int Id { get; set; }
     private int _employeesUsingNewTool;
     public int TotalEmployees { get; set; }
     public int TotalHoursWorkedWeekly { get; set; }

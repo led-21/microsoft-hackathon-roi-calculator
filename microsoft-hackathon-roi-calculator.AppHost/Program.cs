@@ -9,13 +9,15 @@ var sql = builder.AddSqlServer("sql")
     .WithLifetime(ContainerLifetime.Session)
     .AddDatabase("TesteDB");
 
-var apiService = builder.AddProject<Projects.microsoft_hackathon_roi_calculator_ApiService>("apiservice")
-    .WithReference(sql)
-    .WaitFor(sql);
-
 var migrations = builder.AddProject<Projects.microsoft_hackathon_roi_calculator_MigrationService>("migrations")
     .WithReference(sql)
     .WaitFor(sql);
+
+
+var apiService = builder.AddProject<Projects.microsoft_hackathon_roi_calculator_ApiService>("apiservice")
+    .WithReference(cache)
+    .WithReference(sql)
+    .WaitForCompletion(migrations);
 
 var fuctions = builder.AddAzureFunctionsProject<Projects.microsoft_hackathon_roi_calculator_Functions>("functions")
     .WithHostStorage(storange)
@@ -23,8 +25,6 @@ var fuctions = builder.AddAzureFunctionsProject<Projects.microsoft_hackathon_roi
 
 builder.AddProject<Projects.microsoft_hackathon_roi_calculator_Web>("webfrontend")
     .WithExternalHttpEndpoints()
-    .WithReference(cache)
-    .WaitFor(cache)
     .WithReference(apiService)
     .WaitFor(apiService)
     .WithReference(fuctions)

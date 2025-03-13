@@ -47,20 +47,35 @@ public class Worker(
 
     private static async Task SeedDataAsync(CalculatorDbContext dbContext, CancellationToken cancellationToken)
     {
-        ProjectROI firstTicket = new()
+        var random = new Random();
+        var projects = new List<ProjectROI>();
+
+        List<string> names = new List<string>
         {
-            ProjectName = "Test Project",
-            ProjectBudget = 1000,
-            NumberOfEmployees = 1,
-            ProjectDurationMonths = 1
+            "Aurora", "Nexus", "Zenith", "Quantum", "Vanguarda",
+            "Épica", "Horizonte", "Prisma", "Fênix", "Nova Era",
+            "Inovação", "Pioneiro", "Estrela", "Orion", "Galáxia"
         };
+
+        for (int i = 1; i <= 50; i++)
+        {
+            int employeeNumber = random.Next(1, 100);
+            projects.Add(new ProjectROI
+            {
+                ProjectName = $"Projecto {names[random.Next(0, names.Count - 1)]} {names[random.Next(0, names.Count - 1)]} {random.Next(0, 20)}",
+                ProjectBudget = random.Next(1000, 10000) * employeeNumber, // Número de funcionários (1 a 100) x o custo de cada funcionario (R$1,000 a R$10,000)
+                NumberOfEmployees = employeeNumber,   // Employees between 1 and 100
+                ProjectDurationMonths = random.Next(1, 24),   // Duration between 1 and 24 months
+                ROI = random.NextDouble() * 100
+            });
+        }
 
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            // Seed the database
             await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-            await dbContext.ProjectROIs.AddAsync(firstTicket, cancellationToken);
+
+            await dbContext.ProjectROIs.AddRangeAsync(projects, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         });

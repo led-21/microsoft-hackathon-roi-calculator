@@ -11,6 +11,8 @@ var input = new ROIInputParameters
     NumberOfEmployees = 50,
     ProjectDurationMonths = 12
     // Taxas padrão já definidas na classe ProjectInput
+    ,
+    FailureRate = 0.6775
 };
 
 try
@@ -18,6 +20,16 @@ try
     var result = calculator.CalculateROI(input);
     var report = calculator.GenerateReport(result, input);
     Console.WriteLine(report);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Erro: {ex.Message}");
+}
+
+try
+{
+    var result = calculator.EstimateFailureRate(0.07, input);
+    Console.WriteLine($"Taxa de falha estimada: {result}");
 }
 catch (Exception ex)
 {
