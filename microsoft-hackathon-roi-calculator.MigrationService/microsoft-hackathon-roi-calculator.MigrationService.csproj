@@ -18,6 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Core\microsoft-hackathon-roi-calculator.Core.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Domain\microsoft-hackathon-roi-calculator.Domain.csproj" />
   </ItemGroup>
 </Project>

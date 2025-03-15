@@ -18,8 +18,8 @@ public class WebTests
         await app.StartAsync();
 
         // Act
-        var httpClient = app.CreateHttpClient("webfrontend");
-        await resourceNotificationService.WaitForResourceAsync("webfrontend", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
+        var httpClient = app.CreateHttpClient("frontend");
+        await resourceNotificationService.WaitForResourceAsync("frontend", KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
         var response = await httpClient.GetAsync("/");
 
         // Assert

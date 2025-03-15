@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace microsoft_hackathon_roi_calculator.Mobile;
+namespace microsoft_hackathon_roi_calculator.Mobile.Platforms.iOS;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

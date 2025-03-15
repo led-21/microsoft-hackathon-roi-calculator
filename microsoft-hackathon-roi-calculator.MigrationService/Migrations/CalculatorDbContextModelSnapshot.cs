@@ -21,33 +21,33 @@ namespace microsoft_hackathon_roi_calculator.MigrationService.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("microsoft_hackathon_roi_calculator.Core.Models.ProjectROI", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("NumberOfEmployees")
-                        .HasColumnType("int");
+                b.Property<int>("NumberOfEmployees")
+                    .HasColumnType("int");
 
-                    b.Property<double>("ProjectBudget")
-                        .HasColumnType("float");
+                b.Property<double>("ProjectBudget")
+                    .HasColumnType("float");
 
-                    b.Property<int>("ProjectDurationMonths")
-                        .HasColumnType("int");
+                b.Property<int>("ProjectDurationMonths")
+                    .HasColumnType("int");
 
-                    b.Property<string>("ProjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ProjectName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("ROI")
-                        .HasColumnType("float");
+                b.Property<double>("ROI")
+                    .HasColumnType("float");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("ProjectROIs");
-                });
+                b.ToTable("ProjectROIs");
+            });
 #pragma warning restore 612, 618
         }
     }

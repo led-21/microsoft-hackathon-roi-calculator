@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 
-namespace microsoft_hackathon_roi_calculator.Web.Pages;
+namespace microsoft_hackathon_roi_calculator.Web.Pages.SplashScreen;
 public static class DialogSplashScreen
 {
     static public async Task ShowSplashScreen(IDialogService DialogService)
@@ -11,11 +11,10 @@ public static class DialogSplashScreen
             Content = new SplashScreenContent
             {
                 Title = "Loading...",
-                SubTitle = "Olá danilo! Tudo bom??.",
+                SubTitle = "InovaROI: Soluções Inteligentes para Retorno Máximo",
                 LoadingText = "Loading...",
                 Message = (MarkupString)"<strong>Loading</strong> aguarde um pouco...",
                 Logo = FluentSplashScreen.LOGO
-
             },
             Width = "640px",
             Height = "480px",

@@ -1,8 +1,8 @@
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using microsoft_hackathon_roi_calculator.Core.Services;
-using microsoft_hackathon_roi_calculator.Core.Interfaces;
+using microsoft_hackathon_roi_calculator.Application.Interfaces;
+using microsoft_hackathon_roi_calculator.Application.UseCases;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 

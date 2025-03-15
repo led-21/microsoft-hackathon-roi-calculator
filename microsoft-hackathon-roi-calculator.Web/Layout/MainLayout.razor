@@ -6,9 +6,11 @@
 <FluentMessageBarProvider />
 <FluentMenuProvider />
 
+<PageTitle>InovaROI</PageTitle>
+
 <FluentLayout>
     <FluentHeader>
-        Calculadora ROI
+        InovaROI
     </FluentHeader>
 
     <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
@@ -21,7 +23,22 @@
             <FluentNavLink Match="NavLinkMatch.Prefix"
                            Href="/dashboard"
                            Tooltip="Dashboard"
-                           Icon="@(new Icons.Regular.Size20.Database())">Dashboard</FluentNavLink>
+                           Icon="@(new Icons.Regular.Size20.DataTrending())">Dashboard</FluentNavLink>
+
+            <FluentNavLink Match="NavLinkMatch.Prefix"
+                           Href="/calculator"
+                           Tooltip="Calculadora"
+                           Icon="@(new Icons.Regular.Size20.Calculator())">Calculadora</FluentNavLink>
+
+            <FluentNavLink Match="NavLinkMatch.Prefix"
+                           Href="/report"
+                           Tooltip="Relatório"
+                           Icon="@(new Icons.Regular.Size20.DocumentBulletList())">Relatório</FluentNavLink>
+
+            <FluentNavLink Match="NavLinkMatch.Prefix"
+                           Href="/info"
+                           Tooltip="Sobre"
+                           Icon="@(new Icons.Regular.Size20.Info())">Sobre</FluentNavLink>
         </FluentNavMenu>
 
         <FluentBodyContent>
@@ -32,16 +49,6 @@
     </FluentStack>
 
     <FluentFooter>
-        <span>&copy; 2025 - Criado por Adriano e Danillo.</span>
+        <span>&copy; 2025 - Criado por Adriano Godoy e Danillo Silva.</span>
     </FluentFooter>
 </FluentLayout>
-
-@code
-{
-    private bool _menuOpen = false;
-
-    private void Toggle()
-    {
-        _menuOpen = !_menuOpen;
-    }
-}

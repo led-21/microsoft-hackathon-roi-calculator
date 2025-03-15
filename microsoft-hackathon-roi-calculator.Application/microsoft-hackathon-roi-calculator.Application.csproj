@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>microsoft_hackathon_roi_calculator.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="4.0.0" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="4.0.0" />
+    <PackageReference Include="Plotly.NET" Version="3.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Domain\microsoft-hackathon-roi-calculator.Domain.csproj" />
+  </ItemGroup>
+</Project>
