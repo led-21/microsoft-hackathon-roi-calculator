@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.ApiService\microsoft-hackathon-roi-calculator.ApiService.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Api\microsoft-hackathon-roi-calculator.Api.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Functions\microsoft-hackathon-roi-calculator.Functions.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.MigrationService\microsoft-hackathon-roi-calculator.MigrationService.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj" />

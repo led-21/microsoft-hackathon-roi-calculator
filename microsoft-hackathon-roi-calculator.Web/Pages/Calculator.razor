@@ -1,0 +1,92 @@
+﻿@page "/calculator"
+@using System.Globalization
+
+@if (isLoading)
+{
+
+    <FluentCard>
+        <h3>
+            <FluentSkeleton Shape="SkeletonShape.Rect"
+                            Width="150px"
+                            Height="20px" />
+        </h3>
+        <h3>
+            <FluentSkeleton Shape="SkeletonShape.Rect"
+                            Width="100%"
+                            Height="400px" />
+        </h3>
+    </FluentCard>
+}
+else
+{
+
+    <FluentLabel Typo="Typography.H3">Calculadora de ROI</FluentLabel>
+
+    <FluentGrid>
+        <FluentGridItem>
+            <FluentCard xs="12" style="padding: 20px; margin: 20px;">
+
+                <FluentNumberField Label="Orçamento do Projeto (R$)"
+                                   Type="number"
+                                   @bind-Value="inputParameters.ProjectBudget" />
+                <FluentNumberField Label="Número de Funcionários Impactados"
+                                   Type="number"
+                                   @bind-Value="inputParameters.NumberOfEmployees" />
+                <FluentNumberField Label="Duração do Projeto (meses)"
+                                   Type="number"
+                                   @bind-Value="inputParameters.ProjectDurationMonths" />
+                <FluentNumberField Label="Probabilidade de Falha (%)"
+                                   Type="number"
+                                   @bind-Value="inputParameters.FailureRate"
+                                   @onclick="DetermineProbability" /> @failPropability
+
+                <FluentAccordion>
+                    <FluentAccordionItem Heading="Outros Parametros de Cálculo">
+                        <FluentNumberField Label="Percentual do Orçamento Perdido em Caso de Falha (%)"
+                                           Type="number"
+                                           @bind-Value="inputParameters.BudgetLossRate" />
+                        <FluentNumberField Label="Perda por Desengajamento (%)"
+                                           Type="number"
+                                           @bind-Value="inputParameters.ExpectedDisengagementRate" />
+                        <FluentNumberField Label="Ganho de Produtividade (%)"
+                                           Type="number"
+                                           @bind-Value="inputParameters.ExpectedProductivityGain" />
+                        <FluentNumberField Label="Redução do Risco de Falha (%)"
+                                           Type="number"
+                                           @bind-Value="inputParameters.ProjectedRiskReduction" />
+                        <FluentNumberField Label="Retorno no Sucesso (%)"
+                                           Type="number"
+                                           @bind-Value="inputParameters.ExpectedSuccessBenefit" />
+                    </FluentAccordionItem>
+                </FluentAccordion>
+
+                <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular ROI</FluentButton>
+
+                <FluentLabel Typo="Typography.H4">Resultado:</FluentLabel>
+                <p>@ROIResult</p>
+
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+}
+
+
+@code {
+
+    private bool isLoading = false;
+
+    private ROIInputParameters inputParameters = new ROIInputParameters();
+    private string ROIResult = string.Empty;
+
+    string failPropability = "";
+
+    private void SubmitForm()
+    {
+
+    }
+
+    private void DetermineProbability()
+    {
+        failPropability = "Probabilidade de Falha: " + 0.23 + "%";
+    }
+}

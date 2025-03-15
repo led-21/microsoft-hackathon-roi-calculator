@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace microsoft_hackathon_roi_calculator.Mobile;
+namespace microsoft_hackathon_roi_calculator.Mobile.Platforms.MacCatalyst;
 
 public class Program
 {

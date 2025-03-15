@@ -2,8 +2,7 @@ using System.Diagnostics;
 
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Trace;
-
-using microsoft_hackathon_roi_calculator.Core.Models;
+using microsoft_hackathon_roi_calculator.Domain.Models;
 
 namespace microsoft_hackathon_roi_calculator.MigrationService;
 
@@ -54,19 +53,23 @@ public class Worker(
         {
             "Aurora", "Nexus", "Zenith", "Quantum", "Vanguarda",
             "Épica", "Horizonte", "Prisma", "Fênix", "Nova Era",
-            "Inovação", "Pioneiro", "Estrela", "Orion", "Galáxia"
+            "Inovação", "Pioneiro", "Estrela", "Orion", "Galáxia",
+            "Infinito","Explorador", "Eclipse", "Miragem", "Cosmos"
         };
 
         for (int i = 1; i <= 50; i++)
         {
             int employeeNumber = random.Next(1, 100);
+            double projectBudget = random.Next(1000, 10000) * employeeNumber;
+            int projectDurantion = random.Next(1, 36);
+
             projects.Add(new ProjectROI
             {
                 ProjectName = $"Projecto {names[random.Next(0, names.Count - 1)]} {names[random.Next(0, names.Count - 1)]} {random.Next(0, 20)}",
-                ProjectBudget = random.Next(1000, 10000) * employeeNumber, // Número de funcionários (1 a 100) x o custo de cada funcionario (R$1,000 a R$10,000)
-                NumberOfEmployees = employeeNumber,   // Employees between 1 and 100
-                ProjectDurationMonths = random.Next(1, 24),   // Duration between 1 and 24 months
-                ROI = random.NextDouble() * 100
+                ProjectBudget = projectBudget, // Número de funcionários (1 a 100) x o custo médio de cada funcionario (R$1,000 a R$10,000)
+                NumberOfEmployees = employeeNumber,   // Empregados impactados de 1 a 100
+                ProjectDurationMonths = projectDurantion, //  Duração do projeto 1 a 36 meses
+                ROI = Math.Round(-1.6 * Math.Pow(projectBudget / 1000000, 2) + 1.8 * (employeeNumber / 100) * (projectBudget / 1000000) - 0.5 * (projectDurantion / 36) + 0.3, 2) // Returno do investimento entre -0.4 a 1.0
             });
         }
 
@@ -81,5 +84,3 @@ public class Worker(
         });
     }
 }
-
-

@@ -18,7 +18,7 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Core\microsoft-hackathon-roi-calculator.Core.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Application\microsoft-hackathon-roi-calculator.Application.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.ServiceDefaults\microsoft-hackathon-roi-calculator.ServiceDefaults.csproj" />
   </ItemGroup>
   <ItemGroup>

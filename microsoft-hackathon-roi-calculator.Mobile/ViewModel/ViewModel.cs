@@ -14,7 +14,7 @@ namespace microsoft_hackathon_roi_calculator.Mobile.ViewModel
         /// <summary>
         /// Gets or sets the name of the person.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the height of the person.

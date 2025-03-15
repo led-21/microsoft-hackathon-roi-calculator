@@ -2,28 +2,35 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache");
 
-var storange = builder.AddAzureStorage("storage")
+var storage = builder.AddAzureStorage("storage")
     .RunAsEmulator();
+
+//var ollama = builder.AddOllama("ollama")
+//    .WithDataVolume()
+//    .WithLifetime(ContainerLifetime.Persistent);
+
+//var phi4 = ollama.AddModel("phi4", "phi4");
 
 var sql = builder.AddSqlServer("sql")
     .WithLifetime(ContainerLifetime.Session)
-    .AddDatabase("TesteDB");
+    .AddDatabase("roidb");
 
 var migrations = builder.AddProject<Projects.microsoft_hackathon_roi_calculator_MigrationService>("migrations")
     .WithReference(sql)
     .WaitFor(sql);
 
-
-var apiService = builder.AddProject<Projects.microsoft_hackathon_roi_calculator_ApiService>("apiservice")
+var apiService = builder.AddProject<Projects.microsoft_hackathon_roi_calculator_Api>("apiservice")
     .WithReference(cache)
     .WithReference(sql)
     .WaitForCompletion(migrations);
 
 var fuctions = builder.AddAzureFunctionsProject<Projects.microsoft_hackathon_roi_calculator_Functions>("functions")
-    .WithHostStorage(storange)
-    .WaitFor(storange);
+    .WithHostStorage(storage)
+    .WaitFor(storage);
+//.WithReference(phi4)
+//.WaitFor(phi4);
 
-builder.AddProject<Projects.microsoft_hackathon_roi_calculator_Web>("webfrontend")
+builder.AddProject<Projects.microsoft_hackathon_roi_calculator_Web>("frontend")
     .WithExternalHttpEndpoints()
     .WithReference(apiService)
     .WaitFor(apiService)

@@ -167,16 +167,14 @@ public class SalesData : INotifyPropertyChanged
         set => SetProperty(ref _expenses, value);
     }
 
-
     public SalesData(string month, double revenue, double expenses)
     {
-        Month = month;
-        Revenue = revenue;
-        Expenses = expenses;
+        _month = month;
+        _revenue = revenue;
+        _expenses = expenses;
     }
 
-
-    protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+    protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
     {
         if (!EqualityComparer<T>.Default.Equals(field, value))
         {
