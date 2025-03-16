@@ -4,7 +4,7 @@ Quando as empresas precisam se adaptar, a mudança geralmente traz riscos substa
 ## Desafio 
 Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a mudança com insights preditivos, recomendações acionáveis para iniciativas de mudança, visualizações e relatórios. Entradas de amostra incluiriam orçamento do projeto, número de funcionários impactados e duração do projeto. Considere os riscos financeiros de falha do projeto e desengajamento dos funcionários, bem como as economias potenciais de produtividade aumentada, redução de risco e entrega bem-sucedida do projeto.
 
-# Cálculo de Retorno sobre Investimento (ROI) para Projetos
+## Cálculo de Retorno sobre Investimento (ROI) para Projetos
 O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considera fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
 
 ## Entradas
