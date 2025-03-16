@@ -8,7 +8,7 @@ Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a 
 ![Arquitetura de Serviços](assets/arquitetura.gif)
 
 # Cálculo de Retorno sobre Investimento (ROI) para Projetos
-O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considerando fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
+O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considera fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
 
 ## Entradas
 - **Orçamento do projeto**: Valor total alocado para o projeto.
