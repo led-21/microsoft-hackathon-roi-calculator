@@ -10,3 +10,14 @@ Content-Type: application/json
   "FailureRate": 0.2
 }
 
+
+###
+
+GET {{host}}/api/EstimateFailureRate
+Content-Type: application/json
+{
+  "ProjectBudget": 20000,
+  "NumberOfEmployees": 100,
+  "ProjectDurationMonths": 5
+}
+

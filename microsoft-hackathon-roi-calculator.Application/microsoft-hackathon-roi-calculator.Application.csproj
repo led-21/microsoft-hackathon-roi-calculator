@@ -13,4 +13,9 @@
   <ItemGroup>
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Domain\microsoft-hackathon-roi-calculator.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="ML\MLModel.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

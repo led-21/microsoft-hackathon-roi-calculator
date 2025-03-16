@@ -68,7 +68,7 @@
         "Type": "Trial",
         "TrainerName": "FastForestRegression",
         "Score": 0.66155949370454858,
-        "RuntimeInSeconds": 0.232,
+        "RuntimeInSeconds": 0.24,
         "Parameter": {
           "_SCHEMA_": "e0 * e1 * e3",
           "e0": {
@@ -104,8 +104,8 @@
         "Version": 1,
         "Type": "Trial",
         "TrainerName": "FastForestRegression",
-        "Score": 0.66155949370454858,
-        "RuntimeInSeconds": 0.101,
+        "Score": 0.65953109408693655,
+        "RuntimeInSeconds": 0.135,
         "Parameter": {
           "_SCHEMA_": "e0 * e1 * e3",
           "e0": {
@@ -129,9 +129,52 @@
             "OutputColumnName": "Features"
           },
           "e3": {
-            "NumberOfTrees": 4,
-            "NumberOfLeaves": 8,
+            "NumberOfTrees": 7,
+            "NumberOfLeaves": 4,
             "FeatureFraction": 1.0,
+            "LabelColumnName": "ROI",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "LightGbmRegression",
+        "Score": 0.040953726170332438,
+        "RuntimeInSeconds": 0.053,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e4",
+          "e0": {
+            "OutputColumnNames": [
+              "ProjectBudget",
+              "NumberOfEmployees",
+              "ProjectDurationMonths"
+            ],
+            "InputColumnNames": [
+              "ProjectBudget",
+              "NumberOfEmployees",
+              "ProjectDurationMonths"
+            ]
+          },
+          "e1": {
+            "InputColumnNames": [
+              "ProjectBudget",
+              "NumberOfEmployees",
+              "ProjectDurationMonths"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e4": {
+            "NumberOfLeaves": 4,
+            "MinimumExampleCountPerLeaf": 20,
+            "LearningRate": 1.0,
+            "NumberOfTrees": 4,
+            "SubsampleFraction": 1.0,
+            "MaximumBinCountPerFeature": 254,
+            "FeatureFraction": 1.0,
+            "L1Regularization": 2E-10,
+            "L2Regularization": 1.0,
             "LabelColumnName": "ROI",
             "FeatureColumnName": "Features"
           }
@@ -142,7 +185,7 @@
         "Type": "Trial",
         "TrainerName": "FastTreeRegression",
         "Score": -2.4331315643418505,
-        "RuntimeInSeconds": 0.115,
+        "RuntimeInSeconds": 0.117,
         "Parameter": {
           "_SCHEMA_": "e0 * e1 * e2",
           "e0": {
@@ -190,7 +233,7 @@
     },
     "Schema": "e0 * e1 * (e2 + e3 + e4 + e5 + e6)",
     "MetricName": "RSquared",
-    "ModelFilePath": "E:\\Projetos\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\ML\\MLModel.mlnet"
+    "ModelFilePath": "E:\\Projetos\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\MLModel.mlnet"
   },
   "Type": "TrainingConfig",
   "Version": 5,

@@ -61,12 +61,16 @@ else
                                            @bind-Value="inputParameters.ExpectedSuccessBenefit" />
                     </FluentAccordionItem>
                 </FluentAccordion>
+
+                <br />
+                <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular</FluentButton>
+
                 @if (!string.IsNullOrEmpty(Result))
                 {
                     <FluentLabel Typo="Typography.H4">Resultado:</FluentLabel>
                     <p>@Result</p>
                 }
-                <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular</FluentButton>
+
             </FluentCard>
         </FluentGridItem>
     </FluentGrid>
