@@ -82,13 +82,13 @@ Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a 
 - **Eficiência**: Funções serverless reduzem custos operacionais ao executar apenas sob demanda.
 - **Manutenção Simplificada**: Banco de dados e hospedagem gerenciados pelo Azure minimizam a necessidade de gerenciamento manual.
 
+## Limitações
+- Os dados atualmente utilizados são gerados de forma aleatória apenas para fins de teste, apresentando baixa significância estatística e não refletindo cenários reais de uso.
+  
 ## Próximos Passos
 - Implementar autenticação e autorização para garantir segurança dos dados.
 - Adicionar dados reais de projeto para o treinamento dos modelos de Machine Learning.
 - Adicionar testes automatizados para os modelos de Machine Learning.
-
-## Limitaçoes
-- Os dados atualmente utilizados são gerados de forma aleatória apenas para fins de teste, apresentando baixa significância estatística e não refletindo cenários reais de uso.
 
 # Cálculo de Retorno sobre Investimento (ROI) para Projetos
 O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considera fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
