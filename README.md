@@ -25,7 +25,7 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 
 ### Orquestrador
 - **.NET Aspire**:  
-  Atua como o orquestrador central da aplicação, gerenciando a integração e a comunicação entre todos os componentes distribuídos. Simplifica o desenvolvimento, teste e deploy ao coordenar o frontend, backend, serviços serverless e conexões com o Azure, garantindo um fluxo eficiente e resiliente.
+  Atua como o orquestrador central da aplicação, gerenciando a integração e a comunicação entre todos os componentes distribuídos. Simplifica o desenvolvimento, teste e deploy ao coordenar o frontend, backend, serviços serverless e conexões com o Azure.
 
 ### Frontend
 - **Blazor**:  
