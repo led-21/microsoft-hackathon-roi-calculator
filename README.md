@@ -7,6 +7,89 @@ Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a 
 # Arquitetura de Serviços Azure
 ![Arquitetura de Serviços](assets/arquitetura.gif)
 
+## Componentes Principais
+
+### Frontend
+- **Blazor**:  
+  Responsável pela interface de usuário (UI). Utilizado para:  
+  - Entrada de dados e exibição dos resultados de cálculo da calculadora de ROI.  
+  - Cadastro de resultados de projetos concluídos para alimentar os modelos de Machine Learning.  
+  - Visualização interativa e dinâmica de gráficos, dados de projetos e relatórios personalizados, proporcionando uma experiência rica e intuitiva ao usuário.
+
+### Backend
+- **C# / .NET**:  
+  Camada responsável por processar a lógica de negócios. Realiza operações CRUD (Create, Read, Update, Delete) no banco de dados Azure SQL, garantindo a integridade e consistência dos dados.
+
+### Banco de Dados
+- **Azure SQL Database**:  
+  Central de armazenamento de dados da aplicação. Armazena informações sobre projetos, incluindo:
+  - **Identificação e Descrição**:  
+    - `id`: Chave primária única para cada projeto.  
+    - `project_name`: Nome do projeto (obrigatório).  
+    - `description`: Descrição detalhada do projeto (opcional).  
+  - **Financeiro e Temporal**:  
+    - `project_budget`: Orçamento do projeto.  
+    - `start_date`: Data de início do projeto.  
+    - `project_duration_months`: Duração estimada do projeto em meses.  
+    - `roi`: Retorno sobre o investimento calculado.  
+  - **Equipe e Impacto**:  
+    - `number_of_employees`: Número de funcionários impactados pelo projeto.  
+    - `employees_using_new_tool`: Quantidade de funcionários utilizando novas ferramentas introduzidas.
+    - `total_hours_worked_weekly`: Total de horas trabalhadas por semana pelos funcionários no projeto.  
+    - `completed_training`: Número de treinamentos concluídos pelos funcionários no projeto.  
+  - **Métricas de Mundaças**:  
+    - `total_change_implementation_time`: Tempo total de implementação de mudanças.  
+    - `total_planned_implementation_time`: Tempo planejado para implementação.  
+  - **Qualidade e Conformidade**:  
+    - `total_processes`: Total de processos envolvidos no projeto.  
+    - `compliant_processes`: Número de processos em conformidade.  
+  - **Avaliação do Projeto**:  
+    - `project_evaluation_total_responses`: Total de respostas na avaliação do projeto.  
+    - `project_evaluation_positive_responses`: Número de respostas positivas na avaliação.  
+    - `project_evaluation_sum_of_all_scores`: Soma de todas as pontuações da avaliação.  
+### Machine Learning
+- **Azure Machine Learning**:  
+  Consome os dados do Azure SQL Database para treinar modelos preditivos. Esses modelos são utilizados para:
+  - Prever ROI
+  - Avaliar riscos de projetos  
+  Os modelos são ajustados dinamicamente à medida que novos dados são inseridos, garantindo precisão contínua.
+
+### Funções Serverless
+- **Azure Functions**:  
+  Implementa cálculos de ROI em tempo real de forma eficiente e escalável. Além disso, integra-se ao OpenAI para a geração de relatórios personalizados sob demanda.
+
+### Relatórios Personalizados
+- **OpenAI**:  
+  Utilizado para criar relatórios detalhados e análises interpretativas baseadas nos dados processados, oferecendo insights valiosos aos usuários em linguagem natural.
+
+### Hospedagem
+- **Azure Web App**:  
+  Plataforma de hospedagem da aplicação web. Garante:
+  - Escalabilidade automática
+  - Alta disponibilidade
+  - Estabilidade do ambiente de produção
+
+## Fluxo Geral
+1. O usuário interage com a interface em **Blazor** para inserir dados de cálculo e projetos.
+2. O backend em **C# / .NET** processa as informações e realiza operações no **Azure SQL Database**.
+3. O **Azure Machine Learning** utiliza os dados armazenados para treinar e ajustar modelos preditivos.
+4. O **Azure Functions** calcula o ROI e outros indices em tempo real e aciona o **OpenAI** para gerar relatórios personalizados.
+5. Os resultados são exibidos ao usuário na interface **Blazor**, hospedada no **Azure Web App**.
+
+## Benefícios da Arquitetura
+- **Escalabilidade**: Uso de serviços Azure como Web App e Functions permite lidar com picos de demanda.
+- **Flexibilidade**: Integração com Machine Learning e OpenAI possibilita adaptação a diferentes casos de uso.
+- **Eficiência**: Funções serverless reduzem custos operacionais ao executar apenas sob demanda.
+- **Manutenção Simplificada**: Banco de dados e hospedagem gerenciados pelo Azure minimizam a necessidade de gerenciamento manual.
+
+## Próximos Passos
+- Implementar autenticação e autorização para garantir segurança dos dados.
+- Adicionar dados reais de projeto para o treinamento dos modelos de Machine Learning.
+- Adicionar testes automatizados para os modelos de Machine Learning.
+
+## Limitaçoes
+- Os dados atualmente utilizados são gerados de forma aleatória apenas para fins de teste, apresentando baixa significância estatística e não refletindo cenários reais de uso.
+
 # Cálculo de Retorno sobre Investimento (ROI) para Projetos
 O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considera fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
 
