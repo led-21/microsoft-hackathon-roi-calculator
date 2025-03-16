@@ -1,3 +1,18 @@
+# Cálculo de Retorno sobre Investimento (ROI) para Projetos
+O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considera fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
+
+## Entradas
+- **Orçamento do projeto**: Valor total alocado para o projeto.
+- **Número de funcionários impactados:** Quantidade de colaboradores afetados diretamente pelo projeto.
+- **Duração do projeto (em meses):** Período estimado para a execução completa.
+
+## Fatores a Considerar
+- **Riscos financeiros de falha:** Perdas potenciais caso o projeto não seja concluído com sucesso.
+- **Desengajamento dos funcionários:** Impacto da falta de motivação ou adesão da equipe.
+- **Economias por produtividade aumentada:** Ganhos estimados com o aumento da eficiência dos funcionários.
+- **Redução de risco:** Benefícios associados à mitigação de incertezas ou falhas. A capacidade técnica e a motivação da equipe mitiga riscos.
+- **Entrega bem-sucedida:** Valor agregado pela conclusão do projeto dentro dos objetivos planejados.
+  
 ## Retorno sobre Investimento (ROI)
 
 O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.
