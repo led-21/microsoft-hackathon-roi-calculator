@@ -4,8 +4,11 @@ Quando as empresas precisam se adaptar, a mudança geralmente traz riscos substa
 ## Desafio 
 Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a mudança com insights preditivos, recomendações acionáveis para iniciativas de mudança, visualizações e relatórios. Entradas de amostra incluiriam orçamento do projeto, número de funcionários impactados e duração do projeto. Considere os riscos financeiros de falha do projeto e desengajamento dos funcionários, bem como as economias potenciais de produtividade aumentada, redução de risco e entrega bem-sucedida do projeto.
 
+# Arquitetura de Serviços Azure
+![Arquitetura de Serviços](assets/arquitetura.gif)
+
 # Cálculo de Retorno sobre Investimento (ROI) para Projetos
-Este documento descreve um modelo para calcular o Retorno sobre Investimento (ROI) de um projeto, considerando fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
+O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, considerando fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.
 
 ## Entradas
 - **Orçamento do projeto**: Valor total alocado para o projeto.
@@ -16,7 +19,7 @@ Este documento descreve um modelo para calcular o Retorno sobre Investimento (RO
 - **Riscos financeiros de falha:** Perdas potenciais caso o projeto não seja concluído com sucesso.
 - **Desengajamento dos funcionários:** Impacto da falta de motivação ou adesão da equipe.
 - **Economias por produtividade aumentada:** Ganhos estimados com o aumento da eficiência dos funcionários.
-- **Redução de risco:** Benefícios associados à mitigação de incertezas ou falhas.
+- **Redução de risco:** Benefícios associados à mitigação de incertezas ou falhas. A capacidade técnica e a motivação da equipe mitiga riscos.
 - **Entrega bem-sucedida:** Valor agregado pela conclusão do projeto dentro dos objetivos planejados.
 
 ## Retorno sobre Investimento (ROI)
