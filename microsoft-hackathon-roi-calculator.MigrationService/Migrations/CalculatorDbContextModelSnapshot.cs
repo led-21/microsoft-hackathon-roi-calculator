@@ -25,65 +25,83 @@ namespace microsoft_hackathon_roi_calculator.MigrationService.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompletedTraining")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("completed_training");
 
                     b.Property<int>("CompliantProcesses")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("compliant_processes");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
 
                     b.Property<int>("EmployeesUsingNewTool")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("employees_using_new_tool");
 
                     b.Property<int>("NumberOfEmployees")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("number_of_employees");
 
                     b.Property<double>("ProjectBudget")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("project_budget");
 
                     b.Property<int>("ProjectDurationMonths")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("project_duration_months");
 
                     b.Property<int>("ProjectEvaluationPositiveResponses")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("project_evaluation_positive_responses");
 
                     b.Property<int>("ProjectEvaluationSumOfAllScores")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("project_evaluation_sum_of_all_scores");
 
                     b.Property<int>("ProjectEvaluationTotalResponses")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("project_evaluation_total_responses");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("project_name");
 
                     b.Property<double>("ROI")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("roi");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("start_date");
 
                     b.Property<int>("TotalChangeImplementationTime")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("total_change_implementation_time");
 
                     b.Property<int>("TotalHoursWorkedWeekly")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("total_hours_worked_weekly");
 
                     b.Property<int>("TotalPlannedImplementationTime")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("total_planned_implementation_time");
 
                     b.Property<int>("TotalProcesses")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("total_processes");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectROIs");
+                    b.ToTable("roi", (string)null);
                 });
 #pragma warning restore 612, 618
         }
