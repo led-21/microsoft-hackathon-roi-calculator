@@ -4,6 +4,18 @@ Quando as empresas precisam se adaptar, a mudança geralmente traz riscos substa
 ## Desafio 
 Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a mudança com insights preditivos, recomendações acionáveis para iniciativas de mudança, visualizações e relatórios. Entradas de amostra incluiriam orçamento do projeto, número de funcionários impactados e duração do projeto. Considere os riscos financeiros de falha do projeto e desengajamento dos funcionários, bem como as economias potenciais de produtividade aumentada, redução de risco e entrega bem-sucedida do projeto.
 
+## Retorno sobre Investimento (ROI)
+
+O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.
+
+### Fórmula do ROI
+
+$$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento Total}}{\text{Investimento Total}}\right] \times 100$$
+
+#### Onde:
+- **Benefícios Totais**: Soma das economias projetadas (aumento de produtividade, redução de riscos e sucesso do projeto).
+- **Investimento Total**: Custo total do projeto, incluindo orçamento, mitigação de riscos e outros gastos relacionados.
+
 # Arquitetura de Serviços Azure
 ![Arquitetura de Serviços](assets/arquitetura.gif)
 
@@ -105,17 +117,6 @@ O método de calculo do Retorno sobre Investimento (ROI) deste aplicativo, consi
 - **Redução de risco:** Benefícios associados à mitigação de incertezas ou falhas. A capacidade técnica e a motivação da equipe mitiga riscos.
 - **Entrega bem-sucedida:** Valor agregado pela conclusão do projeto dentro dos objetivos planejados.
 
-## Retorno sobre Investimento (ROI)
-
-O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.
-
-### Fórmula do ROI
-
-$$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento Total}}{\text{Investimento Total}}\right] \times 100$$
-
-#### Onde:
-- **Benefícios Totais**: Soma das economias projetadas (aumento de produtividade, redução de riscos e sucesso do projeto).
-- **Investimento Total**: Custo total do projeto, incluindo orçamento, mitigação de riscos e outros gastos relacionados.
 
 ### Componentes dos Cálculos
 
