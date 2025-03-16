@@ -116,3 +116,11 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 - Implementar autenticação e autorização para garantir segurança dos dados.
 - Adicionar dados reais de projeto para o treinamento dos modelos de Machine Learning.
 - Adicionar testes automatizados para os modelos de Machine Learning.
+
+## Equipe do Projeto
+
+Desenvolvida por uma equipe dedicada para competir no **Microsoft Innovation Challenge Hackathon March 2025**, esta aplicação visa transformar a estatística de fracasso em sucesso, capacitando empresas a se adaptarem com confiança e eficiência.
+
+### Membros
+- **Adriano Godoy** [led-21](https://github.com/led-21/)  
+- **Danillo Silva** [DanilloAraujo](https://github.com/DanilloAraujo)  
