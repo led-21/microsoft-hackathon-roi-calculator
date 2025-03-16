@@ -50,9 +50,9 @@ Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a 
 ### Machine Learning
 - **Azure Machine Learning**:  
   Consome os dados do Azure SQL Database para treinar modelos preditivos. Esses modelos são utilizados para:
-  - Prever ROI
-  - Avaliar riscos de projetos  
-  Os modelos são ajustados dinamicamente à medida que novos dados são inseridos, garantindo precisão contínua.
+  - Estimar o ROI do projeto e essa infromação é usado para calcular o riscos de projetos.
+  
+  Os modelos são ajustados dinamicamente conforme novos dados são incorporados, assegurando relevância e precisão contínuas nas previsões.
 
 ### Funções Serverless
 - **Azure Functions**:  
