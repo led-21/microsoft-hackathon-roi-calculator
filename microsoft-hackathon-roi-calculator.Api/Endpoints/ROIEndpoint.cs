@@ -13,74 +13,114 @@ static public class ROIEndpoint
     {
         app.MapGet("/api/roi/csv", async (CalculatorDbContext dbContext) =>
         {
-            var roiList = await dbContext.ProjectROIs.ToListAsync();
-            var csv = new StringBuilder();
-            csv.AppendLine("ProjectName,ProjectBudget,NumberOfEmployees,ProjectDurationMonths,ROI");
-
-            foreach (var roi in roiList)
+            try
             {
-                csv.AppendLine($"{roi.ProjectName},{roi.ProjectBudget.ToString(CultureInfo.InvariantCulture)},{roi.NumberOfEmployees},{roi.ProjectDurationMonths},{roi.ROI.ToString(CultureInfo.InvariantCulture)}");
-            }
+                var roiList = await dbContext.ProjectROIs.ToListAsync();
+                var csv = new StringBuilder();
+                csv.AppendLine("ProjectName,ProjectBudget,NumberOfEmployees,ProjectDurationMonths,ROI");
 
-            var csvBytes = Encoding.UTF8.GetBytes(csv.ToString());
-            return Results.File(csvBytes, "text/csv", "roi.csv");
+                foreach (var roi in roiList)
+                {
+                    csv.AppendLine($"{roi.ProjectName},{roi.ProjectBudget.ToString(CultureInfo.InvariantCulture)},{roi.NumberOfEmployees},{roi.ProjectDurationMonths},{roi.ROI.ToString(CultureInfo.InvariantCulture)}");
+                }
+
+                var csvBytes = Encoding.UTF8.GetBytes(csv.ToString());
+                return Results.File(csvBytes, "text/csv", "roi.csv");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Results.Problem($"Ocorreu um erro ao gerar o arquivo CSV.  \n{ex.Message}");
+            }
         });
 
         app.MapGet("/api/roi", async (CalculatorDbContext dbContext, IDistributedCache cache) =>
         {
-            var cachedRoi = cache.Get("roi");
-
-            if (cachedRoi == null)
+            try
             {
-                var roi = await dbContext.ProjectROIs.ToListAsync();
+                var cachedRoi = cache.Get("roi");
 
-                await cache.SetAsync("roi", Encoding.UTF8.GetBytes(JsonSerializer.Serialize(roi)), new()
+                if (cachedRoi == null)
                 {
-                    AbsoluteExpiration = DateTime.Now.AddSeconds(10)
-                });
+                    var roi = await dbContext.ProjectROIs.ToListAsync();
 
-                return Results.Ok(roi);
+                    await cache.SetAsync("roi", Encoding.UTF8.GetBytes(JsonSerializer.Serialize(roi)), new()
+                    {
+                        AbsoluteExpiration = DateTime.Now.AddSeconds(10)
+                    });
+
+                    return Results.Ok(roi);
+                }
+
+                return Results.Ok(JsonSerializer.Deserialize<IEnumerable<ProjectROI>>(cachedRoi));
             }
-
-            return Results.Ok(JsonSerializer.Deserialize<IEnumerable<ProjectROI>>(cachedRoi));
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Results.Problem($"Ocorreu um erro ao recuperar os dados de ROI.  \n{ex.Message}");
+            }
         });
 
         app.MapPost("/api/roi", async (CalculatorDbContext dbContext, ProjectROI newROI) =>
         {
-            dbContext.ProjectROIs.Add(newROI);
-            await dbContext.SaveChangesAsync();
+            try
+            {
+                dbContext.ProjectROIs.Add(newROI);
+                await dbContext.SaveChangesAsync();
 
-            return Results.Created($"/api/roi/{newROI.Id}", newROI);
+                return Results.Created($"/api/roi/{newROI.Id}", newROI);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Results.Problem($"Ocorreu um erro ao criar a nova entrada de ROI.  \n{ex.Message}");
+            }
         });
 
         app.MapPut("/api/roi/{id}", async (CalculatorDbContext dbContext, int id, ProjectROI updatedROI) =>
         {
-            var existingROI = await dbContext.ProjectROIs.FindAsync(id);
+            try
+            {
+                var existingROI = await dbContext.ProjectROIs.FindAsync(id);
 
-            if (existingROI == null)
-                return Results.NotFound();
+                if (existingROI == null)
+                    return Results.NotFound();
 
-            existingROI.ProjectName = updatedROI.ProjectName;
-            existingROI.ProjectBudget = updatedROI.ProjectBudget;
-            existingROI.NumberOfEmployees = updatedROI.NumberOfEmployees;
-            existingROI.ProjectDurationMonths = updatedROI.ProjectDurationMonths;
+                existingROI.ProjectName = updatedROI.ProjectName;
+                existingROI.ProjectBudget = updatedROI.ProjectBudget;
+                existingROI.NumberOfEmployees = updatedROI.NumberOfEmployees;
+                existingROI.ProjectDurationMonths = updatedROI.ProjectDurationMonths;
 
-            await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
 
-            return Results.NoContent();
+                return Results.NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Results.Problem($"Ocorreu um erro ao atualizar a entrada de ROI.  \n{ex.Message}");
+            }
         });
 
         app.MapDelete("/api/roi/{id}", async (CalculatorDbContext dbContext, int id) =>
         {
-            var existingROI = await dbContext.ProjectROIs.FindAsync(id);
+            try
+            {
+                var existingROI = await dbContext.ProjectROIs.FindAsync(id);
 
-            if (existingROI == null)
-                return Results.NotFound();
+                if (existingROI == null)
+                    return Results.NotFound();
 
-            dbContext.ProjectROIs.Remove(existingROI);
-            await dbContext.SaveChangesAsync();
+                dbContext.ProjectROIs.Remove(existingROI);
+                await dbContext.SaveChangesAsync();
 
-            return Results.NoContent();
+                return Results.NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Results.Problem($"Ocorreu um erro ao excluir a entrada de ROI. \n{ex.Message}");
+            }
         });
     }
 }

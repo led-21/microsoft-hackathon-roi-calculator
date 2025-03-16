@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-cal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Web", "microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj", "{EA403AEA-91AD-4211-AD24-1850A474C2EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Mobile", "microsoft-hackathon-roi-calculator.Mobile\microsoft-hackathon-roi-calculator.Mobile.csproj", "{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.Functions", "microsoft-hackathon-roi-calculator.Functions\microsoft-hackathon-roi-calculator.Functions.csproj", "{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microsoft-hackathon-roi-calculator.MigrationService", "microsoft-hackathon-roi-calculator.MigrationService\microsoft-hackathon-roi-calculator.MigrationService.csproj", "{FD0BC6B2-8F43-4892-8060-5A54454F68B4}"
@@ -93,19 +91,6 @@ Global
 		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Release|x64.Build.0 = Release|Any CPU
 		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA403AEA-91AD-4211-AD24-1850A474C2EC}.Release|x86.Build.0 = Release|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|x64.Build.0 = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Debug|x86.Build.0 = Debug|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|x64.ActiveCfg = Release|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|x64.Build.0 = Release|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|x86.ActiveCfg = Release|Any CPU
-		{9EBA7617-67EA-4A59-9E40-CCD8D35EB1DC}.Release|x86.Build.0 = Release|Any CPU
 		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD0491BB-1E09-4B1D-9F98-EC5E4BB5928E}.Debug|x64.ActiveCfg = Debug|Any CPU

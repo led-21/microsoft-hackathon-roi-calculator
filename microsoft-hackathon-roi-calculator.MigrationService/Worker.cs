@@ -57,19 +57,19 @@ public class Worker(
             "Infinito","Explorador", "Eclipse", "Miragem", "Cosmos"
         };
 
-        for (int i = 1; i <= 50; i++)
+        for (int i = 1; i <= 100; i++)
         {
             int employeeNumber = random.Next(1, 100);
-            double projectBudget = random.Next(1000, 10000) * employeeNumber;
-            int projectDurantion = random.Next(1, 36);
+            double projectBudget = random.Next(1_000, 10_000_000);
+            int projectDuration = random.Next(1, 36);
 
             projects.Add(new ProjectROI
             {
                 ProjectName = $"Projecto {names[random.Next(0, names.Count - 1)]} {names[random.Next(0, names.Count - 1)]} {random.Next(0, 20)}",
-                ProjectBudget = projectBudget, // Número de funcionários (1 a 100) x o custo médio de cada funcionario (R$1,000 a R$10,000)
-                NumberOfEmployees = employeeNumber,   // Empregados impactados de 1 a 100
-                ProjectDurationMonths = projectDurantion, //  Duração do projeto 1 a 36 meses
-                ROI = Math.Round(-1.6 * Math.Pow(projectBudget / 1000000, 2) + 1.8 * (employeeNumber / 100) * (projectBudget / 1000000) - 0.5 * (projectDurantion / 36) + 0.3, 2) // Returno do investimento entre -0.4 a 1.0
+                ProjectBudget = projectBudget,
+                NumberOfEmployees = employeeNumber,
+                ProjectDurationMonths = projectDuration,
+                ROI = EstimateROI(projectBudget, employeeNumber, projectDuration)
             });
         }
 
@@ -82,5 +82,21 @@ public class Worker(
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         });
+    }
+
+    private static double EstimateROI(double projectBudget, int numberOfEmployees, int projectDurationMonths)
+    {
+        // Quadratic estimation formula for ROI
+        // ROI = a * (projectBudget^2) + b * (numberOfEmployees^2) + c * (projectDurationMonths^2) + d
+        // Coefficients a, b, c, and d are assumed for estimation purposes
+        const double a = 0.00000001;
+        const double b = 0.0001;
+        const double c = 0.0005;
+        const double d = -0.5;
+
+        double roi = a * projectBudget + b * numberOfEmployees + c * projectDurationMonths + d;
+
+        // Clamp ROI to be within the range of -0.5 to 1.5
+        return Math.Clamp(roi, -0.5, 1.5);
     }
 }

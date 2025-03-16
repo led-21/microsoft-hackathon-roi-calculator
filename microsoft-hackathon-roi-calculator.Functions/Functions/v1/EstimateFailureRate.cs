@@ -23,19 +23,27 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
         [Function("EstimateFailureRate")]
         public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("C# HTTP trigger process EstimateFailureRate function request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var input = JsonSerializer.Deserialize<ROIInputParameters>(requestBody);
 
             if (input == null)
             {
-                return new BadRequestObjectResult("Please pass a valid input.");
+                return new BadRequestObjectResult("Por favor, passe uma entrada válida.");
             }
 
-            var estimate = _roiCalculatorService.EstimateFailureRate(input);
+            try
+            {
+                var estimate = _roiCalculatorService.EstimateFailureRate(input);
 
-            return new OkObjectResult(new { EstimateFailureRate = estimate });
+                return new OkObjectResult(new { EstimateFailureRate = estimate });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao calcular taxa de falha.");
+                return new BadRequestObjectResult("Erro ao calcular taxa de falha.");
+            }
         }
     }
 }

@@ -38,10 +38,12 @@ else
                 <FluentNumberField Label="Probabilidade de Falha (%)"
                                    Type="number"
                                    @bind-Value="inputParameters.FailureRate"
-                                   @onclick="DetermineProbability" /> @failPropability
+                                   @onclick="DetermineProbability" />
+                <p>@failPropability</p>
 
                 <FluentAccordion>
                     <FluentAccordionItem Heading="Outros Parametros de Cálculo">
+                        <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
                         <FluentNumberField Label="Percentual do Orçamento Perdido em Caso de Falha (%)"
                                            Type="number"
                                            @bind-Value="inputParameters.BudgetLossRate" />
@@ -59,12 +61,12 @@ else
                                            @bind-Value="inputParameters.ExpectedSuccessBenefit" />
                     </FluentAccordionItem>
                 </FluentAccordion>
-
-                <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular ROI</FluentButton>
-
-                <FluentLabel Typo="Typography.H4">Resultado:</FluentLabel>
-                <p>@ROIResult</p>
-
+                @if (!string.IsNullOrEmpty(Result))
+                {
+                    <FluentLabel Typo="Typography.H4">Resultado:</FluentLabel>
+                    <p>@Result</p>
+                }
+                <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular</FluentButton>
             </FluentCard>
         </FluentGridItem>
     </FluentGrid>
@@ -76,7 +78,7 @@ else
     private bool isLoading = false;
 
     private ROIInputParameters inputParameters = new ROIInputParameters();
-    private string ROIResult = string.Empty;
+    private string Result = string.Empty;
 
     string failPropability = "";
 
@@ -87,6 +89,6 @@ else
 
     private void DetermineProbability()
     {
-        failPropability = "Probabilidade de Falha: " + 0.23 + "%";
+        failPropability = "Probabilidade estimada pelo modelo de Machine Learning: " + 0.23 + "%";
     }
 }

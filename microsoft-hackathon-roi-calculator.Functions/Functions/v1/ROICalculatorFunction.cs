@@ -22,7 +22,7 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
         [Function("CalculateROI")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
-            _logger.LogInformation("C# HTTP trigger Calculate ROI function processed a request.");
+            _logger.LogInformation("C# HTTP trigger to process a Calculate ROI function request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var input = JsonSerializer.Deserialize<ROIInputParameters>(requestBody);
@@ -43,9 +43,11 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
             catch (Exception ex)
             {
                 _logger.LogInformation("Error: " + ex.Message);
+                report = "Error: " + ex.Message;
+                return new BadRequestObjectResult(report);
             }
 
-            return new OkObjectResult(report ?? "Algum erro ocorreu");
+            return new OkObjectResult(report);
         }
     }
 }
