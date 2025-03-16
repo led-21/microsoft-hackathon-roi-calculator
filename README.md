@@ -39,7 +39,7 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
   Camada responsável por processar a lógica de negócios. Realiza operações CRUD (Create, Read, Update, Delete) no banco de dados Azure SQL, garantindo a integridade e consistência dos dados.
 
 ### Secredos
-- **Azure Key Vault**:
+- **Azure Key Vault**:  
   Armazena as chaves e segredos necessários para que apenas usuários ou aplicativos autorizados tenham o acesso aos recursos Azure de forma segura.
 
 ### Banco de Dados
