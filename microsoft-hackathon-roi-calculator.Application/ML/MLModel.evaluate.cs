@@ -43,13 +43,13 @@ namespace Microsoft_hackathon_roi_calculator_Application
 
             var featureImportanceMetrics =
                  permutationFeatureImportance
-                 .Select((kvp) => new { kvp.Key, kvp.Value.MeanSquaredError })
-                 .OrderByDescending(myFeatures => Math.Abs(myFeatures.MeanSquaredError.Mean));
+                 .Select((kvp) => new { kvp.Key, kvp.Value.RSquared })
+                 .OrderByDescending(myFeatures => Math.Abs(myFeatures.RSquared.Mean));
 
             var featurePFI = new List<Tuple<string, double>>();
             foreach (var feature in featureImportanceMetrics)
             {
-                var pfiValue = Math.Abs(feature.MeanSquaredError.Mean);
+                var pfiValue = Math.Abs(feature.RSquared.Mean);
                 featurePFI.Add(new Tuple<string, double>(feature.Key, pfiValue));
             }
 

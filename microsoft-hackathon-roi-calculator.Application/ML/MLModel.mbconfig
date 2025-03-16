@@ -8,7 +8,7 @@
     "KeepPunctuations": false,
     "AllowQuoting": false,
     "Type": "TabularFile",
-    "FilePath": "C:\\_Projetos\\Hackathon\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\ML\\Data\\roi_data.csv",
+    "FilePath": "E:\\Projetos\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\ML\\Data\\roi_data.csv",
     "Delimiter": ",",
     "DecimalMarker": ".",
     "HasHeader": true,
@@ -67,8 +67,8 @@
         "Version": 1,
         "Type": "Trial",
         "TrainerName": "FastForestRegression",
-        "Score": 0.019269507203879176,
-        "RuntimeInSeconds": 0.362,
+        "Score": 0.66155949370454858,
+        "RuntimeInSeconds": 0.232,
         "Parameter": {
           "_SCHEMA_": "e0 * e1 * e3",
           "e0": {
@@ -103,9 +103,46 @@
       {
         "Version": 1,
         "Type": "Trial",
+        "TrainerName": "FastForestRegression",
+        "Score": 0.66155949370454858,
+        "RuntimeInSeconds": 0.101,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e3",
+          "e0": {
+            "OutputColumnNames": [
+              "ProjectBudget",
+              "NumberOfEmployees",
+              "ProjectDurationMonths"
+            ],
+            "InputColumnNames": [
+              "ProjectBudget",
+              "NumberOfEmployees",
+              "ProjectDurationMonths"
+            ]
+          },
+          "e1": {
+            "InputColumnNames": [
+              "ProjectBudget",
+              "NumberOfEmployees",
+              "ProjectDurationMonths"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e3": {
+            "NumberOfTrees": 4,
+            "NumberOfLeaves": 8,
+            "FeatureFraction": 1.0,
+            "LabelColumnName": "ROI",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
         "TrainerName": "FastTreeRegression",
-        "Score": 0.057400918895247087,
-        "RuntimeInSeconds": 0.2,
+        "Score": -2.4331315643418505,
+        "RuntimeInSeconds": 0.115,
         "Parameter": {
           "_SCHEMA_": "e0 * e1 * e2",
           "e0": {
@@ -152,26 +189,17 @@
       "e6": "SdcaRegression"
     },
     "Schema": "e0 * e1 * (e2 + e3 + e4 + e5 + e6)",
-    "MetricName": "MeanSquaredError",
-    "ModelFilePath": "C:\\_Projetos\\Hackathon\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\ML\\MLModel.mlnet"
+    "MetricName": "RSquared",
+    "ModelFilePath": "E:\\Projetos\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\ML\\MLModel.mlnet"
   },
   "Type": "TrainingConfig",
   "Version": 5,
   "TrainingOption": {
     "Version": 2,
     "Subsampling": false,
-    "Tuner": "eci-cfo",
     "Type": "RegressionTrainingOption",
     "TrainingTime": 10,
-    "OptimizeMetric": "MSE",
     "LabelColumn": "ROI",
-    "AvailableTrainers": [
-      "SDCA",
-      "LBFGS",
-      "LGBM",
-      "FASTTREE",
-      "FASTFOREST"
-    ],
     "ValidationOption": {
       "Version": 0,
       "Type": "CrossValidationValidationOption",

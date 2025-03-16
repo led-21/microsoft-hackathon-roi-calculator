@@ -1,5 +1,7 @@
 using microsoft_hackathon_roi_calculator.Api.Endpoints;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
+using microsoft_hackathon_roi_calculator.Application.Interfaces;
+using microsoft_hackathon_roi_calculator.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddOpenApi();
 
 builder.AddRedisDistributedCache("cache");
 builder.AddSqlServerDbContext<CalculatorDbContext>("roidb");
+
+builder.Services.AddSingleton<IROICalculatorService, ROICalculatorService>();
 
 // Add Swagger services
 builder.Services.AddSwaggerGen(c =>

@@ -5,12 +5,45 @@ using System.Text;
 using System.Globalization;
 using microsoft_hackathon_roi_calculator.Domain.Models;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
+using microsoft_hackathon_roi_calculator.Application.Interfaces;
 
 namespace microsoft_hackathon_roi_calculator.Api.Endpoints;
 static public class ROIEndpoint
 {
     static public void AddROIEndpoint(this WebApplication app)
     {
+        app.MapPost("/api/roi/calculator", (IROICalculatorService calculator, ROIInputParameters input) =>
+        {
+            string report = string.Empty;
+
+            try
+            {
+                var result = calculator.CalculateROI(input);
+                report = calculator.GenerateReport(result, input) + "\n";
+            }
+            catch (Exception ex)
+            {
+                report = "Error: " + ex.Message;
+                return Results.BadRequest(report);
+            }
+
+            return Results.Ok(report);
+        });
+
+        app.MapPost("/api/roi/estimate/failure-rate", (IROICalculatorService calculator, ROIInputParameters input) =>
+        {
+            try
+            {
+                var estimate = calculator.EstimateFailureRate(input);
+
+                return Results.Ok(new { EstimateFailureRate = estimate });
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest("Erro ao calcular taxa de falha.");
+            }
+        });
+
         app.MapGet("/api/roi/csv", async (CalculatorDbContext dbContext) =>
         {
             try

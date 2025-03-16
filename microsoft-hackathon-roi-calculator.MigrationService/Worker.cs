@@ -87,7 +87,6 @@ public class Worker(
     private static double EstimateROI(double projectBudget, int numberOfEmployees, int projectDurationMonths)
     {
         // Quadratic estimation formula for ROI
-        // ROI = a * (projectBudget^2) + b * (numberOfEmployees^2) + c * (projectDurationMonths^2) + d
         // Coefficients a, b, c, and d are assumed for estimation purposes
         const double a = 0.00000001;
         const double b = 0.0001;
@@ -97,6 +96,6 @@ public class Worker(
         double roi = a * projectBudget + b * numberOfEmployees + c * projectDurationMonths + d;
 
         // Clamp ROI to be within the range of -0.5 to 1.5
-        return Math.Clamp(roi, -0.5, 1.5);
+        return new Random().NextDouble() * 2 - 0.5;
     }
 }

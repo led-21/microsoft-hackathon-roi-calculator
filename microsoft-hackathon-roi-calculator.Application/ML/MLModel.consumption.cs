@@ -63,7 +63,7 @@ namespace Microsoft_hackathon_roi_calculator_Application
 
         #endregion
 
-        private static string MLNetModelPath = Path.GetFullPath("C:\\_Projetos\\Hackathon\\microsoft-hackathon-roi-calculator\\microsoft-hackathon-roi-calculator.Application\\ML\\MLModel.mlnet");
+        private static string MLNetModelPath = Path.GetFullPath("MLModel.mlnet");
 
         public static readonly Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(() => CreatePredictEngine(), true);
 
