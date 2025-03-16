@@ -16,7 +16,7 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 - **Benefícios Totais**: Soma das economias projetadas (aumento de produtividade, redução de riscos e sucesso do projeto).
 - **Investimento Total**: Custo total do projeto, incluindo orçamento, mitigação de riscos e outros gastos relacionados.
 
-[Método de Cálculo usado pelo aplicativo](docs/componentes-de-calculo.md)
+[Métodos de Cálculos Utilizados no Aplicativo](docs/componentes-de-calculo.md)
 
 # Arquitetura de Serviços Azure
 ![Arquitetura de Serviços](docs/arquitetura.gif)
