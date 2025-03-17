@@ -1,21 +1,30 @@
 ﻿@page "/projects"
+@using microsoft_hackathon_roi_calculator.Web.Pages.Components;
 
 @inject HttpClient Http
 @inject IToastService ToastService
 @inject IDialogService DialogService
-@inject NavigationManager Navigation
 
 <h3>Projetos</h3>
 <FluentCard Height="auto" Style="margin: 1rem;">
+    <!-- Acordeão para filtros-->
     <FluentAccordion>
         <FluentAccordionItem Heading="Filter(s)" Expanded="true">
-            <FluentIcon Value="@(new Icons.Regular.Size20.FilterAdd())" Color="@Color.Neutral" Slot="start" />
-            <FluentGrid Spacing="1" Justify="Microsoft.FluentUI.AspNetCore.Components.JustifyContent.FlexStart" Style="padding: 5px;">
+            <FluentIcon Value="@(new Icons.Regular.Size20.FilterAdd())"
+                        Color="@Color.Neutral"
+                        Slot="start" />
+            <FluentGrid Spacing="1"
+                        Justify="Microsoft.FluentUI.AspNetCore.Components.JustifyContent.FlexStart"
+                        Style="padding: 5px;">
                 <FluentGridItem xs="12" sm="6" md="4">
-                    <FluentTextField @bind-Value=_projectName Label="Nome do Projeto"></FluentTextField>
+                    <FluentTextField @bind-Value="_projectName"
+                                     Label="Nome do Projeto" />
                 </FluentGridItem>
             </FluentGrid>
-            <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End">
+
+            <!-- Botões do filtro -->
+            <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal"
+                         HorizontalAlignment="HorizontalAlignment.End">
                 <FluentButton IconStart="@(new Icons.Regular.Size16.Broom())"
                               Disabled="loading"
                               OnClick="ClearFilters">
@@ -30,37 +39,57 @@
             </FluentStack>
         </FluentAccordionItem>
     </FluentAccordion>
+
+    <!-- Tabela -->
     <FluentDataGrid @ref="dataGrid"
-                    Items="projects"
-                    OnRowDoubleClick="@(()=>Console.WriteLine("Row double clicked!"))"
+                    Items="@FilteredProjects"
+                    OnRowDoubleClick="@(() => Console.WriteLine("Row double clicked!"))"
                     ItemSize="46"
                     GenerateHeader="GenerateHeaderOption.Sticky"
                     TGridItem="ProjectROI"
                     Loading="loading"
                     Pagination="pagination">
+        <!-- Colunas da tabela -->
         <PropertyColumn Title="ID" Property="@(c => c!.Id)" />
         <PropertyColumn Property="@(c => c!.ProjectName)" Style="color: #af5f00" />
         <PropertyColumn Property="@(c => c!.ProjectBudget)" />
-        <PropertyColumn Title="NumberOfEmployees" Property="@(c => c!.NumberOfEmployees)" Tooltip="true" />
+        <PropertyColumn Title="NumberOfEmployees"
+                        Property="@(c => c!.NumberOfEmployees)"
+                        Tooltip="true" />
         <PropertyColumn Property="@(c => c!.ROI)" />
-        @* <PropertyColumn Title="Termination Date" Property="@(c => c!.NumberOfEmployees)" SortBy="@(new ColumnKeyGridSort<FoodRecall>("termination_date"))" Sortable="true" /> *@
+
+        <!-- Coluna de ações -->
         <TemplateColumn Title="Actions" Align="@Align.End">
-            <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => Console.WriteLine("Edit clicked"))" />
-            <FluentButton aria-label="Delete item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(()=> DeleteProject(context))" />
+            <FluentButton aria-label="Edit item"
+                          IconEnd="@(new Icons.Regular.Size16.Edit())"
+                          OnClick="@(() => Console.WriteLine("Edit clicked"))" />
+            <FluentButton aria-label="Delete item"
+                          IconEnd="@(new Icons.Regular.Size16.Delete())"
+                          OnClick="@(() => DeleteProject(context))" />
         </TemplateColumn>
     </FluentDataGrid>
+
+    <!-- Paginação vinculada ao estado da tabela -->
     <FluentPaginator State="@pagination" />
-    <FluentButton Appearance="Appearance.Accent" @onclick="Register">Cadastrar</FluentButton>
+
+    <!-- Botão de cadastro fora da tabela, com estilo destacado -->
+    <FluentButton Appearance="Appearance.Accent"
+                  @onclick="Register">
+        Cadastrar
+    </FluentButton>
 </FluentCard>
 
 @code {
     FluentDataGrid<ProjectROI> dataGrid = default!;
     IQueryable<ProjectROI> projects = default!;
-    IQueryable<ProjectROI> projectsFilter = default!;
     bool loading = true;
-    string? _projectName = "";
+    string? _projectName = string.Empty;
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    IDialogReference? _dialog;
+
+    IQueryable<ProjectROI>? FilteredProjects => projects?.Where(x => x.ProjectName.Contains(_projectName!, StringComparison.CurrentCultureIgnoreCase));
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -109,12 +138,12 @@
             {
                 projectList.Remove(projectToDelete);
                 projects = projectList.AsQueryable();
-                ToastService.ShowWarning($"O Projeto {project.ProjectName} foi deletado com sucesso!");
+                ToastService.ShowInfo($"O Projeto {project.ProjectName} foi deletado com sucesso!");
                 await InvokeAsync(StateHasChanged);
             }
             else
             {
-                ToastService.ShowWarning($"Falhou em deletado o {project.ProjectName}!");
+                ToastService.ShowWarning($"Falhou: O {project.ProjectName} não foi encontrado.");
             }
         }
     }
@@ -124,9 +153,9 @@
         _projectName = null;
     }
 
-    public void Filter(string filter)
+    public void ApplyFilter()
     {
-        projectsFilter = projects.Where(x => x.ProjectName == filter);
+        StateHasChanged();
     }
 
     public async Task DataGridRefreshDataAsync()
@@ -134,8 +163,38 @@
         await dataGrid.RefreshDataAsync(true);
     }
 
-    private void Register()
+    private async Task Register()
     {
-        Navigation.NavigateTo("/register");
+        ProjectROI projectROI = new();
+
+        _dialog = await DialogService.ShowPanelAsync<Cadastrar>(projectROI, new DialogParameters<ProjectROI>()
+            {
+                Content = projectROI,
+                Alignment = HorizontalAlignment.Right,
+                Title = $"Cadastrar Projeto",
+                PrimaryAction = "Salvar",
+                SecondaryAction = "Cancelar",
+                Width = "400px"
+            });
+
+        DialogResult result = await _dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            try
+            {
+                var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", projectROI);
+                ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi adicionado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi cadastrado.");
+            }
+        }
+
+        await LoadProjects();
+
     }
+
+
 }

@@ -1,7 +1,7 @@
-﻿@page "/register"
+﻿@implements IDialogContentComponent<ProjectROI>
 @inject HttpClient Http
 
-<h3>Cadastrar Resultados de Projetos</h3>
+<h4>Resultados</h4>
 
 <FluentCard Height="auto" Style="margin: 1rem;">
 	<FluentTextField Label="Nome do Projeto"
@@ -89,11 +89,14 @@
 		</FluentAccordionItem>
 	</FluentAccordion>
 	<br />
-	<FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Salvar</FluentButton>
+@* 	<FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Salvar</FluentButton> *@
 </FluentCard>
 
 
 @code {
+
+	[Parameter]
+	public ProjectROI Content { get; set; } = default!;
 
 	private static ProjectROI project = new()
 	{
@@ -110,16 +113,4 @@
 		ProjectEvaluationPositiveResponses = 0,
 		ProjectEvaluationSumOfAllScores = 0
 	};
-
-	private async Task SubmitForm()
-	{
-		try
-		{
-			var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", project);
-		} 
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-		}
-	}
 }

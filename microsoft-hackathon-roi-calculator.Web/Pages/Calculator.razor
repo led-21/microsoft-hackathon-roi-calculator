@@ -1,19 +1,23 @@
 ﻿@page "/calculator"
 @using System.Globalization
 
+@inject IToastService ToastService
+@inject HttpClient Http
+
+
 @if (isLoading)
 {
 
     <FluentCard>
         <h3>
             <FluentSkeleton Shape="SkeletonShape.Rect"
-                            Width="150px"
-                            Height="20px" />
+            Width="150px"
+            Height="20px" />
         </h3>
         <h3>
             <FluentSkeleton Shape="SkeletonShape.Rect"
-                            Width="100%"
-                            Height="400px" />
+            Width="100%"
+            Height="400px" />
         </h3>
     </FluentCard>
 }
@@ -27,38 +31,38 @@ else
             <FluentCard xs="12" style="padding: 20px; margin: 20px;">
 
                 <FluentNumberField Label="Orçamento do Projeto (R$)"
-                                   Type="number"
-                                   @bind-Value="inputParameters.ProjectBudget" />
+                Type="number"
+                @bind-Value="inputParameters.ProjectBudget" />
                 <FluentNumberField Label="Número de Funcionários Impactados"
-                                   Type="number"
-                                   @bind-Value="inputParameters.NumberOfEmployees" />
+                Type="number"
+                @bind-Value="inputParameters.NumberOfEmployees" />
                 <FluentNumberField Label="Duração do Projeto (meses)"
-                                   Type="number"
-                                   @bind-Value="inputParameters.ProjectDurationMonths" />
+                Type="number"
+                @bind-Value="inputParameters.ProjectDurationMonths" />
                 <FluentNumberField Label="Probabilidade de Falha (%)"
-                                   Type="number"
-                                   @bind-Value="inputParameters.FailureRate"
-                                   @onclick="DetermineProbability" />
+                Type="number"
+                @bind-Value="inputParameters.FailureRate"
+                @onclick="DetermineProbability" />
                 <p>@failPropability</p>
 
                 <FluentAccordion>
                     <FluentAccordionItem Heading="Outros Parametros de Cálculo">
                         <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
                         <FluentNumberField Label="Percentual do Orçamento Perdido em Caso de Falha (%)"
-                                           Type="number"
-                                           @bind-Value="inputParameters.BudgetLossRate" />
+                        Type="number"
+                        @bind-Value="inputParameters.BudgetLossRate" />
                         <FluentNumberField Label="Perda por Desengajamento (%)"
-                                           Type="number"
-                                           @bind-Value="inputParameters.ExpectedDisengagementRate" />
+                        Type="number"
+                        @bind-Value="inputParameters.ExpectedDisengagementRate" />
                         <FluentNumberField Label="Ganho de Produtividade (%)"
-                                           Type="number"
-                                           @bind-Value="inputParameters.ExpectedProductivityGain" />
+                        Type="number"
+                        @bind-Value="inputParameters.ExpectedProductivityGain" />
                         <FluentNumberField Label="Redução do Risco de Falha (%)"
-                                           Type="number"
-                                           @bind-Value="inputParameters.ProjectedRiskReduction" />
+                        Type="number"
+                        @bind-Value="inputParameters.ProjectedRiskReduction" />
                         <FluentNumberField Label="Retorno no Sucesso (%)"
-                                           Type="number"
-                                           @bind-Value="inputParameters.ExpectedSuccessBenefit" />
+                        Type="number"
+                        @bind-Value="inputParameters.ExpectedSuccessBenefit" />
                     </FluentAccordionItem>
                 </FluentAccordion>
 
@@ -86,9 +90,19 @@ else
 
     string failPropability = "";
 
-    private void SubmitForm()
+    private async Task SubmitForm()
     {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi/calculator", inputParameters);
+            ToastService.ShowSuccess($"O relatorio detalhado por AI será gerado.");
 
+            Result = (await response.Content.ReadAsStringAsync()).Replace("\r\n","<br>");
+
+        }catch(Exception ex)
+        {
+            ToastService.ShowWarning($"Falhou ao calcular o projeto. "+ex.Message);
+        }
     }
 
     private void DetermineProbability()
