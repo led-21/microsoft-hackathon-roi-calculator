@@ -104,13 +104,20 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 - **Eficiência**: Funções serverless reduzem custos operacionais ao executar apenas sob demanda.
 - **Manutenção Simplificada**: Banco de dados e hospedagem gerenciados pelo Azure minimizam a necessidade de gerenciamento manual.
 
-## Limitações
-- Os dados atualmente utilizados são gerados de forma aleatória apenas para fins de teste, apresentando baixa significância estatística e não refletindo cenários reais de uso.
+## Princípios de IA Responsável no Treinamento dos Modelos de Machine Learning
+- **Qualidade e Integridade dos Dados:** Os dados do Azure SQL Database precisam ser consistentes, completos e livres de vieses significativos. A IA responsável exige que os dados sejam validados antes do treinamento, evitando que informações incorretas ou enviesadas.
+- **Transparência:** Os modelos preditivos devem ser compreensíveis para os usuários finais. Por exemplo, ao estimar o ROI ou o risco de um projeto, o sistema deve fornecer explicações simples sobre quais variáveis mais influenciaram a previsão. Isso aumenta a confiança do usuário nos resultados.
+- **Atualização Contínua:** Os modelos devem ser ajustados dinamicamente com a entrada de novos dados no Azure SQL. A IA responsável garante que esse processo seja monitorado para evitar "drift" (desvio de desempenho) e que os modelos permaneçam relevantes e precisos ao longo do tempo.
+- **Mitigação de Riscos:** Ao calcular riscos de projetos, o modelo deve ser projetado para evitar discriminação ou decisões injustas. A IA responsável inclui auditorias regulares dos modelos para identificar e corrigir possíveis vieses.
+- **Eficiência e Escalabilidade:** O uso de recursos computacionais no Azure Machine Learning é otimizado para treinar modelos, alinhando-se aos princípios de sustentabilidade. Isso é complementado pela integração com Azure Functions, que executa cálculos em tempo real de forma eficiente.
+  
+## Limitações Uso
+- Os dados atualmente utilizados são gerados de forma aleatória apenas para fins de teste de implementação do aplicativo em um curto espaço de tempo, apresentando baixa significância estatística e não refletindo cenários reais de uso.
   
 ## Próximos Passos
 - Implementar autenticação e autorização para garantir segurança dos dados.
 - Adicionar dados reais de projeto para o treinamento dos modelos de Machine Learning.
-- Adicionar testes automatizados para os modelos de Machine Learning.
+- Adicionar testes automatizados para validar os modelos de Machine Learning.
 
 ## Equipe do Projeto
 
