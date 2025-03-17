@@ -1,201 +1,82 @@
 ﻿@page "/"
 @using microsoft_hackathon_roi_calculator.Web.Pages.Charts
 @using microsoft_hackathon_roi_calculator.Web.Pages.Components
-@using microsoft_hackathon_roi_calculator.Web.Pages.SplashScreen
-@inject IDialogService DialogService
+@inject NavigationManager Navigation
 
-<h3>Soluções Inteligentes para Retorno Máximo</h3>
+<FluentLayout>
+    <!-- Seção Hero -->
+    <FluentCard Style="margin: 20px; padding: 20px; text-align: center;">
+        <FluentLabel Typo="Typography.H1">Soluções Inteligentes para Retorno Máximo</FluentLabel>
+        <FluentLabel Typo="Typography.Subject">Calcule o ROI das suas iniciativas de mudança com IA preditiva e prepare suas equipes para o sucesso.</FluentLabel>
+        <AreaROI></AreaROI>
+        <FluentStack HorizontalAlignment="HorizontalAlignment.Center" Style="margin-top: 60px;">
+            <FluentButton Appearance="Appearance.Accent" @onclick="StartNow">Experimente a Calculadora de ROI</FluentButton>
+            <FluentButton Appearance="Appearance.Outline" @onclick="LearnMore">Saiba Mais</FluentButton>
+        </FluentStack>
+    </FluentCard>
 
-<FluentGrid Spacing="1" Style="padding: 1rem;">
+    <!-- Benefícios -->
+    <FluentCard Style="margin: 20px; padding: 20px;">
+        <FluentLabel Typo="Typography.H2">Por que Escolher o InovaROI?</FluentLabel>
+        <FluentGrid Justify="Microsoft.FluentUI.AspNetCore.Components.JustifyContent.SpaceAround">
+            <FluentGridItem xs="12" sm="6" md="3">
+                <FluentIcon Value="@(new Icons.Regular.Size24.BrainCircuit())" />
+                <FluentLabel>Insights Preditivos</FluentLabel>
+                <p>Antecipe riscos e maximize retornos com IA avançada.</p>
+            </FluentGridItem>
+            <FluentGridItem xs="12" sm="6" md="3">
+                <FluentIcon Value="@(new Icons.Regular.Size24.Lightbulb())" />
+                <FluentLabel>Decisões Inteligentes</FluentLabel>
+                <p>Recomendações práticas para o sucesso da transformação.</p>
+            </FluentGridItem>
+            <FluentGridItem xs="12" sm="6" md="3">
+                <FluentIcon Value="@(new Icons.Regular.Size24.PeopleTeam())" />
+                <FluentLabel>Produtividade Ampliada</FluentLabel>
+                <p>Reduza desperdícios e engaje suas equipes.</p>
+            </FluentGridItem>
+            <FluentGridItem xs="12" sm="6" md="3">
+                <FluentIcon Value="@(new Icons.Regular.Size24.Rocket())" />
+                <FluentLabel>Escalabilidade</FluentLabel>
+                <p>Uma solução que cresce com sua empresa.</p>
+            </FluentGridItem>
+        </FluentGrid>
+    </FluentCard>
 
-    <!-- Area Chart -->
-    <FluentGridItem xs="12" md="12">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton />
-            }
-            else
-            {
-                <Area />
-            }
-        </FluentCard>
-    </FluentGridItem>
+    <!-- Estatística -->
+    <FluentCard Style="margin: 20px; padding: 20px; background-color: #f0f0f0; text-align: center;">
+        <FluentLabel Typo="Typography.H2">Impacto Real</FluentLabel>
+        <FluentLabel Typo="Typography.Body">"70% das transformações falham. Estamos aqui para mudar isso."</FluentLabel>
+    </FluentCard>
 
-    <!-- Area Chart -->
-    <FluentGridItem xs="12" md="6">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton></Skeleton>
-            }
-            else
-            {
-                <h3>Area Chart</h3>
-                <RadzenChart>
-                    <RadzenAreaSeries Data="@chartData"
-                                      CategoryProperty="Month"
-                                      ValueProperty="Sales"
-                                      Title="Vendas"
-                                      LineType="LineType.Solid" />
-                    <RadzenCategoryAxis />
-                    <RadzenValueAxis />
-                </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
+    <!-- Tecnologia -->
+    <FluentCard Style="margin: 20px; padding: 20px; text-align: center;">
+        <FluentLabel Typo="Typography.H2">Construído com o Melhor da Tecnologia</FluentLabel>
+        <FluentStack HorizontalAlignment="HorizontalAlignment.Center">
+            <img src="https://logos-world.net/wp-content/uploads/2021/03/Azure-Logo-2020-present.png" alt="Azure" style="height: 50px; margin: 10px;" />
+            <img src="https://logowik.com/content/uploads/images/azure-machine-learning-service1395.jpg" alt="Azure ML" style="height: 50px; margin: 10px;" />
+            <img src="https://logos-world.net/wp-content/uploads/2023/02/ChatGPT-Logo.png" alt="OpenAI" style="height: 50px; margin: 10px;" />
+            <img src="https://logos-world.net/wp-content/uploads/2022/01/NET-Framework-Logo.png" alt=".NET" style="height: 50px; margin: 10px;" />
+        </FluentStack>
+    </FluentCard>
 
-    <!-- Bar Chart -->
-    <FluentGridItem xs="12" md="6">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton></Skeleton>
-            }
-            else
-            {
-                <h3>Bar Chart</h3>
-                <RadzenChart>
-                    <RadzenBarSeries Data="@chartData"
-                                     CategoryProperty="Month"
-                                     ValueProperty="Sales"
-                                     Title="Vendas" />
-                    <RadzenCategoryAxis />
-                    <RadzenValueAxis />
-                </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
-
-    <!-- Column Chart -->
-    <FluentGridItem xs="12" md="6">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton></Skeleton>
-            }
-            else
-            {
-                <h3>Column Chart</h3>
-                <RadzenChart>
-                    <RadzenColumnSeries Data="@chartData"
-                                        CategoryProperty="Month"
-                                        ValueProperty="Sales"
-                                        Title="Vendas" />
-                    <RadzenCategoryAxis />
-                    <RadzenValueAxis />
-                </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
-
-    <!-- Donut Chart -->
-    <FluentGridItem xs="12" md="6">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton></Skeleton>
-            }
-            else
-            {
-                <h3>Donut Chart</h3>
-                <RadzenChart>
-                    <RadzenDonutSeries Data="@chartData"
-                                       CategoryProperty="Month"
-                                       ValueProperty="Sales"
-                                       Title="Vendas" />
-                </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
-
-    <!-- Line Chart -->
-    <FluentGridItem xs="12" md="6">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton></Skeleton>
-            }
-            else
-            {
-                <h3>Line Chart</h3>
-                <RadzenChart>
-                    <RadzenLineSeries Data="@chartData"
-                                      CategoryProperty="Month"
-                                      ValueProperty="Sales"
-                                      Title="Vendas"
-                                      LineType="LineType.Solid" />
-                    <RadzenCategoryAxis />
-                    <RadzenValueAxis />
-                </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
-
-    <!-- Pie Chart -->
-    <FluentGridItem xs="12" md="6">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton />
-            }
-            else
-            {
-                <h3>Pie Chart</h3>
-                <RadzenChart>
-                    <RadzenPieSeries Data="@chartData"
-                                     CategoryProperty="Month"
-                                     ValueProperty="Sales"
-                                     Title="Vendas" />
-                </RadzenChart>
-            }
-        </FluentCard>
-    </FluentGridItem>
-
-    <!-- Series Chart -->
-    <FluentGridItem xs="12" md="12">
-        <FluentCard>
-            @if (isLoading)
-            {
-                <Skeleton />
-            }
-            else
-            {
-                <h3>Pie Chart</h3>
-                <Series />
-            }
-        </FluentCard>
-    </FluentGridItem>
-</FluentGrid>
+    <!-- CTA Final -->
+    <FluentCard Style="margin: 20px; padding: 20px; background-color: #0078d4; color: white; text-align: center;">
+        <FluentLabel Typo="Typography.H2">Pronto para Transformar Sua Empresa?</FluentLabel>
+        <FluentLabel>Comece hoje mesmo e veja como a IA pode impulsionar seus projetos.</FluentLabel>
+        <FluentButton Appearance="Appearance.Accent" @onclick="StartNow">Começar Agora</FluentButton>
+    </FluentCard>
+</FluentLayout>
 
 @code {
 
-    bool isLoading = true;
-    static bool firstTime = true;
-
-    protected override async Task OnInitializedAsync()
+    private void StartNow()
     {
-        if (firstTime)
-            await DialogSplashScreen.ShowSplashScreen(DialogService);
-
-        firstTime = false;
-
-        await Task.Delay(500);
-        isLoading = false;
+        Navigation.NavigateTo("/calculator");
     }
 
-    public class ChartData
+    private void LearnMore()
     {
-        public string? Month { get; set; }
-        public double Sales { get; set; }
+        Navigation.NavigateTo("/info");
     }
 
-    List<ChartData> chartData = new()
-    {
-        new ChartData { Month = "Jan", Sales = 10 },
-        new ChartData { Month = "Feb", Sales = 20 },
-        new ChartData { Month = "Mar", Sales = 15 },
-        new ChartData { Month = "Apr", Sales = 25 },
-        new ChartData { Month = "May", Sales = 30 }
-    };
 }

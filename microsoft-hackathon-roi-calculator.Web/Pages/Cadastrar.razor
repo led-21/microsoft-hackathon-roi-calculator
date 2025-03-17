@@ -1,105 +1,125 @@
 ﻿@page "/register"
+@inject HttpClient Http
 
 <h3>Cadastrar Resultados de Projetos</h3>
 
-
 <FluentCard Height="auto" Style="margin: 1rem;">
-    <FluentTextField Label="Nome do Projeto"
-                     @bind-Value="project.ProjectName" />
+	<FluentTextField Label="Nome do Projeto"
+	@bind-Value="project.ProjectName" />
 
-    <FluentDatePicker Label="Inicio do projeto" />
+	<FluentDatePicker Label="Inicio do projeto" />
 
-    <FluentNumberField Label="Orçamento do Projeto (R$)"
-                       Type="number"
-                       @bind-Value="project.ProjectBudget" />
+	<FluentNumberField Label="Orçamento do Projeto (R$)"
+	Type="number"
+	@bind-Value="project.ProjectBudget" />
 
-    <FluentNumberField Label="Número de Funcionários Impactados"
-                       Type="number"
-                       @bind-Value="project.NumberOfEmployees" />
+	<FluentNumberField Label="Número de Funcionários Impactados"
+	Type="number"
+	@bind-Value="project.NumberOfEmployees" />
 
-    <FluentNumberField Label="Duração do Projeto (meses)"
-                       Type="number"
-                       @bind-Value="project.ProjectDurationMonths" />
+	<FluentNumberField Label="Duração do Projeto (meses)"
+	Type="number"
+	@bind-Value="project.ProjectDurationMonths" />
 
-    <FluentNumberField Label="Retorno do Investimento (ROI)"
-                       Type="number"
-                       @bind-Value="project.ROI" />
+	<FluentNumberField Label="Retorno do Investimento (ROI)"
+	Type="number"
+	@bind-Value="project.ROI" />
 
-    <FluentTextArea Label="Descrição do Projeto"
-                    @bind-Value="project.Description"
-                    Style="width:13.2rem;" />
+	<FluentTextArea Label="Descrição do Projeto"
+	@bind-Value="project.Description"
+	Style="width:13.2rem;" />
 </FluentCard>
 
 <FluentCard Height="auto" Style="margin: 1rem;">
-    <FluentAccordion>
-        <FluentAccordionItem Heading="METRICAS DE FUNCIONÁRIOS" Style="width: 20rem;">
-            <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+	<FluentAccordion>
+		<FluentAccordionItem Heading="METRICAS DE FUNCIONÁRIOS" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
 
-            <FluentNumberField Label="Total de Horas Trabalhadas por Semana"
-                               Type="number"
-                               @bind-Value="project.TotalHoursWorkedWeekly" />
+			<FluentNumberField Label="Total de Horas Trabalhadas por Semana"
+			Type="number"
+			@bind-Value="project.TotalHoursWorkedWeekly" />
 
-            <FluentNumberField Label="Treinamentos Completos"
-                               Type="number"
-                               @bind-Value="project.CompletedTraining" />
+			<FluentNumberField Label="Treinamentos Completos"
+			Type="number"
+			@bind-Value="project.CompletedTraining" />
 
-            <FluentNumberField Label="Funcionários Usando Nova Ferramenta"
-                               Type="number"
-                               @bind-Value="project.EmployeesUsingNewTool" />
+			<FluentNumberField Label="Funcionários Usando Nova Ferramenta"
+			Type="number"
+			@bind-Value="project.EmployeesUsingNewTool" />
 
-        </FluentAccordionItem>
-        <FluentAccordionItem Heading="METRICAS DE MUDANÇAS" Style="width: 20rem;">
-            <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+		</FluentAccordionItem>
+		<FluentAccordionItem Heading="METRICAS DE MUDANÇAS" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
 
-            <FluentNumberField Label="Tempo Total de Implementação da Mudança"
-                               Type="number"
-                               @bind-Value="project.TotalChangeImplementationTime" />
+			<FluentNumberField Label="Tempo Total de Implementação da Mudança"
+			Type="number"
+			@bind-Value="project.TotalChangeImplementationTime" />
 
-            <FluentNumberField Label="Tempo Total Planejado para Implementação"
-                               Type="number"
-                               @bind-Value="project.TotalPlannedImplementationTime" />
+			<FluentNumberField Label="Tempo Total Planejado para Implementação"
+			Type="number"
+			@bind-Value="project.TotalPlannedImplementationTime" />
 
-        </FluentAccordionItem>
-        <FluentAccordionItem Heading="METRICAS DE PROCESSOS" Style="width: 20rem;">
-            <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+		</FluentAccordionItem>
+		<FluentAccordionItem Heading="METRICAS DE PROCESSOS" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
 
-            <FluentNumberField Label="Total de Processos"
-                               Type="number"
-                               @bind-Value="project.TotalProcesses" />
+			<FluentNumberField Label="Total de Processos"
+			Type="number"
+			@bind-Value="project.TotalProcesses" />
 
-            <FluentNumberField Label="Processos em Conformidade"
-                               Type="number"
-                               @bind-Value="project.CompliantProcesses" />
+			<FluentNumberField Label="Processos em Conformidade"
+			Type="number"
+			@bind-Value="project.CompliantProcesses" />
 
-        </FluentAccordionItem>
-        <FluentAccordionItem Heading="AVALIAÇÃO DO PROJETO" Style="width: 20rem;">
-            <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+		</FluentAccordionItem>
+		<FluentAccordionItem Heading="AVALIAÇÃO DO PROJETO" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
 
-            <FluentNumberField Label="Total de Respostas na Avaliação do Projeto"
-                               Type="number"
-                               @bind-Value="project.ProjectEvaluationTotalResponses" />
+			<FluentNumberField Label="Total de Respostas na Avaliação do Projeto"
+			Type="number"
+			@bind-Value="project.ProjectEvaluationTotalResponses" />
 
-            <FluentNumberField Label="Respostas Positivas na Avaliação do Projeto"
-                               Type="number"
-                               @bind-Value="project.ProjectEvaluationPositiveResponses" />
+			<FluentNumberField Label="Respostas Positivas na Avaliação do Projeto"
+			Type="number"
+			@bind-Value="project.ProjectEvaluationPositiveResponses" />
 
-            <FluentNumberField Label="Soma de Todas as Pontuações na Avaliação do Projeto"
-                               Type="number"
-                               @bind-Value="project.ProjectEvaluationSumOfAllScores" />
-        </FluentAccordionItem>
-    </FluentAccordion>
-    <br />
-    <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent" Style="margin:0.5;">Cadastrar</FluentButton>
+			<FluentNumberField Label="Soma de Todas as Pontuações na Avaliação do Projeto"
+			Type="number"
+			@bind-Value="project.ProjectEvaluationSumOfAllScores" />
+		</FluentAccordionItem>
+	</FluentAccordion>
+	<br />
+	<FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Salvar</FluentButton>
 </FluentCard>
-
 
 
 @code {
 
-    private static ProjectROI project = new();
+	private static ProjectROI project = new()
+	{
+		
+		StartDate = DateTime.Now,
+		TotalHoursWorkedWeekly = 0,
+		CompletedTraining = 0,
+		EmployeesUsingNewTool = 0,
+		TotalChangeImplementationTime = 0,
+		TotalPlannedImplementationTime = 0,
+		TotalProcesses = 0,
+		CompliantProcesses = 0,
+		ProjectEvaluationTotalResponses = 0,
+		ProjectEvaluationPositiveResponses = 0,
+		ProjectEvaluationSumOfAllScores = 0
+	};
 
-    private void SubmitForm()
-    {
-
-    }
+	private async Task SubmitForm()
+	{
+		try
+		{
+			var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", project);
+		} 
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+		}
+	}
 }
