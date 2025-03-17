@@ -50,16 +50,25 @@
                     Loading="loading"
                     Pagination="pagination">
         <!-- Colunas da tabela -->
-        <PropertyColumn Title="ID" Property="@(c => c!.Id)" />
-        <PropertyColumn Property="@(c => c!.ProjectName)" Style="color: #af5f00" />
-        <PropertyColumn Property="@(c => c!.ProjectBudget)" />
-        <PropertyColumn Title="NumberOfEmployees"
+        <PropertyColumn Title="Id" 
+                        Property="@(c => c!.Id)"
+                        Width="80px" />
+        <PropertyColumn Title="Nome do Projeto"
+                        Property="@(c => c!.ProjectName)" 
+                        Style="color: #af5f00" 
+                        Align="Align.Start" />
+        <PropertyColumn Title="Orçamento"
+                        Property="@(c => c!.ProjectBudget.ToString("C"))" 
+                        Align="Align.Center" />
+        <PropertyColumn Title="Funcionários"
                         Property="@(c => c!.NumberOfEmployees)"
-                        Tooltip="true" />
-        <PropertyColumn Property="@(c => c!.ROI)" />
+                        Tooltip="true"
+                        Align="Align.Center" />
+        <PropertyColumn Title="ROI"
+                        Property="@(c => c!.ROI.ToString("0.00"))" Align="Align.Center" />
 
         <!-- Coluna de ações -->
-        <TemplateColumn Title="Actions" Align="@Align.End">
+        <TemplateColumn Title="Ações" Align="@Align.End">
             <FluentButton aria-label="Edit item"
                           IconEnd="@(new Icons.Regular.Size16.Edit())"
                           OnClick="@(() => Console.WriteLine("Edit clicked"))" />
