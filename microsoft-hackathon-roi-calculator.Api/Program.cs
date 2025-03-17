@@ -28,17 +28,24 @@ builder.Services.AddSwaggerGen(c =>
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+    options.AddPolicy("AllowAnyLocalhostPort",
+       builder =>
+       {
+           builder.SetIsOriginAllowed(origin =>
+           {
+               // Permite qualquer porta do localhost (HTTP ou HTTPS)
+               return new Uri(origin).Host == "localhost";
+           })
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+       });
+
 });
 
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowAnyLocalhostPort");
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();

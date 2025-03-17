@@ -65,7 +65,7 @@ public class Worker(
 
             projects.Add(new ProjectROI
             {
-                ProjectName = $"Projecto {names[random.Next(0, names.Count - 1)]} {names[random.Next(0, names.Count - 1)]} {random.Next(0, 20)}",
+                ProjectName = $"Projeto {names[random.Next(0, names.Count - 1)]} {names[random.Next(0, names.Count - 1)]} {random.Next(0, 20)}",
                 ProjectBudget = projectBudget,
                 NumberOfEmployees = employeeNumber,
                 ProjectDurationMonths = projectDuration,
