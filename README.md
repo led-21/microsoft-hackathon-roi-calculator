@@ -4,6 +4,10 @@ Quando as empresas precisam se adaptar, a mudança geralmente traz riscos substa
 ## Desafio 
 Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a mudança com insights preditivos, recomendações acionáveis para iniciativas de mudança, visualizações e relatórios. Entradas de amostra incluiriam orçamento do projeto, número de funcionários impactados e duração do projeto. Considere os riscos financeiros de falha do projeto e desengajamento dos funcionários, bem como as economias potenciais de produtividade aumentada, redução de risco e entrega bem-sucedida do projeto.
 
+# InovaROI
+O projeto inova ao combinar tecnologias de ponta (Azure Machine Learning, OpenAI, Azure Functions) com uma abordagem centrada no usuário, focada em resolver o alto índice de falhas em transformações empresariais. Ele não apenas calcula o ROI, mas também prepara as empresas para a mudança, oferecendo uma solução preditiva, escalável e responsável.
+![Tela aplicativo](docs/tela-app.png)
+
 ## Retorno sobre Investimento (ROI)
 
 O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.
