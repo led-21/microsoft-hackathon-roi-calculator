@@ -91,9 +91,9 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 ### Hospedagem
 - **Azure Web App**:  
   Plataforma de hospedagem da aplicação web. Garante:
-  - Escalabilidade automática
-  - Alta disponibilidade
-  - Estabilidade do ambiente de produção
+  - Escalabilidade automática.
+  - Alta disponibilidade.
+  - Estabilidade do ambiente de produção.
 
 ## Fluxo Geral
 1. O usuário interage com a interface em **Blazor** para inserir dados de cálculo e projetos.
