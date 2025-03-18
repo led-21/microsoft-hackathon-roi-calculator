@@ -9,7 +9,7 @@
 <FluentCard Height="auto" Style="margin: 1rem;">
     <!-- Acordeão para filtros-->
     <FluentAccordion>
-        <FluentAccordionItem Heading="Filter(s)" Expanded="true">
+        <FluentAccordionItem Heading="Filter(s)" Expanded="false">
             <FluentIcon Value="@(new Icons.Regular.Size20.FilterAdd())"
                         Color="@Color.Neutral"
                         Slot="start" />
@@ -50,15 +50,15 @@
                     Loading="loading"
                     Pagination="pagination">
         <!-- Colunas da tabela -->
-        <PropertyColumn Title="Id" 
+        <PropertyColumn Title="Id"
                         Property="@(c => c!.Id)"
                         Width="80px" />
         <PropertyColumn Title="Nome do Projeto"
-                        Property="@(c => c!.ProjectName)" 
-                        Style="color: #af5f00" 
+                        Property="@(c => c!.ProjectName)"
+                        Style="color: #af5f00"
                         Align="Align.Start" />
         <PropertyColumn Title="Orçamento"
-                        Property="@(c => c!.ProjectBudget.ToString("C"))" 
+                        Property="@(c => c!.ProjectBudget.ToString("C"))"
                         Align="Align.Center" />
         <PropertyColumn Title="Funcionários"
                         Property="@(c => c!.NumberOfEmployees)"
@@ -71,7 +71,7 @@
         <TemplateColumn Title="Ações" Align="@Align.End">
             <FluentButton aria-label="Edit item"
                           IconEnd="@(new Icons.Regular.Size16.Edit())"
-                          OnClick="@(() => Console.WriteLine("Edit clicked"))" />
+                          OnClick="@(() => UpdateProject(context))" />
             <FluentButton aria-label="Delete item"
                           IconEnd="@(new Icons.Regular.Size16.Delete())"
                           OnClick="@(() => DeleteProject(context))" />
@@ -83,7 +83,7 @@
 
     <!-- Botão de cadastro fora da tabela, com estilo destacado -->
     <FluentButton Appearance="Appearance.Accent"
-                  @onclick="Register">
+                  @onclick="RegisterProject">
         Cadastrar
     </FluentButton>
 </FluentCard>
@@ -117,6 +117,98 @@
 
         loading = false;
         await InvokeAsync(StateHasChanged);
+    }
+
+    public void ClearFilters()
+    {
+        _projectName = string.Empty;
+    }
+
+    public async Task DataGridRefreshDataAsync()
+    {
+        await dataGrid.RefreshDataAsync(true);
+    }
+
+    private async Task RegisterProject()
+    {
+        ProjectROI projectROI = new()
+            {
+
+                StartDate = DateTime.Now,
+                TotalHoursWorkedWeekly = 0,
+                CompletedTraining = 0,
+                EmployeesUsingNewTool = 0,
+                TotalChangeImplementationTime = 0,
+                TotalPlannedImplementationTime = 0,
+                TotalProcesses = 0,
+                CompliantProcesses = 0,
+                ProjectEvaluationTotalResponses = 0,
+                ProjectEvaluationPositiveResponses = 0,
+                ProjectEvaluationSumOfAllScores = 0
+            };
+
+        _dialog = await DialogService.ShowPanelAsync<Cadastrar>(projectROI, new DialogParameters<ProjectROI>()
+            {
+                Content = projectROI,
+                Alignment = HorizontalAlignment.Right,
+                Title = $"Cadastrar Projeto",
+                PrimaryAction = "Salvar",
+                SecondaryAction = "Cancelar",
+                Width = "400px"
+            });
+
+        DialogResult result = await _dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            try
+            {
+                var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", projectROI);
+
+                if (response.IsSuccessStatusCode)
+                    ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi adicionado com sucesso!");
+            }
+            catch
+            {
+                ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi cadastrado.");
+            }
+        }
+
+        await LoadProjects();
+
+    }
+
+    private async Task UpdateProject(ProjectROI projectROI)
+    {
+
+        var dialog = await DialogService.ShowPanelAsync<Cadastrar>(projectROI, new DialogParameters<ProjectROI>()
+            {
+                Content = projectROI,
+                Alignment = HorizontalAlignment.Right,
+                Title = $"Cadastrar Projeto",
+                PrimaryAction = "Salvar",
+                SecondaryAction = "Cancelar",
+                Width = "400px"
+            });
+
+        DialogResult result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            try
+            {
+                var response = await Http.PutAsJsonAsync($"https://localhost:7288/api/roi/{projectROI.Id}", projectROI);
+
+                if (response.IsSuccessStatusCode)
+                    ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi atualizado com sucesso!");
+            }
+            catch
+            {
+                ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi atualizado.");
+            }
+        }
+
+        await LoadProjects();
     }
 
     public async Task DeleteProject(ProjectROI project)
@@ -156,54 +248,4 @@
             }
         }
     }
-
-    public void ClearFilters()
-    {
-        _projectName = null;
-    }
-
-    public void ApplyFilter()
-    {
-        StateHasChanged();
-    }
-
-    public async Task DataGridRefreshDataAsync()
-    {
-        await dataGrid.RefreshDataAsync(true);
-    }
-
-    private async Task Register()
-    {
-        ProjectROI projectROI = new();
-
-        _dialog = await DialogService.ShowPanelAsync<Cadastrar>(projectROI, new DialogParameters<ProjectROI>()
-            {
-                Content = projectROI,
-                Alignment = HorizontalAlignment.Right,
-                Title = $"Cadastrar Projeto",
-                PrimaryAction = "Salvar",
-                SecondaryAction = "Cancelar",
-                Width = "400px"
-            });
-
-        DialogResult result = await _dialog.Result;
-
-        if (!result.Cancelled)
-        {
-            try
-            {
-                var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", projectROI);
-                ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi adicionado com sucesso!");
-            }
-            catch 
-            {
-                ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi cadastrado.");
-            }
-        }
-
-        await LoadProjects();
-
-    }
-
-
 }

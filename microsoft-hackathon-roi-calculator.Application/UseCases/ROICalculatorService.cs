@@ -115,49 +115,49 @@ public class ROICalculatorService : IROICalculatorService
     public string GenerateReport(ROICalculationResults result, ROIInputParameters input)
     {
         return $@"
-                    # Relatório de ROI do Projeto
-                    -------------------------
-                    
-                    **Orçamento do Projeto:** R$ {input.ProjectBudget:N2}  
-                    **Funcionários Impactados:** {input.NumberOfEmployees}  
-                    **Duração:** {input.ProjectDurationMonths} meses  
-                    
-                    ## Parâmetros de Risco e Benefício:
-                    - **Taxa de Falha do Projeto:** {input.FailureRate:P2}  
-                    - **Taxa de Desengajamento Esperada:** {input.ExpectedDisengagementRate:P2}  
-                    - **Percentual de Perda Orçamentária em Caso de Falha:** {input.BudgetLossRate:P2}  
-                    - **Ganho de Produtividade Esperado:** {input.ExpectedProductivityGain:F2}x  
-                    - **Redução de Risco Projetada:** {input.ProjectedRiskReduction:P2}  
-                    - **Benefício de Sucesso:** {input.ExpectedSuccessBenefit:F2}x o orçamento  
-                    
-                    ## Detalhamento dos Cálculos:
-                    - **Custo Médio Mensal por Funcionário:** R$ {input.ProjectBudget / input.      NumberOfEmployees /           input.ProjectDurationMonths:N2}  
-                    
-                    ## Passos para Calcular os Valores Ajustados:
-                    
-                    ### 1. Ganho de Produtividade:
-                    - **Ganho de Produtividade Inicial:** R$ {result.ProductivityGainValue:N2}  
-                    - **Ajuste por Desengajamento:** R$ {result.ProductivityGainValue *             input.ExpectedDisengagementRate:N2}  
-                    - **Ganho de Produtividade Ajustado:** R$ {result.AdjustedProductivityGainValue:N2}  
-                    
-                    ### 2. Redução de Risco:
-                    - **Valor de Redução de Risco Inicial:** R$ {result.RiskReductionValue:N2}  
-                    - **Ajuste por Taxa de Falha:** R$ {result.RiskReductionValue * input.FailureRate:N2}  
-                    - **Redução de Risco Ajustada:** R$ {result.AdjustedRiskReduction:N2}  
-                    
-                    ### 3. Benefício de Sucesso:
-                    - **Valor de Benefício de Sucesso Inicial:** R$ {result.SuccessBenefitValue:N2}  
-                    - **Ajuste por Taxa de Falha:** R$ {result.SuccessBenefitValue * input.FailureRate:N2}  
-                    - **Benefício de Sucesso Ajustado:** R$ {result.AdjustedSuccessBenefit:N2}  
-                    
-                    ## Benefícios Totais:
-                    - **Benefícios Totais Ajustados:** R$ {result.TotalBenefits:N2}  
-                    
-                    ## Resultado Final:
-                    - **Investimento Total:** R$ {input.ProjectBudget:N2}  
-                    - **Retorno sobre Investimento (ROI):** {result.RoiPercentage:F2}%  
-                    - **Viabilidade:** {(result.RoiPercentage > 0 ? "Positiva" : "Negativa")}  
-                    -------------------------
+## Relatório de ROI do Projeto
+-------------------------
+
+*Orçamento do Projeto:* R$ {input.ProjectBudget:N2}  
+*Funcionários Impactados:* {input.NumberOfEmployees}  
+*Duração:* {input.ProjectDurationMonths} meses  
+
+### Parâmetros de Risco e Benefício:
+- *Taxa de Falha do Projeto:* {input.FailureRate:P2}  
+- *Taxa de Desengajamento Esperada:* {input.ExpectedDisengagementRate:P2}  
+- *Percentual de Perda Orçamentária em Caso de Falha:* {input.BudgetLossRate:P2}  
+- *Ganho de Produtividade Esperado:* {input.ExpectedProductivityGain:F2}x  
+- *Redução de Risco Projetada:* {input.ProjectedRiskReduction:P2}  
+- *Benefício de Sucesso:* {input.ExpectedSuccessBenefit:F2}x o orçamento  
+
+#### Detalhamento dos Cálculos:
+- *Custo Médio Mensal por Funcionário:* R$ {input.ProjectBudget / input.      NumberOfEmployees /           input.ProjectDurationMonths:N2}  
+
+### Passos para Calcular os Valores Ajustados:
+
+#### 1. Ganho de Produtividade:
+- *Ganho de Produtividade Inicial:* R$ {result.ProductivityGainValue:N2}  
+- *Ajuste por Desengajamento:* R$ {result.ProductivityGainValue *             input.ExpectedDisengagementRate:N2}  
+- *Ganho de Produtividade Ajustado:* R$ {result.AdjustedProductivityGainValue:N2}  
+
+#### 2. Redução de Risco:
+- *Valor de Redução de Risco Inicial:* R$ {result.RiskReductionValue:N2}  
+- *Ajuste por Taxa de Falha:* R$ {result.RiskReductionValue * input.FailureRate:N2}  
+- *Redução de Risco Ajustada:* R$ {result.AdjustedRiskReduction:N2}  
+
+#### 3. Benefício de Sucesso:
+- *Valor de Benefício de Sucesso Inicial:* R$ {result.SuccessBenefitValue:N2}  
+- *Ajuste por Taxa de Falha:* R$ {result.SuccessBenefitValue * input.FailureRate:N2}  
+- *Benefício de Sucesso Ajustado:* R$ {result.AdjustedSuccessBenefit:N2}  
+
+### Benefícios Totais:
+- **Benefícios Totais Ajustados:** R$ {result.TotalBenefits:N2}  
+
+### Resultado Final:
+- *Investimento Total:* R$ {input.ProjectBudget:N2}  
+- *Retorno sobre Investimento (ROI):* {result.RoiPercentage:F2}%  
+- *Viabilidade:* {(result.RoiPercentage > 0 ? "Positiva" : "Negativa")}  
+-------------------------
          ";
     }
 }

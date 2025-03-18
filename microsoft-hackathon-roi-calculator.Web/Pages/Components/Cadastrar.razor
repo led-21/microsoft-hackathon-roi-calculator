@@ -5,28 +5,28 @@
 
 <FluentCard Height="auto" Style="margin: 1rem;">
 	<FluentTextField Label="Nome do Projeto"
-	@bind-Value="project.ProjectName" />
+	@bind-Value="Content.ProjectName" />
 
 	<FluentDatePicker Label="Inicio do projeto" />
 
 	<FluentNumberField Label="Orçamento do Projeto (R$)"
 	Type="number"
-	@bind-Value="project.ProjectBudget" />
+	@bind-Value="Content.ProjectBudget" />
 
 	<FluentNumberField Label="Número de Funcionários Impactados"
 	Type="number"
-	@bind-Value="project.NumberOfEmployees" />
+	@bind-Value="Content.NumberOfEmployees" />
 
 	<FluentNumberField Label="Duração do Projeto (meses)"
 	Type="number"
-	@bind-Value="project.ProjectDurationMonths" />
+	@bind-Value="Content.ProjectDurationMonths" />
 
 	<FluentNumberField Label="Retorno do Investimento (ROI)"
 	Type="number"
-	@bind-Value="project.ROI" />
+	@bind-Value="Content.ROI" />
 
 	<FluentTextArea Label="Descrição do Projeto"
-	@bind-Value="project.Description"
+	@bind-Value="Content.Description"
 	Style="width:13.2rem;" />
 </FluentCard>
 
@@ -37,15 +37,15 @@
 
 			<FluentNumberField Label="Total de Horas Trabalhadas por Semana"
 			Type="number"
-			@bind-Value="project.TotalHoursWorkedWeekly" />
+			@bind-Value="Content.TotalHoursWorkedWeekly" />
 
 			<FluentNumberField Label="Treinamentos Completos"
 			Type="number"
-			@bind-Value="project.CompletedTraining" />
+			@bind-Value="Content.CompletedTraining" />
 
 			<FluentNumberField Label="Funcionários Usando Nova Ferramenta"
 			Type="number"
-			@bind-Value="project.EmployeesUsingNewTool" />
+			@bind-Value="Content.EmployeesUsingNewTool" />
 
 		</FluentAccordionItem>
 		<FluentAccordionItem Heading="METRICAS DE MUDANÇAS" Style="width: 20rem;">
@@ -53,11 +53,11 @@
 
 			<FluentNumberField Label="Tempo Total de Implementação da Mudança"
 			Type="number"
-			@bind-Value="project.TotalChangeImplementationTime" />
+			@bind-Value="Content.TotalChangeImplementationTime" />
 
 			<FluentNumberField Label="Tempo Total Planejado para Implementação"
 			Type="number"
-			@bind-Value="project.TotalPlannedImplementationTime" />
+			@bind-Value="Content.TotalPlannedImplementationTime" />
 
 		</FluentAccordionItem>
 		<FluentAccordionItem Heading="METRICAS DE PROCESSOS" Style="width: 20rem;">
@@ -65,11 +65,11 @@
 
 			<FluentNumberField Label="Total de Processos"
 			Type="number"
-			@bind-Value="project.TotalProcesses" />
+			@bind-Value="Content.TotalProcesses" />
 
 			<FluentNumberField Label="Processos em Conformidade"
 			Type="number"
-			@bind-Value="project.CompliantProcesses" />
+			@bind-Value="Content.CompliantProcesses" />
 
 		</FluentAccordionItem>
 		<FluentAccordionItem Heading="AVALIAÇÃO DO PROJETO" Style="width: 20rem;">
@@ -77,15 +77,15 @@
 
 			<FluentNumberField Label="Total de Respostas na Avaliação do Projeto"
 			Type="number"
-			@bind-Value="project.ProjectEvaluationTotalResponses" />
+			@bind-Value="Content.ProjectEvaluationTotalResponses" />
 
 			<FluentNumberField Label="Respostas Positivas na Avaliação do Projeto"
 			Type="number"
-			@bind-Value="project.ProjectEvaluationPositiveResponses" />
+			@bind-Value="Content.ProjectEvaluationPositiveResponses" />
 
 			<FluentNumberField Label="Soma de Todas as Pontuações na Avaliação do Projeto"
 			Type="number"
-			@bind-Value="project.ProjectEvaluationSumOfAllScores" />
+			@bind-Value="Content.ProjectEvaluationSumOfAllScores" />
 		</FluentAccordionItem>
 	</FluentAccordion>
 	<br />
@@ -97,20 +97,4 @@
 
 	[Parameter]
 	public ProjectROI Content { get; set; } = default!;
-
-	private static ProjectROI project = new()
-	{
-		
-		StartDate = DateTime.Now,
-		TotalHoursWorkedWeekly = 0,
-		CompletedTraining = 0,
-		EmployeesUsingNewTool = 0,
-		TotalChangeImplementationTime = 0,
-		TotalPlannedImplementationTime = 0,
-		TotalProcesses = 0,
-		CompliantProcesses = 0,
-		ProjectEvaluationTotalResponses = 0,
-		ProjectEvaluationPositiveResponses = 0,
-		ProjectEvaluationSumOfAllScores = 0
-	};
 }
