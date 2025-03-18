@@ -3,6 +3,7 @@
 
 @inject IToastService ToastService
 @inject HttpClient Http
+@inject MarkdownService Markdown
 
 
 @if (isLoading)
@@ -71,8 +72,9 @@ else
 
                 @if (!string.IsNullOrEmpty(Result))
                 {
+                    <br />
                     <FluentLabel Typo="Typography.H4">Resultado:</FluentLabel>
-                    <p>@Result</p>
+                    <p>@((MarkupString)Result)</p>
                 }
 
             </FluentCard>
@@ -85,8 +87,8 @@ else
 
     private bool isLoading = false;
 
-    private ROIInputParameters inputParameters = new ROIInputParameters();
-    private string Result = string.Empty;
+    private static ROIInputParameters inputParameters = new ROIInputParameters();
+    private static string Result = string.Empty;
 
     string failPropability = "";
 
@@ -97,7 +99,7 @@ else
             var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi/calculator", inputParameters);
             ToastService.ShowSuccess($"O relatorio detalhado por AI será gerado.");
 
-            Result = (await response.Content.ReadAsStringAsync()).Replace("\r\n","<br>");
+            Result = Markdown.ConvertToHtml(await response.Content.ReadAsStringAsync());
 
         }catch(Exception ex)
         {

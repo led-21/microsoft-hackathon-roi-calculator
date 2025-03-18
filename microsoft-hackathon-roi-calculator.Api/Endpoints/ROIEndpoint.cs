@@ -27,7 +27,7 @@ static public class ROIEndpoint
                 return Results.BadRequest(report);
             }
 
-            return Results.Ok(report);
+            return Results.Content(report, "text/plain");
         });
 
         app.MapPost("/api/roi/estimate/failure-rate", (IROICalculatorService calculator, ROIInputParameters input) =>
@@ -38,7 +38,7 @@ static public class ROIEndpoint
 
                 return Results.Ok(new { EstimateFailureRate = estimate });
             }
-            catch (Exception ex)
+            catch 
             {
                 return Results.BadRequest("Erro ao calcular taxa de falha.");
             }

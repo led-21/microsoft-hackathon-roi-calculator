@@ -195,7 +195,7 @@
                 var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", projectROI);
                 ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi adicionado com sucesso!");
             }
-            catch (Exception ex)
+            catch 
             {
                 ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi cadastrado.");
             }
