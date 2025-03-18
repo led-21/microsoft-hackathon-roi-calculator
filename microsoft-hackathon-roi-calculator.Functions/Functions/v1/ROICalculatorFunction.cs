@@ -5,6 +5,11 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using microsoft_hackathon_roi_calculator.Application.Interfaces;
 using microsoft_hackathon_roi_calculator.Domain.Models;
+using Azure.AI.OpenAI;
+using Azure;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System.Net;
+using OpenAI.Chat;
 
 namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
 {
@@ -12,11 +17,14 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
     {
         private readonly ILogger<ROICalculatorFunction> _logger;
         private readonly IROICalculatorService _roiCalculatorService;
+        private readonly AzureOpenAIClient _openAIClient;
 
         public ROICalculatorFunction(ILogger<ROICalculatorFunction> logger, IROICalculatorService roiCalculatorService)
         {
             _logger = logger;
             _roiCalculatorService = roiCalculatorService;
+            _openAIClient = new AzureOpenAIClient(new Uri("url"),
+                new AzureKeyCredential("apiKey"));
         }
 
         [Function("CalculateROI")]
@@ -38,7 +46,9 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
             {
                 var result = _roiCalculatorService.CalculateROI(input);
 
-                report = _roiCalculatorService.GenerateReport(result, input) + "\n";
+                var insights = await GenerateInsightsFromOpenAI(result);
+
+                report = _roiCalculatorService.GenerateReport(result, input) + "\n" + insights;
             }
             catch (Exception ex)
             {
@@ -48,6 +58,25 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
             }
 
             return new OkObjectResult(report);
+        }
+
+        private async Task<string> GenerateInsightsFromOpenAI(ROICalculationResults result)
+        {
+            var prompt = $"Com base nos seguintes resultados de cálculo de ROI, forneça insights e recomendações:\n" +
+                         $"Investimento Total: {result.TotalInvestment}\n" +
+                         $"Benefícios Totais: {result.TotalBenefits}\n" +
+                         $"Percentual de ROI: {result.RoiPercentage}\n" +
+                         $"Valor do Ganho de Produtividade: {result.ProductivityGainValue}\n" +
+                         $"Valor Ajustado do Ganho de Produtividade: {result.AdjustedProductivityGainValue}\n" +
+                         $"Valor da Redução de Risco: {result.RiskReductionValue}\n" +
+                         $"Redução de Risco Ajustada: {result.AdjustedRiskReduction}\n" +
+                         $"Valor do Benefício de Sucesso: {result.SuccessBenefitValue}\n" +
+                         $"Benefício de Sucesso Ajustado: {result.AdjustedSuccessBenefit}\n" +
+                         $"Recomendações Ação: {string.Join(", ", result.ActionableRecommendations)}";
+
+
+            var completionResult = await _openAIClient.GetChatClient("gpt-4o-mini").CompleteChatAsync(prompt).ConfigureAwait(false);
+            return completionResult.Value.Content[0].Text;
         }
     }
 }
