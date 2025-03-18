@@ -76,7 +76,7 @@ $$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento To
 ### Machine Learning
 - **Azure Machine Learning**:  
   Consome os dados do Azure SQL Database para treinar modelos preditivos. Esses modelos são utilizados para:
-  - Estimar o ROI do projeto e essa infromação é usado para calcular o riscos de projetos.
+  - Estimar o ROI e calcular o risco do projeto.
   
   Os modelos são ajustados dinamicamente conforme novos dados são incorporados, assegurando relevância e precisão contínuas nas previsões.
 
