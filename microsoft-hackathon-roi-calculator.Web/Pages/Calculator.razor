@@ -89,7 +89,7 @@ else
     private bool isLoading = false;
 
     private static ROIInputParameters inputParameters = new ROIInputParameters();
-    private static string Result = string.Empty;
+    public static string Result = string.Empty;
 
     string failPropability = "";
 
@@ -123,7 +123,7 @@ else
 
             if (functionsResponse.IsSuccessStatusCode)
             {
-                Report.DetailReport =  Markdown.ConvertToHtml(await functionsResponse.Content.ReadAsStringAsync());
+                Report.DetailReport =  await functionsResponse.Content.ReadAsStringAsync();
                 ToastService.ShowSuccess($"Relatorio criado com sucesso.");
             }
         }

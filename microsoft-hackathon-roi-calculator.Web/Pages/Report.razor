@@ -18,8 +18,8 @@
         </FluentCard>
     }else
     {
-        <FluentCard Height="auto">
-               @((MarkupString)DetailReport)
+        <FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+               @((MarkupString)Markdown.ConvertToHtml(DetailReport))
         </FluentCard>
     }
 </FluentGridItem>

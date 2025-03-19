@@ -15,7 +15,7 @@ using Azure;
 namespace microsoft_hackathon_roi_calculator.Api.Endpoints;
 static public class ROIEndpoint
 {
-    static AzureOpenAIClient _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openaikey"));
+    static AzureOpenAIClient _openAIClient = new AzureOpenAIClient(new Uri("https://openai-agro.openai.azure.com/"), new AzureKeyCredential("G7ARUS04F2oMMT4mfeuMu7jTNI8POKI5OU8rlzj42Wffxd7QJQjQJQQJ99ALACYeBjFXJ3w3AAABACOGerkZ"));
     static public void AddROIEndpoint(this WebApplication app)
     {
         app.MapPost("/api/roi/ai", async (HttpRequest request, IOllamaApiClient apiClient) =>
@@ -63,7 +63,7 @@ static public class ROIEndpoint
                 return Results.Problem($"Ocorreu um erro ao processar a solicitação do gerador de relatorio por AI. \n{ex.Message}");
             }
 
-            return Results.Ok(result);
+            return Results.Content(result, "text/plain");
 
         }).WithRequestTimeout(TimeSpan.FromMinutes(5));
 
