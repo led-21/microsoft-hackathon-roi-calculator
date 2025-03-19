@@ -7,9 +7,6 @@ using microsoft_hackathon_roi_calculator.Application.Interfaces;
 using microsoft_hackathon_roi_calculator.Domain.Models;
 using Azure.AI.OpenAI;
 using Azure;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using System.Net;
-using OpenAI.Chat;
 
 namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
 {
@@ -23,13 +20,17 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
         {
             _logger = logger;
             _roiCalculatorService = roiCalculatorService;
-            _openAIClient = new AzureOpenAIClient(new Uri("url"),
-                new AzureKeyCredential("apiKey"));
+            //_openAIClient = new AzureOpenAIClient(new Uri("url"),
+            //    new AzureKeyCredential("apiKey"));
+
+            _openAIClient = _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openaikey"));
         }
 
         [Function("CalculateROI")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req)
         {
+            req.Headers.AccessControlAllowOrigin = "*";
+         
             _logger.LogInformation("C# HTTP trigger to process a Calculate ROI function request.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -40,42 +41,46 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
                 return new BadRequestObjectResult("Invalid input");
             }
 
-            string report = string.Empty;
+            string openAIReport;
 
             try
             {
                 var result = _roiCalculatorService.CalculateROI(input);
+                var report = _roiCalculatorService.GenerateReport(result, input);
 
-                var insights = await GenerateInsightsFromOpenAI(result);
+                var insights = await GenerateInsightsFromOpenAI(report);
 
-                report = _roiCalculatorService.GenerateReport(result, input) + "\n" + insights;
+                openAIReport = _roiCalculatorService.GenerateReport(result, input) + "\n" + insights;
             }
             catch (Exception ex)
             {
                 _logger.LogInformation("Error: " + ex.Message);
-                report = "Error: " + ex.Message;
-                return new BadRequestObjectResult(report);
+                openAIReport = "Error: " + ex.Message;
+                return new BadRequestObjectResult(openAIReport);
             }
 
-            return new OkObjectResult(report);
+            var response = new OkObjectResult(openAIReport);
+
+            return response;
         }
 
-        private async Task<string> GenerateInsightsFromOpenAI(ROICalculationResults result)
+        private async Task<string> GenerateInsightsFromOpenAI(string report)
         {
-            var prompt = $"Com base nos seguintes resultados de cálculo de ROI, forneça insights e recomendações:\n" +
-                         $"Investimento Total: {result.TotalInvestment}\n" +
-                         $"Benefícios Totais: {result.TotalBenefits}\n" +
-                         $"Percentual de ROI: {result.RoiPercentage}\n" +
-                         $"Valor do Ganho de Produtividade: {result.ProductivityGainValue}\n" +
-                         $"Valor Ajustado do Ganho de Produtividade: {result.AdjustedProductivityGainValue}\n" +
-                         $"Valor da Redução de Risco: {result.RiskReductionValue}\n" +
-                         $"Redução de Risco Ajustada: {result.AdjustedRiskReduction}\n" +
-                         $"Valor do Benefício de Sucesso: {result.SuccessBenefitValue}\n" +
-                         $"Benefício de Sucesso Ajustado: {result.AdjustedSuccessBenefit}\n" +
-                         $"Recomendações Ação: {string.Join(", ", result.ActionableRecommendations)}";
+            var prompt = $"""
+                Com base nos seguintes resultados de cálculo de ROI, forneça insights e recomendações:
+                
+                Estrutura do Relatório Final
 
+                Resumo Executivo: Visão geral.
+                Análise Detalhada: Explicação dos cálculos e dados analisados.
+                Insights e Recomendações: Conclusões acionáveis baseadas na análise.
+
+                Relatorio: {report}
+                """;
+               
 
             var completionResult = await _openAIClient.GetChatClient("gpt-4o-mini").CompleteChatAsync(prompt).ConfigureAwait(false);
+
             return completionResult.Value.Content[0].Text;
         }
     }

@@ -6,6 +6,7 @@
 @inject IDialogService DialogService
 
 <h3>Projetos</h3>
+
 <FluentCard Height="auto" Style="margin: 1rem;">
     <!-- Acordeão para filtros-->
     <FluentAccordion>
@@ -55,11 +56,12 @@
                         Width="80px" />
         <PropertyColumn Title="Nome do Projeto"
                         Property="@(c => c!.ProjectName)"
-                        Style="color: #af5f00"
+                        Style=""
                         Align="Align.Start" />
         <PropertyColumn Title="Orçamento"
                         Property="@(c => c!.ProjectBudget.ToString("C"))"
-                        Align="Align.Center" />
+                        Align="Align.Center"
+                        />
         <PropertyColumn Title="Funcionários"
                         Property="@(c => c!.NumberOfEmployees)"
                         Tooltip="true"
@@ -89,15 +91,17 @@
 </FluentCard>
 
 @code {
+
+    public static IQueryable<ProjectROI> Projects = default!;
+
     FluentDataGrid<ProjectROI> dataGrid = default!;
-    IQueryable<ProjectROI> projects = default!;
     bool loading = true;
     string? _projectName = string.Empty;
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     IDialogReference? _dialog;
 
-    IQueryable<ProjectROI>? FilteredProjects => projects?.Where(x => x.ProjectName.Contains(_projectName!, StringComparison.CurrentCultureIgnoreCase));
+    IQueryable<ProjectROI>? FilteredProjects => Projects?.Where(x => x.ProjectName.Contains(_projectName!, StringComparison.CurrentCultureIgnoreCase));
 
 
     protected override async Task OnInitializedAsync()
@@ -105,26 +109,26 @@
         await LoadProjects();
     }
 
-    private async Task LoadProjects()
+    public async Task LoadProjects()
     {
         loading = true;
         await InvokeAsync(StateHasChanged);
 
         var response = await Http.GetFromJsonAsync<ProjectROI[]>("https://localhost:7288/api/roi");
 
-        projects = response!.AsQueryable();
+        Projects = response!.AsQueryable();
         await pagination.SetTotalItemCountAsync(response!.Length);
 
         loading = false;
         await InvokeAsync(StateHasChanged);
     }
 
-    public void ClearFilters()
+    private void ClearFilters()
     {
         _projectName = string.Empty;
     }
 
-    public async Task DataGridRefreshDataAsync()
+    private async Task DataGridRefreshDataAsync()
     {
         await dataGrid.RefreshDataAsync(true);
     }
@@ -133,7 +137,6 @@
     {
         ProjectROI projectROI = new()
             {
-
                 StartDate = DateTime.Now,
                 TotalHoursWorkedWeekly = 0,
                 CompletedTraining = 0,
@@ -211,7 +214,7 @@
         await LoadProjects();
     }
 
-    public async Task DeleteProject(ProjectROI project)
+    private async Task DeleteProject(ProjectROI project)
     {
         var dialogInstance = await DialogService.ShowDialogAsync(
     @<div>
@@ -231,14 +234,14 @@
         {
             var response = await Http.DeleteAsync($"https://localhost:7288/api/roi/{project.Id}");
 
-            var projectList = projects.ToList();
+            var projectList = Projects.ToList();
 
             var projectToDelete = projectList.FirstOrDefault(p => p.ProjectName == project.ProjectName);
 
             if (projectToDelete != null)
             {
                 projectList.Remove(projectToDelete);
-                projects = projectList.AsQueryable();
+                Projects = projectList.AsQueryable();
                 ToastService.ShowInfo($"O Projeto {project.ProjectName} foi deletado com sucesso!");
                 await InvokeAsync(StateHasChanged);
             }

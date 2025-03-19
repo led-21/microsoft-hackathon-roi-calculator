@@ -1,7 +1,7 @@
-using microsoft_hackathon_roi_calculator.Api.Endpoints;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
 using microsoft_hackathon_roi_calculator.Application.Interfaces;
 using microsoft_hackathon_roi_calculator.Application.UseCases;
+using microsoft_hackathon_roi_calculator.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,8 @@ builder.AddRedisDistributedCache("cache");
 builder.AddSqlServerDbContext<CalculatorDbContext>("roidb");
 
 builder.Services.AddSingleton<IROICalculatorService, ROICalculatorService>();
+
+builder.AddOllamaApiClient("phi4");
 
 // Add Swagger services
 builder.Services.AddSwaggerGen(c =>
@@ -41,7 +43,6 @@ builder.Services.AddCors(options =>
        });
 
 });
-
 
 var app = builder.Build();
 

@@ -5,19 +5,10 @@ GET {{host}}/api/CalculateROI
 Content-Type: application/json
 {
   "ProjectBudget": 20000,
-  "NumberOfEmployees": 100,
+  "NumberOfEmployees": 10,
   "ProjectDurationMonths": 5,
   "FailureRate": 0.2
 }
 
-
 ###
-
-GET {{host}}/api/EstimateFailureRate
-Content-Type: application/json
-{
-  "ProjectBudget": 20000,
-  "NumberOfEmployees": 100,
-  "ProjectDurationMonths": 5
-}
 

@@ -1,14 +1,15 @@
 ﻿@page "/calculator"
 @using System.Globalization
+@using System.Text.Json
 
 @inject IToastService ToastService
 @inject HttpClient Http
 @inject MarkdownService Markdown
 
+<FluentLabel Typo="Typography.H3">Calculadora de ROI</FluentLabel>
 
 @if (isLoading)
 {
-
     <FluentCard>
         <h3>
             <FluentSkeleton Shape="SkeletonShape.Rect"
@@ -24,60 +25,60 @@
 }
 else
 {
-
-    <FluentLabel Typo="Typography.H3">Calculadora de ROI</FluentLabel>
-
     <FluentGrid>
         <FluentGridItem>
-            <FluentCard xs="12" style="padding: 20px; margin: 20px;">
+            <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
+                <FluentCard xs="12" Height="auto" style="padding: 20px; max-height: 725px; margin: 20px;">
 
-                <FluentNumberField Label="Orçamento do Projeto (R$)"
-                Type="number"
-                @bind-Value="inputParameters.ProjectBudget" />
-                <FluentNumberField Label="Número de Funcionários Impactados"
-                Type="number"
-                @bind-Value="inputParameters.NumberOfEmployees" />
-                <FluentNumberField Label="Duração do Projeto (meses)"
-                Type="number"
-                @bind-Value="inputParameters.ProjectDurationMonths" />
-                <FluentNumberField Label="Probabilidade de Falha (%)"
-                Type="number"
-                @bind-Value="inputParameters.FailureRate"
-                @onclick="DetermineProbability" />
-                <p>@failPropability</p>
+                    <FluentTextField Label="Orçamento do Projeto (R$)"
+                    @bind-Value="formattedBudget" />
+                    <FluentNumberField Label="Número de Funcionários Impactados"
+                    Type="number"
+                    @bind-Value="inputParameters.NumberOfEmployees" />
+                    <FluentNumberField Label="Duração do Projeto (meses)"
+                    Type="number"
+                    @bind-Value="inputParameters.ProjectDurationMonths" />
+                    <FluentNumberField Label="Probabilidade de Falha (%)"
+                    Type="number"
+                    @bind-Value="@inputParameters.FailureRate"
+                    @onclick="DetermineProbability" />
+                    <p>@failPropability</p>
 
-                <FluentAccordion>
-                    <FluentAccordionItem Heading="Outros Parametros de Cálculo">
-                        <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
-                        <FluentNumberField Label="Percentual do Orçamento Perdido em Caso de Falha (%)"
-                        Type="number"
-                        @bind-Value="inputParameters.BudgetLossRate" />
-                        <FluentNumberField Label="Perda por Desengajamento (%)"
-                        Type="number"
-                        @bind-Value="inputParameters.ExpectedDisengagementRate" />
-                        <FluentNumberField Label="Ganho de Produtividade (%)"
-                        Type="number"
-                        @bind-Value="inputParameters.ExpectedProductivityGain" />
-                        <FluentNumberField Label="Redução do Risco de Falha (%)"
-                        Type="number"
-                        @bind-Value="inputParameters.ProjectedRiskReduction" />
-                        <FluentNumberField Label="Retorno no Sucesso (%)"
-                        Type="number"
-                        @bind-Value="inputParameters.ExpectedSuccessBenefit" />
-                    </FluentAccordionItem>
-                </FluentAccordion>
+                    <FluentAccordion>
+                        <FluentAccordionItem Heading="Outros Parametros de Cálculo">
+                            <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+                            <FluentNumberField Label="Percentual do Orçamento Perdido em Caso de Falha (%)"
+                            Type="number"
+                            @bind-Value="inputParameters.BudgetLossRate" />
+                            <FluentNumberField Label="Perda por Desengajamento (%)"
+                            Type="number"
+                            @bind-Value="inputParameters.ExpectedDisengagementRate" />
+                            <FluentNumberField Label="Ganho de Produtividade (%)"
+                            Type="number"
+                            @bind-Value="inputParameters.ExpectedProductivityGain" />
+                            <FluentNumberField Label="Redução do Risco de Falha (%)"
+                            Type="number"
+                            @bind-Value="inputParameters.ProjectedRiskReduction" />
+                            <FluentNumberField Label="Retorno no Sucesso (%)"
+                            Type="number"
+                            @bind-Value="inputParameters.ExpectedSuccessBenefit" />
+                        </FluentAccordionItem>
+                    </FluentAccordion>
 
-                <br />
-                <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular</FluentButton>
+                    <br />
+                    <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular</FluentButton>
+                    <br />
+                </FluentCard>
 
+                <!-- Relatório de ROI do Projeto -->
                 @if (!string.IsNullOrEmpty(Result))
                 {
-                    <br />
-                    <FluentLabel Typo="Typography.H4">Resultado:</FluentLabel>
-                    <p>@((MarkupString)Result)</p>
+                    <FluentCard style="padding: 20px; margin: 20px; height: 725px; overflow-y: scroll;">
+                        <p>@((MarkupString)Result)</p>
+                    </FluentCard>
                 }
+            </FluentStack>
 
-            </FluentCard>
         </FluentGridItem>
     </FluentGrid>
 }
@@ -97,18 +98,73 @@ else
         try
         {
             var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi/calculator", inputParameters);
-            ToastService.ShowSuccess($"O relatorio detalhado por AI será gerado.");
+
+            if (response.IsSuccessStatusCode)
+                ToastService.ShowInfo($"Um relatorio detalhado será gerado por AI.");
 
             Result = Markdown.ConvertToHtml(await response.Content.ReadAsStringAsync());
+            await InvokeAsync(StateHasChanged);
 
-        }catch(Exception ex)
+            Report.DetailReport = Result;
+
+        }
+        catch (Exception ex)
         {
-            ToastService.ShowWarning($"Falhou ao calcular o projeto. "+ex.Message);
+            ToastService.ShowWarning($"Falhou ao calcular o projeto. " + ex.Message);
+        }
+
+        try
+        {
+            string functionUrl = "https://localhost:7288/api/roi/ai"; // http://localhost:7071/api/CalculateROI
+
+            HttpContent httpContent = new StringContent(Result);
+
+            var functionsResponse = await Http.PostAsync(functionUrl, httpContent);
+
+            if (functionsResponse.IsSuccessStatusCode)
+            {
+                Report.DetailReport =  Markdown.ConvertToHtml(await functionsResponse.Content.ReadAsStringAsync());
+                ToastService.ShowSuccess($"Relatorio criado com sucesso.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 
-    private void DetermineProbability()
+    private async Task DetermineProbability()
     {
-        failPropability = "Probabilidade estimada pelo modelo de Machine Learning: " + 0.23 + "%";
+        if (inputParameters?.ProjectBudget != null &&
+            inputParameters?.NumberOfEmployees != null &&
+            inputParameters?.ProjectDurationMonths != null)
+        {
+            var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi/estimate/failure-rate", inputParameters);
+
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var failRate = await response.Content.ReadAsStringAsync();
+                    failPropability = "Probabilidade de falha estimada pelo modelo de Machine Learning: " + failRate;
+                }
+                catch
+                {
+                    failPropability = "Não foi possivel estimada a probabilidade de falha pelo modelo de Machine Learning";
+                }
+            }
+        }
+    }
+
+    private string formattedBudget
+    {
+        get => inputParameters.ProjectBudget.ToString("C", new System.Globalization.CultureInfo("pt-BR"));
+        set
+        {
+            if (double.TryParse(value, System.Globalization.NumberStyles.Currency, new System.Globalization.CultureInfo("pt-BR"), out var result))
+            {
+                inputParameters.ProjectBudget = result;
+            }
+        }
     }
 }

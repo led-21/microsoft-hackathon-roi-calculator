@@ -10,7 +10,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https+http://functions") });
+builder.Services.AddScoped(sp => new HttpClient { Timeout = TimeSpan.FromMinutes(5)});
 
 builder.Services.AddScoped<MarkdownService>();
 

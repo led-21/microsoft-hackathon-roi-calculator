@@ -9,9 +9,8 @@
 
 	<FluentDatePicker Label="Inicio do projeto" />
 
-	<FluentNumberField Label="Orçamento do Projeto (R$)"
-	Type="number"
-	@bind-Value="Content.ProjectBudget" />
+	<FluentTextField Label="Orçamento do Projeto (R$)"
+	@bind-Value="formattedBudget" />
 
 	<FluentNumberField Label="Número de Funcionários Impactados"
 	Type="number"
@@ -97,4 +96,16 @@
 
 	[Parameter]
 	public ProjectROI Content { get; set; } = default!;
+
+	private string formattedBudget
+	{
+		get => Content.ProjectBudget.ToString("C", new System.Globalization.CultureInfo("pt-BR"));
+		set
+		{
+			if (double.TryParse(value, System.Globalization.NumberStyles.Currency, new System.Globalization.CultureInfo("pt-BR"), out var result))
+			{
+				Content.ProjectBudget = result;
+			}
+		}
+	}
 }

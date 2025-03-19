@@ -6,29 +6,86 @@ using System.Globalization;
 using microsoft_hackathon_roi_calculator.Domain.Models;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
 using microsoft_hackathon_roi_calculator.Application.Interfaces;
+using static System.Net.WebRequestMethods;
+using OllamaSharp;
+using OllamaSharp.Models.Chat;
+using Azure.AI.OpenAI;
+using Azure;
 
 namespace microsoft_hackathon_roi_calculator.Api.Endpoints;
 static public class ROIEndpoint
 {
+    static AzureOpenAIClient _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openaikey"));
     static public void AddROIEndpoint(this WebApplication app)
     {
-        app.MapPost("/api/roi/calculator", (IROICalculatorService calculator, ROIInputParameters input) =>
+        app.MapPost("/api/roi/ai", async (HttpRequest request, IOllamaApiClient apiClient) =>
         {
-            string report = string.Empty;
+
+            string report = await new StreamReader(request.Body).ReadToEndAsync();
+
+            var prompt = $"""
+                Com base nos seguintes resultados de cálculo de ROI, forneça insights e recomendações:
+                
+                Estrutura do Relatório Final
+
+                Resumo Executivo: Visão geral.
+                Análise Detalhada: Explicação dos cálculos e dados analisados.
+                Insights e Recomendações: Conclusões acionáveis baseadas na análise.
+
+                Relatorio: {report}
+                """;
+
+            ChatRequest chatRequest = new()
+            {
+                Messages = [new Message() {
+                    Role = ChatRole.User,
+                    Content = prompt
+
+                }]
+            };
+
+            string result = "";
 
             try
             {
-                var result = calculator.CalculateROI(input);
-                report = calculator.GenerateReport(result, input) + "\n";
+                // OpenAI API call
+                result = _openAIClient.GetChatClient("gpt-4o-mini")
+                                          .CompleteChatAsync(prompt)
+                                          .ConfigureAwait(false)
+                                          .GetAwaiter()
+                                          .GetResult()
+                                          .Value
+                                          .Content[0]
+                                          .Text;
             }
             catch (Exception ex)
             {
-                report = "Error: " + ex.Message;
-                return Results.BadRequest(report);
+                return Results.Problem($"Ocorreu um erro ao processar a solicitação do gerador de relatorio por AI. \n{ex.Message}");
             }
 
-            return Results.Content(report, "text/plain");
-        });
+            return Results.Ok(result);
+
+        }).WithRequestTimeout(TimeSpan.FromMinutes(5));
+
+
+
+        app.MapPost("/api/roi/calculator", (IROICalculatorService calculator, ROIInputParameters input) =>
+    {
+        string report = string.Empty;
+
+        try
+        {
+            var result = calculator.CalculateROI(input);
+            report = calculator.GenerateReport(result, input) + "\n";
+        }
+        catch (Exception ex)
+        {
+            report = "Error: " + ex.Message;
+            return Results.BadRequest(report);
+        }
+
+        return Results.Content(report, "text/plain");
+    });
 
         app.MapPost("/api/roi/estimate/failure-rate", (IROICalculatorService calculator, ROIInputParameters input) =>
         {
@@ -36,9 +93,12 @@ static public class ROIEndpoint
             {
                 var estimate = calculator.EstimateFailureRate(input);
 
-                return Results.Ok(new { EstimateFailureRate = estimate });
+                if (double.IsNaN(estimate))
+                    return Results.BadRequest();
+
+                return Results.Ok(estimate.ToString("0.00") + "%");
             }
-            catch 
+            catch
             {
                 return Results.BadRequest("Erro ao calcular taxa de falha.");
             }
