@@ -6,6 +6,7 @@ Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a 
 
 # Projeto InovaROI
 O projeto inova ao combinar tecnologias de ponta (Azure Machine Learning, OpenAI e Azure Functions) com uma abordagem centrada no usuário, focada em resolver o alto índice de falhas em transformações empresariais. Ele não apenas calcula o ROI, mas também prepara as empresas para a mudança, oferecendo uma solução preditiva, escalável e responsável.
+![Tela Home aplicativo](docs/tela-app-home.png)
 ![Tela aplicativo](docs/tela-app.png)
 
 ## Retorno sobre Investimento (ROI)
