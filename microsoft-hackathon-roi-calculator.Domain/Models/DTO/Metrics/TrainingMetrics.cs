@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace microsoft_hackathon_roi_calculator.Domain.Models.Metrics;
+namespace microsoft_hackathon_roi_calculator.Domain.Models.DTO.Metrics;
 
 /// <summary>
 /// Métricas relacionadas a treinamento

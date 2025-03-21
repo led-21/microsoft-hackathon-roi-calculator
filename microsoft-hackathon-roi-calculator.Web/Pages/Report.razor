@@ -1,20 +1,31 @@
 ﻿@page "/report"
+@inject MarkdownService Markdown
 
 <h3>Relatório</h3>
 
 <FluentGridItem xs="12" md="8" lg="9">
-    <FluentCard>
-        <h3>
+    @if (DetailReport == string.Empty)
+    {
+        <FluentCard>
+            <h3>
+                <FluentSkeleton Shape="SkeletonShape.Rect"
+                Width="150px"
+                Height="20px" />
+            </h3>
             <FluentSkeleton Shape="SkeletonShape.Rect"
-                            Width="150px"
-                            Height="20px" />
-        </h3>
-        <FluentSkeleton Shape="SkeletonShape.Rect"
-                        Width="100%"
-                        Height="600px" />
-    </FluentCard>
+            Width="100%"
+            Height="600px" />
+        </FluentCard>
+    }else
+    {
+        <FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+               @((MarkupString)Markdown.ConvertToHtml(DetailReport))
+        </FluentCard>
+    }
 </FluentGridItem>
 
 @code {
+
+    public static string DetailReport = string.Empty;
 
 }

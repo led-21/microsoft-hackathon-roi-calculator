@@ -1,38 +1,89 @@
 ﻿@page "/dashboard"
+@using microsoft_hackathon_roi_calculator.Web.Pages.Charts
 
 <h2>Dashboard</h2>
 
 <FluentGrid Spacing="1" Style="padding: 1rem;">
     <!-- Seção de Estatísticas -->
-    <FluentGridItem xs="12" sm="6" md="4" lg="3"
-                    Style="display: flex; flex-direction: column; gap: 20px;">
-        @for (int i = 0; i < 3; i++)
-        {
+    @if (isLoading)
+    {
+        <FluentGridItem xs="12" sm="6" md="4" lg="3"
+                        Style="display: flex; flex-direction: column; gap: 20px;">
+            @for (int i = 0; i < 3; i++)
+            {
+                <FluentCard>
+                    <FluentSkeleton Shape="SkeletonShape.Rect"
+                                    Width="180px"
+                                    Height="20px"
+                                    Style="margin-bottom: 10px" />
+                    <FluentSkeleton Shape="SkeletonShape.Rect"
+                                    Width="120px"
+                                    Height="30px" />
+                </FluentCard>
+            }
+        </FluentGridItem>
+    }
+    else
+    {
+        <FluentGridItem xs="12" sm="6" md="4" lg="3"
+                        Style="display: flex; flex-direction: column; gap: 20px;">
             <FluentCard>
-                <FluentSkeleton Shape="SkeletonShape.Rect"
-                                Width="180px"
-                                Height="20px"
-                                Style="margin-bottom: 10px" />
-                <FluentSkeleton Shape="SkeletonShape.Rect"
-                                Width="120px"
-                                Height="30px" />
+                <FluentLabel>Número de Funcionários Impactados</FluentLabel>
+                <FluentLabel>@_numberOfEmployees</FluentLabel>
             </FluentCard>
-        }
-    </FluentGridItem>
+            <FluentCard>
+                <FluentLabel>Retorno dos Investimentos</FluentLabel>
+                <FluentLabel>@_sumOfROI.ToString("C")</FluentLabel>
+                <FluentLabel>(@((_sumOfROI / _sumOfBudget * 100).ToString("0.0"))%)</FluentLabel>
+            </FluentCard>
+            <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
+                <FluentCard>
+                    <FluentLabel>Total Projetos</FluentLabel>
+                    <FluentLabel>@_numberOfProjects</FluentLabel>
+                </FluentCard>
+                <FluentCard>
+                    <FluentLabel>Investimentos</FluentLabel>
+                    <FluentLabel>@_sumOfBudget.ToString("C")</FluentLabel>
+                </FluentCard>
+            </FluentStack>
+        </FluentGridItem>
+    }
 
     <!-- Gráfico -->
-    <FluentGridItem xs="12" md="8" lg="9">
-        <FluentCard>
-            <h3>
+    @if (isLoading)
+    {
+        <FluentGridItem xs="12" md="8" lg="9">
+            <FluentCard>
+                <h3>
+                    <FluentSkeleton Shape="SkeletonShape.Rect"
+                                    Width="150px"
+                                    Height="20px" />
+                </h3>
                 <FluentSkeleton Shape="SkeletonShape.Rect"
-                                Width="150px"
-                                Height="20px" />
-            </h3>
-            <FluentSkeleton Shape="SkeletonShape.Rect"
-                            Width="100%"
-                            Height="200px" />
-        </FluentCard>
-    </FluentGridItem>
+                                Width="100%"
+                                Height="200px" />
+            </FluentCard>
+        </FluentGridItem>
+    }
+    else
+    {
+        <FluentGridItem xs="12" md="8" lg="9">
+            <FluentCard>
+                <RadzenChart>
+                    <RadzenAreaSeries Smooth="true" Data="@filteredProjetROIs" Title="2024" ValueProperty="ROI" CategoryProperty="Id" RenderingOrder="1" Fill="rgba(16,112,227,.5)" Stroke="rgba(26,72,227,0.8)">
+                        <RadzenSeriesDataLabels Visible="true" />
+                    </RadzenAreaSeries>
+                    <RadzenCategoryAxis Padding="20" LabelAutoRotation="-45">
+                        <RadzenAxisTitle Text="Id do projeto" />
+                    </RadzenCategoryAxis>
+                    <RadzenValueAxis Formatter="@FormatAsPercentage">
+                        <RadzenGridLines Visible="true" />
+                        <RadzenAxisTitle Text="ROI (%)" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </FluentCard>
+        </FluentGridItem>
+    }
 
     <!-- Tabela -->
     <FluentGridItem xs="12">
@@ -67,8 +118,36 @@
         }
         else
         {
-            <FluentCard>
-
+            <FluentCard @onclick="Refresh">
+                <!-- Tabela -->
+                <FluentDataGrid @ref="dataGrid"
+                                Items="@projects"
+                                OnRowDoubleClick="@(() => Console.WriteLine("Row double clicked!"))"
+                                ItemSize="46"
+                                GenerateHeader="GenerateHeaderOption.Sticky"
+                                TGridItem="ProjectROI"
+                                Loading="isLoading"
+                                Pagination="pagination">
+                    <!-- Colunas da tabela -->
+                    <PropertyColumn Title="Id"
+                                    Property="@(c => c!.Id)"
+                                    Width="80px" />
+                    <PropertyColumn Title="Nome do Projeto"
+                                    Property="@(c => c!.ProjectName)"
+                                    Style=""
+                                    Align="Align.Start" />
+                    <PropertyColumn Title="Orçamento"
+                                    Property="@(c => c!.ProjectBudget.ToString("C"))"
+                                    Align="Align.Center" />
+                    <PropertyColumn Title="Funcionários"
+                                    Property="@(c => c!.NumberOfEmployees)"
+                                    Tooltip="true"
+                                    Align="Align.Center" />
+                    <PropertyColumn Title="ROI"
+                                    Property="@(c => c!.ROI.ToString("0.00"))" Align="Align.Center" />
+                </FluentDataGrid>
+                <!-- Paginação vinculada ao estado da tabela -->
+                <FluentPaginator State="@pagination" />
             </FluentCard>
         }
     </FluentGridItem>
@@ -77,4 +156,48 @@
 @code {
     // Simulação de carregamento (opcional)
     private bool isLoading = true;
+
+    private IQueryable<ProjectROI> projects = default!;
+    private IQueryable<ProjectROI> filteredProjetROIs = default!;
+
+    private int _numberOfProjects = 0;
+    private int _numberOfEmployees = 0;
+    private double _sumOfBudget = 0;
+    private double _sumOfROI = 0;
+
+    FluentDataGrid<ProjectROI> dataGrid = default!;
+    string? _projectName = string.Empty;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(2000);
+
+        projects = Project.Projects;
+
+        if (projects != null)
+        {
+            filteredProjetROIs = projects.Take(pagination.ItemsPerPage);
+            DashboarCalculations();
+            isLoading = false;
+        }
+    }
+
+    private void Refresh()
+    {
+        filteredProjetROIs = projects.Skip(pagination.ItemsPerPage * pagination.CurrentPageIndex).Take(pagination.ItemsPerPage);
+    }
+
+    private void DashboarCalculations()
+    {
+        _numberOfProjects = projects.Count();
+        _numberOfEmployees = projects.Sum(p => p.NumberOfEmployees);
+        _sumOfBudget = projects.Sum(p => p.ProjectBudget);
+        _sumOfROI = projects.Sum(p => p.ProjectBudget * p.ROI);
+    }
+
+    string FormatAsPercentage(object value)
+    {
+        return ((double)value).ToString("N2") + "%"; // Formats as percentage with 1 decimal
+    }
 }

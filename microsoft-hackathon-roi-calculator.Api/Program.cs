@@ -1,5 +1,7 @@
-using microsoft_hackathon_roi_calculator.Api.Endpoints;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
+using microsoft_hackathon_roi_calculator.Application.Interfaces;
+using microsoft_hackathon_roi_calculator.Application.UseCases;
+using microsoft_hackathon_roi_calculator.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +17,36 @@ builder.Services.AddOpenApi();
 builder.AddRedisDistributedCache("cache");
 builder.AddSqlServerDbContext<CalculatorDbContext>("roidb");
 
+builder.Services.AddSingleton<IROICalculatorService, ROICalculatorService>();
+
+builder.AddOllamaApiClient("phi4");
+
 // Add Swagger services
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "ROI Calculator API", Version = "v1" });
 });
 
+// Configuração do CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyLocalhostPort",
+       builder =>
+       {
+           builder.SetIsOriginAllowed(origin =>
+           {
+               // Permite qualquer porta do localhost (HTTP ou HTTPS)
+               return new Uri(origin).Host == "localhost";
+           })
+           .AllowAnyHeader()
+           .AllowAnyMethod();
+       });
+
+});
+
 var app = builder.Build();
+
+app.UseCors("AllowAnyLocalhostPort");
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();

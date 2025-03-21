@@ -1,0 +1,62 @@
+﻿@using System.Globalization
+<RadzenStack class="rz-p-0 rz-p-md-6 rz-p-lg-12">
+	<RadzenChart>
+		<RadzenAreaSeries Smooth="@smooth" Data="@roi2024" Title="2024" ValueProperty="ROI" CategoryProperty="ProjectName" RenderingOrder="1" Fill="rgba(16,112,227,.5)" Stroke="rgba(26,72,227,0.8)">
+			<RadzenSeriesDataLabels Visible="@showDataLabels" />
+		</RadzenAreaSeries>
+		<RadzenCategoryAxis Padding="20" LabelAutoRotation="-45" />
+		<RadzenValueAxis Formatter="@FormatAsPercentage">
+			<RadzenGridLines Visible="true" />
+			<RadzenAxisTitle Text="ROI (%)" />
+		</RadzenValueAxis>
+	</RadzenChart>
+</RadzenStack>
+
+
+@code {
+	bool smooth = true;
+	bool showDataLabels = false;
+
+	class DataItem
+	{
+		public string? ProjectName { get; set; }
+		public double Revenue { get; set; }
+		public double Investment { get; set; }
+		public double ROI => ((Revenue - Investment) / Investment) * 100; // ROI as percentage
+	}
+
+	string FormatAsPercentage(object value)
+	{
+		return ((double)value).ToString("N1") + "%"; // Formats as percentage with 1 decimal
+	}
+
+	DataItem[] roi2023 = new DataItem[] {
+	new DataItem { ProjectName = "AlphaWave", Revenue = 234000, Investment = 200000 },
+	new DataItem { ProjectName = "BetaCore", Revenue = 269000, Investment = 200000 },
+	new DataItem { ProjectName = "GammaPeak", Revenue = 233000, Investment = 200000 },
+	new DataItem { ProjectName = "DeltaFlux", Revenue = 244000, Investment = 200000 },
+	new DataItem { ProjectName = "EpsilonRise", Revenue = 214000, Investment = 200000 },
+	new DataItem { ProjectName = "ZetaPulse", Revenue = 253000, Investment = 200000 },
+	new DataItem { ProjectName = "EtaSpark", Revenue = 274000, Investment = 200000 },
+	new DataItem { ProjectName = "ThetaBeam", Revenue = 284000, Investment = 200000 },
+	new DataItem { ProjectName = "IotaShift", Revenue = 273000, Investment = 200000 },
+	new DataItem { ProjectName = "KappaFlow", Revenue = 282000, Investment = 200000 },
+	new DataItem { ProjectName = "LambdaEdge", Revenue = 289000, Investment = 200000 },
+	new DataItem { ProjectName = "MuStream", Revenue = 294000, Investment = 200000 }
+};
+
+	DataItem[] roi2024 = new DataItem[] {
+	new DataItem { ProjectName = "AlphaWave", Revenue = 334000, Investment = 300000 },
+	new DataItem { ProjectName = "BetaCore", Revenue = 369000, Investment = 300000 },
+	new DataItem { ProjectName = "GammaPeak", Revenue = 333000, Investment = 300000 },
+	new DataItem { ProjectName = "DeltaFlux", Revenue = 344000, Investment = 300000 },
+	new DataItem { ProjectName = "EpsilonRise", Revenue = 314000, Investment = 300000 },
+	new DataItem { ProjectName = "ZetaPulse", Revenue = 353000, Investment = 300000 },
+	new DataItem { ProjectName = "EtaSpark", Revenue = 374000, Investment = 300000 },
+	new DataItem { ProjectName = "ThetaBeam", Revenue = 384000, Investment = 300000 },
+	new DataItem { ProjectName = "IotaShift", Revenue = 373000, Investment = 300000 },
+	new DataItem { ProjectName = "KappaFlow", Revenue = 382000, Investment = 300000 },
+	new DataItem { ProjectName = "LambdaEdge", Revenue = 389000, Investment = 300000 },
+	new DataItem { ProjectName = "MuStream", Revenue = 394000, Investment = 300000 }
+};
+}

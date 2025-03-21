@@ -1,0 +1,181 @@
+﻿@page "/documentation"
+
+<h3>Documentação</h3>
+
+<FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+    <h2>InovaROI</h2>
+    <p>O projeto inova ao combinar tecnologias de ponta (Azure Machine Learning, OpenAI e Azure Functions) com uma abordagem centrada no usuário, focada em resolver o alto índice de falhas em transformações empresariais. Ele não apenas calcula o ROI, mas também prepara as empresas para a mudança, oferecendo uma solução preditiva, escalável e responsável.</p>
+</FluentCard>
+
+<FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+
+    <h2>Retorno sobre Investimento (ROI)</h2>
+
+    <p>O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.</p>
+
+    <h3>Fórmula do ROI</h3>
+    <p>
+        <code>ROI (%) = [(Benefícios Totais - Investimento Total) / Investimento Total] × 100</code>
+    </p>
+    <h4>Onde:</h4>
+    <ul>
+        <li><strong>Benefícios Totais</strong>: Soma das economias projetadas (aumento de produtividade, redução de riscos e sucesso do projeto).</li>
+        <li><strong>Investimento Total</strong>: Custo total do projeto, incluindo orçamento, mitigação de riscos e outros gastos relacionados.</li>
+    </ul>
+</FluentCard>
+
+<FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+
+    <h2>Cálculo de Retorno sobre Investimento (ROI) para Projetos</h2>
+
+    <p>O método de cálculo do Retorno sobre Investimento (ROI) deste aplicativo considera fatores como orçamento, impacto nos funcionários, duração, riscos financeiros, produtividade e sucesso na entrega. O objetivo é fornecer uma análise quantitativa que auxilie na avaliação da viabilidade e lucratividade do investimento.</p>
+
+    <h3>Entradas</h3>
+    <ul>
+        <li><strong>Orçamento do projeto</strong>: Valor total alocado para o projeto.</li>
+        <li><strong>Número de funcionários impactados</strong>: Quantidade de colaboradores afetados diretamente pelo projeto.</li>
+        <li><strong>Duração do projeto (em meses)</strong>: Período estimado para a execução completa.</li>
+    </ul>
+
+    <h3>Fatores a Considerar</h3>
+    <ul>
+        <li><strong>Riscos financeiros de falha</strong>: Perdas potenciais caso o projeto não seja concluído com sucesso.</li>
+        <li><strong>Desengajamento dos funcionários</strong>: Impacto da falta de motivação ou adesão da equipe.</li>
+        <li><strong>Economias por produtividade aumentada</strong>: Ganhos estimados com o aumento da eficiência dos funcionários.</li>
+        <li><strong>Redução de risco</strong>: Benefícios associados à mitigação de incertezas ou falhas. A capacidade técnica e a motivação da equipe mitiga riscos.</li>
+        <li><strong>Entrega bem-sucedida</strong>: Valor agregado pela conclusão do projeto dentro dos objetivos planejados.</li>
+    </ul>
+</FluentCard>
+
+<FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+
+    <h2>Componentes dos Cálculos</h2>
+
+    <h3>1. Custo Médio Mensal por Funcionário</h3>
+    <p>
+        <code>Custo Médio = Orçamento / (Número de Funcionários × Duração (meses))</code>
+    </p>
+    <h4>Onde:</h4>
+    <ul>
+        <li><strong>Orçamento</strong>: Valor total do projeto em reais.</li>
+        <li><strong>Número de Funcionários</strong>: Total de colaboradores impactados.</li>
+        <li><strong>Duração (meses)</strong>: Tempo estimado do projeto.</li>
+    </ul>
+
+    <h3>2. Economia por Produtividade Aumentada</h3>
+    <p>
+        <code>Ganho de Produtividade = (Custo Médio × (Ganho Esperado - 1)) × Número de Funcionários × Duração (meses)</code>
+    </p>
+    <p>
+        <code>Ganho Ajustado = Ganho de Produtividade × (1 - Taxa de Desengajamento)</code>
+    </p>
+    <h4>Onde:</h4>
+    <ul>
+        <li><strong>Custo Médio</strong>: Custo médio mensal por funcionário (calculado acima).</li>
+        <li><strong>Ganho Esperado</strong>: Fator de aumento de produtividade (ex.: 1,2 para 20%).</li>
+        <li><strong>Taxa de Desengajamento</strong>: Percentual de perda por desengajamento (ex.: 0,1 para 10%).</li>
+    </ul>
+
+    <h3>3. Redução de Risco</h3>
+    <p>
+        <code>Redução de Risco = (Orçamento × Taxa de Perda) × Redução Projetada</code>
+    </p>
+    <p>
+        <code>Redução Ajustada = Redução de Risco × (1 - Taxa de Falha)</code>
+    </p>
+    <h4>Onde:</h4>
+    <ul>
+        <li><strong>Orçamento</strong>: Valor total do projeto em reais.</li>
+        <li><strong>Taxa de Perda</strong>: Percentual do orçamento perdido em caso de falha (ex.: 0,3 para 30%).</li>
+        <li><strong>Redução Projetada</strong>: Percentual de risco mitigado (ex.: 0,5 para 50%).</li>
+        <li><strong>Taxa de Falha</strong>: Probabilidade de falha do projeto (ex.: 0,7 para 70%).</li>
+    </ul>
+
+    <h3>4. Benefício de Sucesso</h3>
+    <p>
+        <code>Benefícios de Sucesso = Orçamento × Fator de Sucesso</code>
+    </p>
+    <p>
+        <code>Benefícios Ajustados = Benefícios de Sucesso × (1 - Taxa de Falha)</code>
+    </p>
+    <h4>Onde:</h4>
+    <ul>
+        <li><strong>Orçamento</strong>: Valor total do projeto em reais.</li>
+        <li><strong>Fator de Sucesso</strong>: Multiplicador de benefícios adicionais (ex.: 0,4 para 40%).</li>
+        <li><strong>Taxa de Falha</strong>: Probabilidade de falha do projeto (ex.: 0,7 para 70%).</li>
+    </ul>
+
+    <h3>Soma dos Benefícios Ajustados</h3>
+    <p>
+        <code>Benefícios Totais = Ganho Ajustado + Redução Ajustada + Benefícios Ajustados</code>
+    </p>
+    <h4>Onde:</h4>
+    <ul>
+        <li><strong>Ganho Ajustado</strong>: Economia por produtividade ajustada.</li>
+        <li><strong>Redução Ajustada</strong>: Redução de risco ajustada.</li>
+        <li><strong>Benefícios Ajustados</strong>: Benefícios de sucesso ajustados.</li>
+    </ul>
+</FluentCard>
+
+<FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+    <h2>Machine Learning: Como Funciona e Suas Limitações</h2>
+
+    <h3>Como Funciona</h3>
+    <p>
+        Machine Learning (ML) é uma subárea da inteligência artificial (IA) que permite que sistemas aprendam e melhorem automaticamente com base em experiências, sem serem explicitamente programados para cada tarefa. O processo geralmente envolve os seguintes passos:
+    </p>
+    <ol>
+        <li><strong>Coleta de Dados</strong>: Dados relevantes são coletados de várias fontes.</li>
+        <li><strong>Pré-processamento de Dados</strong>: Os dados são limpos e organizados para torná-los utilizáveis.</li>
+        <li><strong>Escolha do Modelo</strong>: Um algoritmo de ML é selecionado com base no problema a ser resolvido, como classificação, regressão, clustering, etc.</li>
+        <li><strong>Treinamento</strong>: O modelo é alimentado com dados de treinamento para aprender padrões e criar uma representação estatística dos dados.</li>
+        <li><strong>Validação</strong>: O desempenho do modelo é avaliado usando um conjunto de dados de validação.</li>
+        <li><strong>Ajustes</strong>: Hiperparâmetros e estruturas do modelo são ajustados para melhorar o desempenho.</li>
+        <li><strong>Teste e Implementação</strong>: O modelo final é testado com dados nunca antes vistos e implementado para tarefas práticas.</li>
+        <li><strong>Aprendizado Contínuo</strong>: Com novos dados, o modelo pode ser refinado continuamente para melhorar sua precisão.</li>
+    </ol>
+
+    <h3>Limitações</h3>
+    <p>Apesar do sucesso do Machine Learning, ele tem algumas limitações importantes:</p>
+    <ol>
+        <li><strong>Dependência de Dados de Qualidade</strong>: Modelos de ML só são tão bons quanto os dados em que são treinados. Dados desbalanceados ou de baixa qualidade podem resultar em previsões ruins.</li>
+        <li><strong>Overfitting e Underfitting</strong>: O overfitting ocorre quando o modelo se adapta excessivamente aos dados de treinamento, falhando em generalizar. Underfitting acontece quando o modelo não aprende o suficiente dos dados.</li>
+        <li><strong>Necessidade de Recursos Computacionais</strong>: Algoritmos de ML, especialmente redes neurais profundas, podem ser intensivos em recursos e exigem hardware especializado como GPUs.</li>
+        <li><strong>Interpretação Limitada</strong>: Modelos como redes neurais profundas são frequentemente descritos como "caixas pretas", dificultando a interpretação de como chegaram a uma determinada previsão.</li>
+        <li><strong>Riscos de Bias</strong>: Se os dados de treinamento contêm preconceitos ou vieses, o modelo pode perpetuar esses vieses.</li>
+        <li><strong>Escalabilidade</strong>: Treinamento e implementação de modelos em cenários de grande escala podem ser desafiadores.</li>
+        <li><strong>Dependência de Dados Históricos</strong>: Muitos modelos dependem de padrões passados, o que pode limitar sua eficácia em cenários futuros ou dinâmicos.</li>
+    </ol>
+
+    <hr>
+    <p>
+        Machine Learning é uma ferramenta poderosa que está revolucionando muitas indústrias. No entanto, entender suas limitações é essencial para garantir que sua aplicação seja ética e eficaz.
+    </p>
+</FluentCard>
+
+<FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
+    <h2>Limitações da IA Generativa</h2>
+
+    <ol>
+        <li><strong>Falta de Contexto Profundo</strong>: A IA Generativa pode não compreender completamente o contexto detalhado de um assunto. Isso pode resultar em textos aparentemente coerentes, mas com falta de precisão ou relevância em análises técnicas complexas.</li>
+        <li><strong>Dependência da Qualidade dos Dados de Treinamento</strong>: A eficácia da IA está ligada aos dados em que foi treinada. Dados desatualizados, tendenciosos ou incompletos podem levar a análises imprecisas e textos pouco confiáveis.</li>
+        <li><strong>Dificuldade em Lidar com Informações Complexas</strong>: Em casos que envolvem dados multidisciplinares ou intricados, a IA pode encontrar dificuldades para integrar e interpretar informações de múltiplas fontes, gerando conclusões simplistas ou erradas.</li>
+        <li><strong>Falta de Criatividade e Intuição Humana</strong>: Operando apenas com base em padrões existentes, a IA não possui a criatividade ou intuição de um ser humano, o que a limita em fornecer insights inovadores ou soluções únicas.</li>
+        <li><strong>Riscos de Viés e Erros</strong>: A IA pode refletir os vieses dos dados de treinamento, resultando em análises tendenciosas. Além disso, erros podem surgir da má interpretação de informações ambíguas ou incompletas.</li>
+        <li><strong>Limitações na Personalização</strong>: Apesar da velocidade na geração de textos, a IA pode não atender às necessidades específicas de um público ou situação, particularmente em análises técnicas que demandam personalização detalhada.</li>
+    </ol>
+</FluentCard>
+
+<style>
+    code {
+        display: inline-block;
+        background-color: #f4f4f4;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2em;
+        font-style: italic;
+        text-align: center;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    }
+</style>

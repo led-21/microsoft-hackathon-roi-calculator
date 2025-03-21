@@ -1,0 +1,111 @@
+﻿@implements IDialogContentComponent<ProjectROI>
+@inject HttpClient Http
+
+<h4>Resultados</h4>
+
+<FluentCard Height="auto" Style="margin: 1rem;">
+	<FluentTextField Label="Nome do Projeto"
+	@bind-Value="Content.ProjectName" />
+
+	<FluentDatePicker Label="Inicio do projeto" />
+
+	<FluentTextField Label="Orçamento do Projeto (R$)"
+	@bind-Value="formattedBudget" />
+
+	<FluentNumberField Label="Número de Funcionários Impactados"
+	Type="number"
+	@bind-Value="Content.NumberOfEmployees" />
+
+	<FluentNumberField Label="Duração do Projeto (meses)"
+	Type="number"
+	@bind-Value="Content.ProjectDurationMonths" />
+
+	<FluentNumberField Label="Retorno do Investimento (ROI)"
+	Type="number"
+	@bind-Value="Content.ROI" />
+
+	<FluentTextArea Label="Descrição do Projeto"
+	@bind-Value="Content.Description"
+	Style="width:13.2rem;" />
+</FluentCard>
+
+<FluentCard Height="auto" Style="margin: 1rem;">
+	<FluentAccordion>
+		<FluentAccordionItem Heading="METRICAS DE FUNCIONÁRIOS" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+
+			<FluentNumberField Label="Total de Horas Trabalhadas por Semana"
+			Type="number"
+			@bind-Value="Content.TotalHoursWorkedWeekly" />
+
+			<FluentNumberField Label="Treinamentos Completos"
+			Type="number"
+			@bind-Value="Content.CompletedTraining" />
+
+			<FluentNumberField Label="Funcionários Usando Nova Ferramenta"
+			Type="number"
+			@bind-Value="Content.EmployeesUsingNewTool" />
+
+		</FluentAccordionItem>
+		<FluentAccordionItem Heading="METRICAS DE MUDANÇAS" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+
+			<FluentNumberField Label="Tempo Total de Implementação da Mudança"
+			Type="number"
+			@bind-Value="Content.TotalChangeImplementationTime" />
+
+			<FluentNumberField Label="Tempo Total Planejado para Implementação"
+			Type="number"
+			@bind-Value="Content.TotalPlannedImplementationTime" />
+
+		</FluentAccordionItem>
+		<FluentAccordionItem Heading="METRICAS DE PROCESSOS" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+
+			<FluentNumberField Label="Total de Processos"
+			Type="number"
+			@bind-Value="Content.TotalProcesses" />
+
+			<FluentNumberField Label="Processos em Conformidade"
+			Type="number"
+			@bind-Value="Content.CompliantProcesses" />
+
+		</FluentAccordionItem>
+		<FluentAccordionItem Heading="AVALIAÇÃO DO PROJETO" Style="width: 20rem;">
+			<FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+
+			<FluentNumberField Label="Total de Respostas na Avaliação do Projeto"
+			Type="number"
+			@bind-Value="Content.ProjectEvaluationTotalResponses" />
+
+			<FluentNumberField Label="Respostas Positivas na Avaliação do Projeto"
+			Type="number"
+			@bind-Value="Content.ProjectEvaluationPositiveResponses" />
+
+			<FluentNumberField Label="Soma de Todas as Pontuações na Avaliação do Projeto"
+			Type="number"
+			@bind-Value="Content.ProjectEvaluationSumOfAllScores" />
+		</FluentAccordionItem>
+	</FluentAccordion>
+	<br />
+@* 	<FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Salvar</FluentButton> *@
+</FluentCard>
+
+
+@code {
+
+	[Parameter]
+	public ProjectROI Content { get; set; } = default!;
+
+	private string formattedBudget
+	{
+		get => Content.ProjectBudget.ToString("C", new System.Globalization.CultureInfo("pt-BR"));
+		set
+		{
+			if (double.TryParse(value, System.Globalization.NumberStyles.Currency, new System.Globalization.CultureInfo("pt-BR"), out var result))
+			{
+				Content.ProjectBudget = result;
+			}
+		}
+	}
+}
