@@ -20,10 +20,8 @@ namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
         {
             _logger = logger;
             _roiCalculatorService = roiCalculatorService;
-            //_openAIClient = new AzureOpenAIClient(new Uri("url"),
-            //    new AzureKeyCredential("apiKey"));
 
-            _openAIClient = _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openaikey"));
+            _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openaikey"));
         }
 
         [Function("CalculateROI")]

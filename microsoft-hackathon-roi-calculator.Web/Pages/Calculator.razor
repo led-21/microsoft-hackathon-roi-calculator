@@ -129,6 +129,7 @@ else
         }
         catch (Exception ex)
         {
+            ToastService.ShowWarning($"Falhou em gerar o relatorio. " + ex.Message);
             Console.WriteLine(ex.Message);
         }
     }

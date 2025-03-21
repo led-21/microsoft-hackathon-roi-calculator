@@ -6,7 +6,6 @@ using System.Globalization;
 using microsoft_hackathon_roi_calculator.Domain.Models;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
 using microsoft_hackathon_roi_calculator.Application.Interfaces;
-using static System.Net.WebRequestMethods;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
 using Azure.AI.OpenAI;
@@ -15,8 +14,7 @@ using Azure;
 namespace microsoft_hackathon_roi_calculator.Api.Endpoints;
 static public class ROIEndpoint
 {
-    static AzureOpenAIClient _openAIClient = new AzureOpenAIClient(new Uri("url"), 
-        new AzureKeyCredential("openaikey"));
+    static AzureOpenAIClient _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openapikey"));
     static public void AddROIEndpoint(this WebApplication app)
     {
         app.MapPost("/api/roi/ai", async (HttpRequest request, IOllamaApiClient apiClient) =>
@@ -50,7 +48,7 @@ static public class ROIEndpoint
             try
             {
                 // OpenAI API call
-                result = _openAIClient.GetChatClient("gpt-4o-mini")
+                result = _openAIClient.GetChatClient("gpt-4o")
                                           .CompleteChatAsync(prompt)
                                           .ConfigureAwait(false)
                                           .GetAwaiter()
@@ -66,8 +64,7 @@ static public class ROIEndpoint
 
             return Results.Content(result, "text/plain");
 
-        }).WithRequestTimeout(TimeSpan.FromMinutes(5));
-
+        }).WithRequestTimeout(TimeSpan.FromMinutes(1));
 
 
         app.MapPost("/api/roi/calculator", (IROICalculatorService calculator, ROIInputParameters input) =>
