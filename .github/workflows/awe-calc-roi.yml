@@ -14,7 +14,6 @@ on:
 env:
   AZURE_STATIC_WEBAPP_NAME: awe-calc-roi
   APP_DIRECTORY: microsoft-hackathon-roi-calculator
-  API_DIRECTORY: microsoft-hackathon-roi-calculator
   OUTPUT: wwwroot
   DEPLOYMENT_ENVIRONMENT: preview
 jobs:
@@ -30,12 +29,10 @@ jobs:
       name: Build And Deploy
       uses: Azure/static-web-apps-deploy@v1
       with:
-        azure_static_web_apps_api_token: ${{ secrets.awe_calc_roi_SPN }}
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         action: upload
         deployment_environment: ${{env.DEPLOYMENT_ENVIRONMENT}}
         app_location: ${{ env.APP_DIRECTORY }}
-        api_location: ${{ env.API_DIRECTORY }}
         output_location: ${{ env.OUTPUT }}
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -46,6 +43,5 @@ jobs:
       name: Close Pull Request
       uses: Azure/static-web-apps-deploy@v1
       with:
-        azure_static_web_apps_api_token: ${{ secrets.awe_calc_roi_SPN }}
         action: close
         repo_token: ${{ secrets.GITHUB_TOKEN }}
