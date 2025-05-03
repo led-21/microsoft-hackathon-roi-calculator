@@ -97,7 +97,7 @@ else
     {
         try
         {
-            var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi/calculator", inputParameters);
+            var response = await Http.PostAsJsonAsync("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/calculator", inputParameters);
 
             if (response.IsSuccessStatusCode)
                 ToastService.ShowInfo($"Um relatorio detalhado será gerado por AI.");
@@ -115,7 +115,7 @@ else
 
         try
         {
-            string functionUrl = "https://localhost:7288/api/roi/ai"; // http://localhost:7071/api/CalculateROI
+            string functionUrl = "https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/ai"; // http://localhost:7071/api/CalculateROI
 
             HttpContent httpContent = new StringContent(Result);
 
@@ -140,7 +140,7 @@ else
             inputParameters?.NumberOfEmployees != null &&
             inputParameters?.ProjectDurationMonths != null)
         {
-            var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi/estimate/failure-rate", inputParameters);
+            var response = await Http.PostAsJsonAsync("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/estimate/failure-rate", inputParameters);
 
             if (response.IsSuccessStatusCode)
             {

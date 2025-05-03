@@ -114,7 +114,7 @@
         loading = true;
         await InvokeAsync(StateHasChanged);
 
-        var response = await Http.GetFromJsonAsync<ProjectROI[]>("https://localhost:7288/api/roi");
+        var response = await Http.GetFromJsonAsync<ProjectROI[]>("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi");
 
         Projects = response!.AsQueryable();
         await pagination.SetTotalItemCountAsync(response!.Length);
@@ -166,7 +166,7 @@
         {
             try
             {
-                var response = await Http.PostAsJsonAsync("https://localhost:7288/api/roi", projectROI);
+                var response = await Http.PostAsJsonAsync("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi", projectROI);
 
                 if (response.IsSuccessStatusCode)
                     ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi adicionado com sucesso!");
@@ -200,7 +200,7 @@
         {
             try
             {
-                var response = await Http.PutAsJsonAsync($"https://localhost:7288/api/roi/{projectROI.Id}", projectROI);
+                var response = await Http.PutAsJsonAsync($"https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/{projectROI.Id}", projectROI);
 
                 if (response.IsSuccessStatusCode)
                     ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi atualizado com sucesso!");
@@ -232,7 +232,7 @@
 
         if (!result.Cancelled)
         {
-            var response = await Http.DeleteAsync($"https://localhost:7288/api/roi/{project.Id}");
+            var response = await Http.DeleteAsync($"https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/{project.Id}");
 
             var projectList = Projects.ToList();
 
