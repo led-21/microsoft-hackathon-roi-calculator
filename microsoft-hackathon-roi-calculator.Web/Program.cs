@@ -10,10 +10,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+// Default HttpClient points to Blazor WASM host origin so relative assets load reliably
 builder.Services.AddScoped(sp => new HttpClient 
 { 
-    BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? builder.HostEnvironment.BaseAddress),
-    Timeout = TimeSpan.FromMinutes(5)
+    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
+    Timeout = TimeSpan.FromMinutes(2)
 });
 
 builder.Services.AddScoped<AppStateService>();

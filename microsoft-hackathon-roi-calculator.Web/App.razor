@@ -1,13 +1,15 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
+        <PageTitle>Página Não Encontrada</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-            <script src="_content/Microsoft.FluentUI.AspNetCore.Components/Microsoft.FluentUI.AspNetCore.Components.lib.module.js" type="module" async></script>
-            <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+            <FluentCard Style="padding: 2rem; margin: 2rem; text-align: center;">
+                <FluentLabel Typo="Typography.H4">Página Não Encontrada</FluentLabel>
+                <p>O endereço solicitado não existe ou foi movido.</p>
+                <FluentAnchor Href="/">Voltar para o Início</FluentAnchor>
+            </FluentCard>
         </LayoutView>
     </NotFound>
 </Router>
