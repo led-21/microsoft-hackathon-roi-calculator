@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
 <FluentToastProvider />
 <FluentDialogProvider />
@@ -9,8 +9,22 @@
 <PageTitle>InovaROI</PageTitle>
 
 <FluentLayout>
-    <FluentHeader>
-        InovaROI
+    <FluentHeader Style="display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; background: var(--accent-fill-rest, #0078d4);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <FluentIcon Value="@(new Icons.Regular.Size24.BrainCircuit())" Color="@Color.FillInverse" />
+            <span style="font-weight: 600; font-size: 1.15rem; color: #ffffff; letter-spacing: -0.02em;">InovaROI</span>
+            <FluentBadge Appearance="Appearance.Neutral" Style="font-size: 0.7rem; margin-left: 6px;">v2.0 • .NET 10</FluentBadge>
+        </div>
+        <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" Style="gap: 12px;">
+            <FluentBadge Appearance="Appearance.Accent" Style="display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.15); color: #ffffff; border: 1px solid rgba(255,255,255,0.3);">
+                <FluentIcon Value="@(new Icons.Regular.Size16.CloudCheckmark())" Color="@Color.FillInverse" />
+                <span>Nuvem & Offline Ativos</span>
+            </FluentBadge>
+            <FluentAnchor Href="https://github.com/led-21/microsoft-hackathon-roi-calculator" Target="_blank" Appearance="Appearance.Lightweight" Style="color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                <FluentIcon Value="@(new Icons.Regular.Size20.Code())" Color="@Color.FillInverse" />
+                GitHub
+            </FluentAnchor>
+        </FluentStack>
     </FluentHeader>
 
     <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
@@ -58,7 +72,8 @@
         </FluentBodyContent>
     </FluentStack>
 
-    <FluentFooter>
-        <span>&copy; 2025 - Criado por Adriano Godoy e Danillo Silva.</span>
+    <FluentFooter Style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; font-size: 0.85rem; border-top: 1px solid var(--neutral-stroke-rest, #e0e0e0);">
+        <span>&copy; 2025–2026 InovaROI • Microsoft Innovation Challenge Hackathon • Criado por <strong>Adriano Godoy</strong> e <strong>Danillo Silva</strong></span>
+        <span>Stack: .NET 10 • Blazor WASM • ML.NET • Azure OpenAI • .NET Aspire</span>
     </FluentFooter>
 </FluentLayout>

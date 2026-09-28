@@ -5,6 +5,8 @@
 @inject RoiApiClient ApiClient
 @inject MarkdownService Markdown
 @inject NavigationManager Navigation
+@inject IJSRuntime JS
+@inject IToastService ToastService
 
 <FluentLabel Typo="Typography.H3">Relatório Executivo de Transformação</FluentLabel>
 
@@ -31,13 +33,31 @@
         else
         {
             <FluentCard Height="auto" Style="padding: 24px; line-height: 1.6;">
-                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End" Style="margin-bottom: 12px;">
-                    <FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => Navigation.NavigateTo("/calculator"))">
-                        Editar Parâmetros
-                    </FluentButton>
+                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.SpaceBetween" VerticalAlignment="VerticalAlignment.Center" Style="margin-bottom: 16px; flex-wrap: wrap; gap: 10px;" Class="no-print">
+                    <FluentStack Orientation="Orientation.Horizontal" Style="gap: 8px;">
+                        <FluentBadge Appearance="Appearance.Accent">Análise Estratégica Consolidada</FluentBadge>
+                        <FluentBadge Appearance="Appearance.Neutral">Motor IA Híbrido</FluentBadge>
+                    </FluentStack>
+                    <FluentStack Orientation="Orientation.Horizontal" Style="gap: 8px;">
+                        <a style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--neutral-layer-2, #f3f3f3); border-radius: 4px; text-decoration: none; color: var(--neutral-foreground-rest, #24292f); border: 1px solid var(--neutral-stroke-rest, #d1d5db); font-size: 0.875rem;"
+                           href="data:text/markdown;charset=utf-8,@(Uri.EscapeDataString(AppState.DetailReport))"
+                           download="@($"InovaROI-Relatorio-{DateTime.Now:yyyyMMdd-HHmm}.md")">
+                            <FluentIcon Value="@(new Icons.Regular.Size16.ArrowDownload())" />
+                            Download (.md)
+                        </a>
+                        <FluentButton Appearance="Appearance.Outline" IconStart="@(new Icons.Regular.Size16.Print())" OnClick="PrintReport">
+                            Salvar PDF / Imprimir
+                        </FluentButton>
+                        <FluentButton Appearance="Appearance.Lightweight" IconStart="@(new Icons.Regular.Size16.Copy())" OnClick="CopyReport">
+                            Copiar
+                        </FluentButton>
+                        <FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => Navigation.NavigateTo("/calculator"))">
+                            Editar Parâmetros
+                        </FluentButton>
+                    </FluentStack>
                 </FluentStack>
 
-                <div>
+                <div class="markdown-report">
                     @((MarkupString)Markdown.ConvertToHtml(AppState.DetailReport))
                 </div>
             </FluentCard>
@@ -56,6 +76,31 @@
         var (markdown, _) = await ApiClient.CalculateRoiAsync(AppState.CurrentInput);
         var (aiReport, _) = await ApiClient.GenerateAiReportAsync(markdown);
         AppState.SetDetailReport(aiReport);
+    }
+
+    private async Task PrintReport()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("window.print");
+        }
+        catch
+        {
+            ToastService.ShowWarning("Não foi possível acionar a impressão direta.");
+        }
+    }
+
+    private async Task CopyReport()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", AppState.DetailReport);
+            ToastService.ShowSuccess("Relatório copiado para a área de transferência!");
+        }
+        catch
+        {
+            ToastService.ShowInfo("Selecione o texto e copie manualmente (Ctrl+C).");
+        }
     }
 
     public void Dispose()

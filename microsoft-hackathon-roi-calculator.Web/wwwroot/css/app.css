@@ -115,7 +115,13 @@ footer {
         }
 
 .loading-progress-text {
-    display: none !important;
+    position: relative;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-top: 1rem;
+    display: block;
 }
 
     .loading-progress-text:after {
@@ -185,5 +191,100 @@ code {
     [dir="rtl"] .navmenu-icon {
         left: 20px;
         right: unset;
+    }
+}
+
+/* Executive Markdown Report Styles */
+.markdown-report {
+    color: var(--neutral-foreground-rest, #24292f);
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+.markdown-report h1,
+.markdown-report h2,
+.markdown-report h3,
+.markdown-report h4 {
+    color: var(--neutral-foreground-rest, #1f2328);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.markdown-report h2 {
+    border-bottom: 1px solid var(--neutral-stroke-rest, #e1e4e8);
+    padding-bottom: 0.4rem;
+}
+
+.markdown-report table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.9rem;
+}
+
+.markdown-report th,
+.markdown-report td {
+    padding: 8px 14px;
+    border: 1px solid var(--neutral-stroke-rest, #dfe2e5);
+    text-align: left;
+}
+
+.markdown-report th {
+    background-color: var(--neutral-layer-2, #f6f8fa);
+    font-weight: 600;
+}
+
+.markdown-report tr:nth-child(even) {
+    background-color: var(--neutral-layer-1, #f9fafb);
+}
+
+.markdown-report blockquote {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    color: var(--neutral-foreground-hint, #57606a);
+    border-left: 4px solid var(--accent-fill-rest, #0078d4);
+    background-color: var(--neutral-layer-2, #f8f9fa);
+    border-radius: 0 4px 4px 0;
+}
+
+.markdown-report hr {
+    border: 0;
+    height: 1px;
+    background: var(--neutral-stroke-rest, #e1e4e8);
+    margin: 1.5rem 0;
+}
+
+.markdown-report ul,
+.markdown-report ol {
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+}
+
+.markdown-report li {
+    margin-bottom: 0.35rem;
+}
+
+/* Print Styles for Executive PDF Export */
+@media print {
+    fluent-nav-menu,
+    fluent-header,
+    fluent-footer,
+    .no-print {
+        display: none !important;
+    }
+
+    body, .content, .body-content {
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: white !important;
+        color: black !important;
+    }
+
+    fluent-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
     }
 }

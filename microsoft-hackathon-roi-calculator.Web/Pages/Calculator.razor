@@ -7,6 +7,7 @@
 @inject RoiApiClient ApiClient
 @inject AppStateService AppState
 @inject MarkdownService Markdown
+@inject NavigationManager Navigation
 
 <FluentLabel Typo="Typography.H3">Calculadora de ROI</FluentLabel>
 
@@ -25,7 +26,17 @@ else
     <FluentGrid>
         <FluentGridItem xs="12" md="6">
             <FluentCard xs="12" Height="auto" Style="padding: 20px; margin: 10px;">
-                <FluentLabel Typo="Typography.H5" Style="margin-bottom: 12px;">Parâmetros da Iniciativa</FluentLabel>
+                <FluentLabel Typo="Typography.H5" Style="margin-bottom: 8px;">Parâmetros da Iniciativa</FluentLabel>
+
+                <div style="margin-bottom: 14px;">
+                    <FluentLabel Typo="Typography.Body" Style="font-weight: 600; font-size: 0.85rem; color: var(--neutral-foreground-hint);">Cenários Pré-configurados (1-Clique):</FluentLabel>
+                    <FluentStack Orientation="Orientation.Horizontal" Wrap="true" Style="gap: 6px; margin-top: 4px;">
+                        <FluentButton Size="ButtonSize.Small" Appearance="Appearance.Neutral" OnClick="@(() => ApplyPreset("cloud"))">☁️ Nuvem</FluentButton>
+                        <FluentButton Size="ButtonSize.Small" Appearance="Appearance.Neutral" OnClick="@(() => ApplyPreset("copilot"))">🤖 Copilot / IA</FluentButton>
+                        <FluentButton Size="ButtonSize.Small" Appearance="Appearance.Neutral" OnClick="@(() => ApplyPreset("erp"))">🔄 ERP</FluentButton>
+                        <FluentButton Size="ButtonSize.Small" Appearance="Appearance.Neutral" OnClick="@(() => ApplyPreset("devops"))">⚡ DevSecOps</FluentButton>
+                    </FluentStack>
+                </div>
 
                 <FluentTextField Label="Orçamento do Projeto (R$)"
                                  @bind-Value="formattedBudget" />
@@ -116,9 +127,15 @@ else
                         </FluentBadge>
                     }
 
-                    <div>
+                    <div class="markdown-report">
                         @((MarkupString)AppState.CalculationResultHtml)
                     </div>
+
+                    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End" Style="margin-top: 16px; border-top: 1px solid var(--neutral-stroke-rest, #e0e0e0); padding-top: 12px;">
+                        <FluentButton Appearance="Appearance.Accent" IconEnd="@(new Icons.Regular.Size16.ArrowRight())" OnClick="@(() => Navigation.NavigateTo("/report"))">
+                            Ver Relatório Executivo Completo
+                        </FluentButton>
+                    </FluentStack>
                 </FluentCard>
             }
             else
@@ -216,5 +233,61 @@ else
                 AppState.CurrentInput.ProjectBudget = invResult;
             }
         }
+    }
+
+    private void ApplyPreset(string preset)
+    {
+        switch (preset)
+        {
+            case "cloud":
+                AppState.CurrentInput.ProjectBudget = 1500000;
+                AppState.CurrentInput.NumberOfEmployees = 350;
+                AppState.CurrentInput.ProjectDurationMonths = 12;
+                AppState.CurrentInput.FailureRate = 0.45;
+                AppState.CurrentInput.BudgetLossRate = 0.30;
+                AppState.CurrentInput.ExpectedDisengagementRate = 0.12;
+                AppState.CurrentInput.ExpectedProductivityGain = 1.25;
+                AppState.CurrentInput.ProjectedRiskReduction = 0.40;
+                AppState.CurrentInput.ExpectedSuccessBenefit = 0.35;
+                ToastService.ShowInfo("Cenário de Migração Cloud aplicado!");
+                break;
+            case "copilot":
+                AppState.CurrentInput.ProjectBudget = 600000;
+                AppState.CurrentInput.NumberOfEmployees = 180;
+                AppState.CurrentInput.ProjectDurationMonths = 6;
+                AppState.CurrentInput.FailureRate = 0.35;
+                AppState.CurrentInput.BudgetLossRate = 0.20;
+                AppState.CurrentInput.ExpectedDisengagementRate = 0.10;
+                AppState.CurrentInput.ExpectedProductivityGain = 1.30;
+                AppState.CurrentInput.ProjectedRiskReduction = 0.50;
+                AppState.CurrentInput.ExpectedSuccessBenefit = 0.40;
+                ToastService.ShowInfo("Cenário de Adoção de IA / Copilot aplicado!");
+                break;
+            case "erp":
+                AppState.CurrentInput.ProjectBudget = 2800000;
+                AppState.CurrentInput.NumberOfEmployees = 750;
+                AppState.CurrentInput.ProjectDurationMonths = 18;
+                AppState.CurrentInput.FailureRate = 0.60;
+                AppState.CurrentInput.BudgetLossRate = 0.40;
+                AppState.CurrentInput.ExpectedDisengagementRate = 0.20;
+                AppState.CurrentInput.ExpectedProductivityGain = 1.18;
+                AppState.CurrentInput.ProjectedRiskReduction = 0.30;
+                AppState.CurrentInput.ExpectedSuccessBenefit = 0.25;
+                ToastService.ShowInfo("Cenário de Modernização ERP aplicado!");
+                break;
+            case "devops":
+                AppState.CurrentInput.ProjectBudget = 450000;
+                AppState.CurrentInput.NumberOfEmployees = 90;
+                AppState.CurrentInput.ProjectDurationMonths = 8;
+                AppState.CurrentInput.FailureRate = 0.30;
+                AppState.CurrentInput.BudgetLossRate = 0.25;
+                AppState.CurrentInput.ExpectedDisengagementRate = 0.08;
+                AppState.CurrentInput.ExpectedProductivityGain = 1.35;
+                AppState.CurrentInput.ProjectedRiskReduction = 0.45;
+                AppState.CurrentInput.ExpectedSuccessBenefit = 0.35;
+                ToastService.ShowInfo("Cenário de DevSecOps Ágil aplicado!");
+                break;
+        }
+        StateHasChanged();
     }
 }
