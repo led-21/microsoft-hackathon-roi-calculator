@@ -6,7 +6,7 @@
 [![ML.NET](https://img.shields.io/badge/ML.NET-Predictive%20Analytics-blue?logo=dotnet)](https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet)
 [![Azure OpenAI](https://img.shields.io/badge/Azure%20OpenAI-GPT--4o%20%7C%20Local%20Fallback-0078D4?logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/products/ai-services/openai-service)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests Passing](https://img.shields.io/badge/Tests-36%20Passing-brightgreen?logo=xunit)](microsoft-hackathon-roi-calculator.Tests)
+[![Tests Passing](https://img.shields.io/badge/Tests-108%20Passing-brightgreen?logo=xunit)](microsoft-hackathon-roi-calculator.Tests)
 
 > **Executive Overview**: Over 70% of organizational transformation initiatives fail due to miscalculated risks, employee disengagement, and cost overruns. **InovaROI** bridges the gap between raw financial metrics and executive decision-making by combining **pure deterministic financial modeling**, **machine learning risk forecasting**, and **generative AI narrative synthesis** into a cohesive enterprise solution.
 
@@ -138,8 +138,8 @@ $$\text{Failure Rate}_{\text{break-even}} = 1 - \frac{\text{Budget} - \text{Adju
 ```
 microsoft-hackathon-roi-calculator/
 ├── .github/workflows/                 # CI/CD (GitHub Actions)
-│   ├── ci.yml                         # Automated build & unit test pipeline
-│   └── azure-static-web-apps-*.yml    # Static Web Apps deployment workflow
+│   └── ci.yml                         # Automated multi-SDK build, test & coverage pipeline
+├── docker-compose.yml                 # 1-click full-stack containerization (API, Web, SQL, Redis)
 ├── docs/                              # Architecture diagrams & design artifacts
 ├── microsoft-hackathon-roi-calculator.Domain/
 │   ├── Financial/                     # Pure financial & risk calculation engine
@@ -153,14 +153,17 @@ microsoft-hackathon-roi-calculator/
 │   └── Data/                          # CalculatorDbContext (EF Core SQL Server / SQLite)
 ├── microsoft-hackathon-roi-calculator.Api/
 │   ├── Endpoints/                     # Minimal API endpoints (/api/roi/...)
+│   ├── Dockerfile                     # Multi-stage .NET 10 API production container
 │   └── Program.cs                     # API bootstrapper with hybrid cloud/local DI
 ├── microsoft-hackathon-roi-calculator.Web/
 │   ├── Pages/                         # Blazor WASM pages (Calculator, Dashboard, Projects, Report)
-│   └── Services/                      # AppStateService, RoiApiClient, MarkdownService
+│   ├── Services/                      # AppStateService, RoiApiClient, MarkdownService
+│   ├── Dockerfile                     # Multi-stage Blazor WASM → Nginx Alpine container
+│   └── nginx.conf                     # Production SPA routing, gzip, WASM/WebCil MIME types
 ├── microsoft-hackathon-roi-calculator.AppHost/ # .NET Aspire distributed orchestrator
 ├── microsoft-hackathon-roi-calculator.ServiceDefaults/ # Telemetry, health checks, discovery
 ├── microsoft-hackathon-roi-calculator.Functions/ # Serverless calculation worker
-└── microsoft-hackathon-roi-calculator.Tests/   # Unit & regression test suite (xUnit)
+└── microsoft-hackathon-roi-calculator.Tests/   # Unit & regression test suite (108 tests)
 ```
 
 ---
@@ -228,13 +231,13 @@ docker compose up -d --build
 
 | Dimension | Hackathon Prototype (March 2025) | Portfolio Edition (.NET 10) |
 | :--- | :--- | :--- |
-| **Target Framework** | .NET 8 / 9 mixed versions | **.NET 10 LTS Unified** across all projects |
+| **Target Framework** | .NET 8 / 9 mixed versions | **.NET 10 LTS Backend / Microservices** + .NET 8 Blazor WASM Client (Multi-targeted Domain) |
 | **Financial Engine** | Coupled inline procedural logic | **Pure Functional Domain Engine (`ROICalculator`)** |
-| **Test Coverage** | 1 sample Aspire test | **36 Comprehensive Unit Tests** (100% pass rate) |
+| **Test Coverage** | 1 sample Aspire test | **108 Comprehensive Unit Tests** (100% pass rate across Domain, Application, and Web layers) |
 | **Cloud Dependency** | Required active Azure SQL & Azure OpenAI | **100% Offline Capability** (SQLite + In-Memory + Local Engine) |
 | **Frontend State** | Unsafe static shared variables | **Scoped DI State Management (`AppStateService`)** |
 | **Resilience** | Failed without internet connection | **Graceful In-Browser WebAssembly Fallback** |
-| **CI/CD** | Single deployment workflow | **Automated GitHub Actions CI Pipeline** (build + test) |
+| **CI/CD** | Single deployment workflow | **Automated Multi-SDK CI Pipeline** (.NET 8 & 10, coverage report) + **Docker Compose Stack** |
 
 ---
 
