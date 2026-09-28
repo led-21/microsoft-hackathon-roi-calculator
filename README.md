@@ -28,7 +28,22 @@ This project was originally designed and built for the **Microsoft Innovation Ch
 
 ---
 
+## Product Interface & Visuals
+
+| Analytics & ROI Dashboard | Landing Page & Overview |
+| :---: | :---: |
+| ![Analytics Dashboard](docs/tela-app.png) | ![Landing Page](docs/tela-app-home.png) |
+
+---
+
 ## Key Architectural Highlights
+
+<p align="center">
+  <img src="docs/arquitetura.gif" alt="Arquitetura de Serviços Azure & .NET" width="100%">
+</p>
+
+<details>
+<summary><b>Component Orchestration Flow (Mermaid Diagram)</b></summary>
 
 ```mermaid
 flowchart TD
@@ -66,6 +81,8 @@ flowchart TD
     Aspire -.-> Api
     Aspire -.-> UI
 ```
+
+</details>
 
 ### 1. Pure Deterministic Financial Engine (`Domain.Financial`)
 Financial math is strictly isolated from presentation, framework code, and external I/O:
