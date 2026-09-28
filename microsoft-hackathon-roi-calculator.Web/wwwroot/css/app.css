@@ -90,34 +90,36 @@ footer {
 .loading-progress {
     position: relative;
     display: block;
-    width: 8rem;
-    height: 8rem;
-    margin: 20vh auto 1rem auto;
+    width: 6rem;
+    height: 6rem;
+    margin: 25vh auto 1rem auto;
+    animation: rotate-spinner 1.5s linear infinite;
+}
+
+@keyframes rotate-spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
     .loading-progress circle {
         fill: none;
-        stroke: #e0e0e0;
-        stroke-width: 0.6rem;
+        stroke: #f3f3f3;
+        stroke-width: 0.5rem;
         transform-origin: 50% 50%;
-        transform: rotate(-90deg);
     }
 
         .loading-progress circle:last-child {
-            stroke: #1b6ec2;
-            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-            transition: stroke-dasharray 0.05s ease-in-out;
+            stroke: #0078d4;
+            stroke-dasharray: 80, 200;
+            stroke-linecap: round;
         }
 
 .loading-progress-text {
-    position: absolute;
-    text-align: center;
-    font-weight: bold;
-    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+    display: none !important;
 }
 
     .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Loading");
+        content: none !important;
     }
 
 code {
