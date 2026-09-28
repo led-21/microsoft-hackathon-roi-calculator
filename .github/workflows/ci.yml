@@ -8,26 +8,46 @@ on:
 
 jobs:
   build-and-test:
-    name: Build & Test (.NET 10)
+    name: Build & Test (.NET 10 & Blazor WASM 8)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
+      - name: Setup .NET 8 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            10.0.x
-            9.0.x
-            8.0.x
+          dotnet-version: '8.0.x'
+
+      - name: Setup .NET 10 SDK (Preview)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Verify .NET SDKs
+        run: dotnet --list-sdks
 
       - name: Restore Dependencies
         run: dotnet restore microsoft-hackathon-roi-calculator.sln
 
-      - name: Build Solution
+      - name: Build Solution (Release)
         run: dotnet build microsoft-hackathon-roi-calculator.sln --no-restore --configuration Release
 
-      - name: Run Unit Tests
-        run: dotnet test microsoft-hackathon-roi-calculator.Tests/microsoft-hackathon-roi-calculator.Tests.csproj --no-build --configuration Release --filter "Category!=Integration" --verbosity normal
+      - name: Run Unit Tests with Coverage
+        run: >
+          dotnet test microsoft-hackathon-roi-calculator.Tests/microsoft-hackathon-roi-calculator.Tests.csproj
+          --no-build
+          --configuration Release
+          --filter "Category!=Integration"
+          --verbosity normal
+          --collect:"XPlat Code Coverage"
+          --results-directory ./TestResults
+
+      - name: Upload Test Results & Coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-and-coverage
+          path: ./TestResults

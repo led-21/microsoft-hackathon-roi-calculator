@@ -1,0 +1,52 @@
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inovatoi-sql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Your_strong_P@ssw0rd!
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Your_strong_P@ssw0rd!' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: inovatoi-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: microsoft-hackathon-roi-calculator.Api/Dockerfile
+    container_name: inovatoi-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__sql=Server=sql,1433;Database=roidb;User Id=sa;Password=Your_strong_P@ssw0rd!;TrustServerCertificate=True;
+      - ConnectionStrings__cache=redis:6379
+    ports:
+      - "5000:8080"
+    depends_on:
+      sql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: microsoft-hackathon-roi-calculator.Web/Dockerfile
+    container_name: inovatoi-web
+    ports:
+      - "80:80"
+    depends_on:
+      - api
