@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Trace;
 using microsoft_hackathon_roi_calculator.Domain.Financial;
@@ -41,6 +41,7 @@ public class Worker(
         await strategy.ExecuteAsync(async () =>
         {
             await dbContext.Database.MigrateAsync(cancellationToken);
+            await dbContext.Database.EnsureCreatedAsync(cancellationToken);
         });
     }
 
