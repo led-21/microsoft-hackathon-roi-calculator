@@ -7,9 +7,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>microsoft_hackathon_roi_calculator.Functions</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="Properties\local.settings.json" />
-  </ItemGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />

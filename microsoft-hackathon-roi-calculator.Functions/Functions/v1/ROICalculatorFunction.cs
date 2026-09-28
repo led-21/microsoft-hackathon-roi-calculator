@@ -1,85 +1,58 @@
+ï»¿using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using microsoft_hackathon_roi_calculator.Application.Interfaces;
 using microsoft_hackathon_roi_calculator.Domain.Models;
-using Azure.AI.OpenAI;
-using Azure;
 
-namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1
+namespace microsoft_hackathon_roi_calculator.Functions.Functions.v1;
+
+public class ROICalculatorFunction
 {
-    public class ROICalculatorFunction
+    private readonly ILogger<ROICalculatorFunction> _logger;
+    private readonly IROICalculatorService _roiCalculatorService;
+    private readonly IAssistantReportService _reportService;
+
+    public ROICalculatorFunction(
+        ILogger<ROICalculatorFunction> logger, 
+        IROICalculatorService roiCalculatorService,
+        IAssistantReportService reportService)
     {
-        private readonly ILogger<ROICalculatorFunction> _logger;
-        private readonly IROICalculatorService _roiCalculatorService;
-        private readonly AzureOpenAIClient _openAIClient;
+        _logger = logger;
+        _roiCalculatorService = roiCalculatorService;
+        _reportService = reportService;
+    }
 
-        public ROICalculatorFunction(ILogger<ROICalculatorFunction> logger, IROICalculatorService roiCalculatorService)
+    [Function("CalculateROI")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req)
+    {
+        req.HttpContext.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+     
+        _logger.LogInformation("Processing CalculateROI Azure Function request.");
+
+        string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+        var input = JsonSerializer.Deserialize<ROIInputParameters>(requestBody);
+
+        if (input == null)
         {
-            _logger = logger;
-            _roiCalculatorService = roiCalculatorService;
-
-            _openAIClient = new AzureOpenAIClient(new Uri("url"), new AzureKeyCredential("openaikey"));
+            return new BadRequestObjectResult("Invalid input: request body could not be deserialized to ROIInputParameters.");
         }
 
-        [Function("CalculateROI")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req)
+        try
         {
-            req.Headers.AccessControlAllowOrigin = "*";
-         
-            _logger.LogInformation("C# HTTP trigger to process a Calculate ROI function request.");
+            var result = _roiCalculatorService.CalculateROI(input);
+            var mathematicalReport = _roiCalculatorService.GenerateReport(result, input);
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var input = JsonSerializer.Deserialize<ROIInputParameters>(requestBody);
+            var executiveReport = await _reportService.GenerateInsightsAsync(mathematicalReport);
 
-            if (input == null)
-            {
-                return new BadRequestObjectResult("Invalid input");
-            }
-
-            string openAIReport;
-
-            try
-            {
-                var result = _roiCalculatorService.CalculateROI(input);
-                var report = _roiCalculatorService.GenerateReport(result, input);
-
-                var insights = await GenerateInsightsFromOpenAI(report);
-
-                openAIReport = _roiCalculatorService.GenerateReport(result, input) + "\n" + insights;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation("Error: " + ex.Message);
-                openAIReport = "Error: " + ex.Message;
-                return new BadRequestObjectResult(openAIReport);
-            }
-
-            var response = new OkObjectResult(openAIReport);
-
-            return response;
+            var combinedReport = $"{mathematicalReport}\n\n{executiveReport}";
+            return new OkObjectResult(combinedReport);
         }
-
-        private async Task<string> GenerateInsightsFromOpenAI(string report)
+        catch (Exception ex)
         {
-            var prompt = $"""
-                Com base nos seguintes resultados de cálculo de ROI, forneça insights e recomendações:
-                
-                Estrutura do Relatório Final
-
-                Resumo Executivo: Visão geral.
-                Análise Detalhada: Explicação dos cálculos e dados analisados.
-                Insights e Recomendações: Conclusões acionáveis baseadas na análise.
-
-                Relatorio: {report}
-                """;
-               
-
-            var completionResult = await _openAIClient.GetChatClient("gpt-4o-mini").CompleteChatAsync(prompt).ConfigureAwait(false);
-
-            return completionResult.Value.Content[0].Text;
+            _logger.LogError(ex, "Error processing ROI calculation in Azure Function.");
+            return new BadRequestObjectResult($"Calculation error: {ex.Message}");
         }
     }
 }

@@ -34,7 +34,6 @@ builder.AddProject<Projects.microsoft_hackathon_roi_calculator_Web>("frontend")
     .WithExternalHttpEndpoints()
     .WithReference(apiService)
     .WaitFor(apiService)
-    .WithReference(fuctions)
-    .WaitFor(fuctions);
+    .WithReference(fuctions);
 
 builder.Build().Run();
