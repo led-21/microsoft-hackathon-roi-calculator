@@ -197,6 +197,14 @@ dotnet run
 ```
 Navigate to the Aspire dashboard URL printed in the console to inspect logs, traces, metrics, and connected services.
 
+### 4. Run with Docker Compose (1-Click Containerized Stack)
+Zero host dependencies—run the entire platform (SQL Server 2022, Redis, .NET 10 API, and Blazor WebAssembly on Nginx) with a single command:
+```bash
+docker compose up -d --build
+```
+- **Frontend Blazor WASM (Nginx)**: http://localhost
+- **Backend API & Swagger**: http://localhost:5000/swagger
+
 ---
 
 ## Evolution: Hackathon Prototype vs. Portfolio Standard
