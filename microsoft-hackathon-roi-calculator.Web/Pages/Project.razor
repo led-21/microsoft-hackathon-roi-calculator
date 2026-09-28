@@ -1,16 +1,19 @@
-﻿@page "/projects"
-@using microsoft_hackathon_roi_calculator.Web.Pages.Components;
+@page "/projects"
+@using microsoft_hackathon_roi_calculator.Domain.Models
+@using microsoft_hackathon_roi_calculator.Web.Pages.Components
+@using microsoft_hackathon_roi_calculator.Web.Services
 
-@inject HttpClient Http
+@inject RoiApiClient ApiClient
+@inject AppStateService AppState
 @inject IToastService ToastService
 @inject IDialogService DialogService
 
-<h3>Projetos</h3>
+<FluentLabel Typo="Typography.H3">Projetos de Transformação</FluentLabel>
 
-<FluentCard Height="auto" Style="margin: 1rem;">
-    <!-- Acordeão para filtros-->
+<FluentCard Height="auto" Style="margin: 1rem 0;">
+    <!-- Acordeão para filtros -->
     <FluentAccordion>
-        <FluentAccordionItem Heading="Filter(s)" Expanded="false">
+        <FluentAccordionItem Heading="Filtros de Busca" Expanded="false">
             <FluentIcon Value="@(new Icons.Regular.Size20.FilterAdd())"
                         Color="@Color.Neutral"
                         Slot="start" />
@@ -29,13 +32,13 @@
                 <FluentButton IconStart="@(new Icons.Regular.Size16.Broom())"
                               Disabled="loading"
                               OnClick="ClearFilters">
-                    Clear
+                    Limpar
                 </FluentButton>
                 <FluentButton IconStart="@(new Icons.Regular.Size16.Search())"
                               Appearance="Appearance.Accent"
                               Loading="loading"
                               OnClick="DataGridRefreshDataAsync">
-                    Search
+                    Filtrar
                 </FluentButton>
             </FluentStack>
         </FluentAccordionItem>
@@ -44,7 +47,6 @@
     <!-- Tabela -->
     <FluentDataGrid @ref="dataGrid"
                     Items="@FilteredProjects"
-                    OnRowDoubleClick="@(() => Console.WriteLine("Row double clicked!"))"
                     ItemSize="46"
                     GenerateHeader="GenerateHeaderOption.Sticky"
                     TGridItem="ProjectROI"
@@ -56,25 +58,24 @@
                         Width="80px" />
         <PropertyColumn Title="Nome do Projeto"
                         Property="@(c => c!.ProjectName)"
-                        Style=""
                         Align="Align.Start" />
         <PropertyColumn Title="Orçamento"
-                        Property="@(c => c!.ProjectBudget.ToString("C"))"
-                        Align="Align.Center"
-                        />
-        <PropertyColumn Title="Funcionários"
+                        Property="@(c => c!.ProjectBudget.ToString("C", new System.Globalization.CultureInfo("pt-BR")))"
+                        Align="Align.Center" />
+        <PropertyColumn Title="Colaboradores"
                         Property="@(c => c!.NumberOfEmployees)"
                         Tooltip="true"
                         Align="Align.Center" />
-        <PropertyColumn Title="ROI"
-                        Property="@(c => c!.ROI.ToString("0.00"))" Align="Align.Center" />
+        <PropertyColumn Title="ROI Estimado"
+                        Property="@(c => (c!.ROI * 100).ToString("0.0") + "%")" 
+                        Align="Align.Center" />
 
         <!-- Coluna de ações -->
         <TemplateColumn Title="Ações" Align="@Align.End">
-            <FluentButton aria-label="Edit item"
+            <FluentButton aria-label="Editar item"
                           IconEnd="@(new Icons.Regular.Size16.Edit())"
                           OnClick="@(() => UpdateProject(context))" />
-            <FluentButton aria-label="Delete item"
+            <FluentButton aria-label="Excluir item"
                           IconEnd="@(new Icons.Regular.Size16.Delete())"
                           OnClick="@(() => DeleteProject(context))" />
         </TemplateColumn>
@@ -83,17 +84,15 @@
     <!-- Paginação vinculada ao estado da tabela -->
     <FluentPaginator State="@pagination" />
 
-    <!-- Botão de cadastro fora da tabela, com estilo destacado -->
+    <!-- Botão de cadastro fora da tabela -->
     <FluentButton Appearance="Appearance.Accent"
-                  @onclick="RegisterProject">
-        Cadastrar
+                  @onclick="RegisterProject"
+                  Style="margin-top: 10px;">
+        Cadastrar Novo Projeto
     </FluentButton>
 </FluentCard>
 
 @code {
-
-    public static IQueryable<ProjectROI> Projects = default!;
-
     FluentDataGrid<ProjectROI> dataGrid = default!;
     bool loading = true;
     string? _projectName = string.Empty;
@@ -101,11 +100,14 @@
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     IDialogReference? _dialog;
 
-    IQueryable<ProjectROI>? FilteredProjects => Projects?.Where(x => x.ProjectName.Contains(_projectName!, StringComparison.CurrentCultureIgnoreCase));
-
+    IQueryable<ProjectROI>? FilteredProjects =>
+        string.IsNullOrWhiteSpace(_projectName)
+            ? AppState.Projects.AsQueryable()
+            : AppState.Projects.Where(x => x.ProjectName.Contains(_projectName, StringComparison.CurrentCultureIgnoreCase)).AsQueryable();
 
     protected override async Task OnInitializedAsync()
     {
+        AppState.OnChange += StateHasChanged;
         await LoadProjects();
     }
 
@@ -114,10 +116,8 @@
         loading = true;
         await InvokeAsync(StateHasChanged);
 
-        var response = await Http.GetFromJsonAsync<ProjectROI[]>("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi");
-
-        Projects = response!.AsQueryable();
-        await pagination.SetTotalItemCountAsync(response!.Length);
+        var projects = await ApiClient.GetProjectsAsync();
+        await pagination.SetTotalItemCountAsync(projects.Count);
 
         loading = false;
         await InvokeAsync(StateHasChanged);
@@ -136,119 +136,91 @@
     private async Task RegisterProject()
     {
         ProjectROI projectROI = new()
-            {
-                StartDate = DateTime.Now,
-                TotalHoursWorkedWeekly = 0,
-                CompletedTraining = 0,
-                EmployeesUsingNewTool = 0,
-                TotalChangeImplementationTime = 0,
-                TotalPlannedImplementationTime = 0,
-                TotalProcesses = 0,
-                CompliantProcesses = 0,
-                ProjectEvaluationTotalResponses = 0,
-                ProjectEvaluationPositiveResponses = 0,
-                ProjectEvaluationSumOfAllScores = 0
-            };
+        {
+            ProjectName = "Novo Projeto de Modernização",
+            ProjectBudget = 500000,
+            NumberOfEmployees = 150,
+            ROI = 1.65,
+            StartDate = DateTime.Now,
+            TotalHoursWorkedWeekly = 40,
+            CompletedTraining = 0,
+            EmployeesUsingNewTool = 0,
+            TotalChangeImplementationTime = 0,
+            TotalPlannedImplementationTime = 0,
+            TotalProcesses = 0,
+            CompliantProcesses = 0,
+            ProjectEvaluationTotalResponses = 0,
+            ProjectEvaluationPositiveResponses = 0,
+            ProjectEvaluationSumOfAllScores = 0
+        };
 
         _dialog = await DialogService.ShowPanelAsync<Cadastrar>(projectROI, new DialogParameters<ProjectROI>()
-            {
-                Content = projectROI,
-                Alignment = HorizontalAlignment.Right,
-                Title = $"Cadastrar Projeto",
-                PrimaryAction = "Salvar",
-                SecondaryAction = "Cancelar",
-                Width = "400px"
-            });
+        {
+            Content = projectROI,
+            Alignment = HorizontalAlignment.Right,
+            Title = $"Cadastrar Projeto",
+            PrimaryAction = "Salvar",
+            SecondaryAction = "Cancelar",
+            Width = "400px"
+        });
 
         DialogResult result = await _dialog.Result;
 
         if (!result.Cancelled)
         {
-            try
-            {
-                var response = await Http.PostAsJsonAsync("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi", projectROI);
-
-                if (response.IsSuccessStatusCode)
-                    ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi adicionado com sucesso!");
-            }
-            catch
-            {
-                ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi cadastrado.");
-            }
+            await ApiClient.SaveProjectAsync(projectROI);
+            ToastService.ShowSuccess($"O Projeto '{projectROI.ProjectName}' foi adicionado com sucesso!");
+            await LoadProjects();
         }
-
-        await LoadProjects();
-
     }
 
     private async Task UpdateProject(ProjectROI projectROI)
     {
-
         var dialog = await DialogService.ShowPanelAsync<Cadastrar>(projectROI, new DialogParameters<ProjectROI>()
-            {
-                Content = projectROI,
-                Alignment = HorizontalAlignment.Right,
-                Title = $"Cadastrar Projeto",
-                PrimaryAction = "Salvar",
-                SecondaryAction = "Cancelar",
-                Width = "400px"
-            });
+        {
+            Content = projectROI,
+            Alignment = HorizontalAlignment.Right,
+            Title = $"Editar Projeto",
+            PrimaryAction = "Salvar",
+            SecondaryAction = "Cancelar",
+            Width = "400px"
+        });
 
         DialogResult result = await dialog.Result;
 
         if (!result.Cancelled)
         {
-            try
-            {
-                var response = await Http.PutAsJsonAsync($"https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/{projectROI.Id}", projectROI);
-
-                if (response.IsSuccessStatusCode)
-                    ToastService.ShowSuccess($"O Projeto {projectROI.ProjectName} foi atualizado com sucesso!");
-            }
-            catch
-            {
-                ToastService.ShowWarning($"Falhou: O {projectROI.ProjectName} não foi atualizado.");
-            }
+            await ApiClient.UpdateProjectAsync(projectROI);
+            ToastService.ShowSuccess($"O Projeto '{projectROI.ProjectName}' foi atualizado com sucesso!");
+            await LoadProjects();
         }
-
-        await LoadProjects();
     }
 
     private async Task DeleteProject(ProjectROI project)
     {
         var dialogInstance = await DialogService.ShowDialogAsync(
-    @<div>
-        <FluentLabel>Tem certeza que deseja deletar o @project.ProjectName?</FluentLabel>
-    </div>
-    ,
-     new()
-     {
-         Title = "Deletar Projeto",
-         PrimaryAction = "Deletar",
-         SecondaryAction = "Cancelar"
-     });
+            @<div>
+                <FluentLabel>Tem certeza de que deseja excluir o projeto '<strong>@project.ProjectName</strong>'?</FluentLabel>
+            </div>,
+            new DialogParameters
+            {
+                Title = "Excluir Projeto",
+                PrimaryAction = "Excluir",
+                SecondaryAction = "Cancelar"
+            });
 
         var result = await dialogInstance.Result;
 
         if (!result.Cancelled)
         {
-            var response = await Http.DeleteAsync($"https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/{project.Id}");
-
-            var projectList = Projects.ToList();
-
-            var projectToDelete = projectList.FirstOrDefault(p => p.ProjectName == project.ProjectName);
-
-            if (projectToDelete != null)
-            {
-                projectList.Remove(projectToDelete);
-                Projects = projectList.AsQueryable();
-                ToastService.ShowInfo($"O Projeto {project.ProjectName} foi deletado com sucesso!");
-                await InvokeAsync(StateHasChanged);
-            }
-            else
-            {
-                ToastService.ShowWarning($"Falhou: O {project.ProjectName} não foi encontrado.");
-            }
+            await ApiClient.DeleteProjectAsync(project.Id);
+            ToastService.ShowInfo($"O Projeto '{project.ProjectName}' foi excluído.");
+            await LoadProjects();
         }
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
     }
 }

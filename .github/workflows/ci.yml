@@ -1,0 +1,33 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (.NET 10)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            9.0.x
+            8.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore microsoft-hackathon-roi-calculator.sln
+
+      - name: Build Solution
+        run: dotnet build microsoft-hackathon-roi-calculator.sln --no-restore --configuration Release
+
+      - name: Run Unit Tests
+        run: dotnet test microsoft-hackathon-roi-calculator.Tests/microsoft-hackathon-roi-calculator.Tests.csproj --no-build --configuration Release --filter "Category!=Integration" --verbosity normal

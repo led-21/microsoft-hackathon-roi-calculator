@@ -1,163 +1,135 @@
-﻿using microsoft_hackathon_roi_calculator.Application.Interfaces;
+using System.Globalization;
+using microsoft_hackathon_roi_calculator.Application.Interfaces;
+using microsoft_hackathon_roi_calculator.Domain.Financial;
 using microsoft_hackathon_roi_calculator.Domain.Models;
 using Microsoft_hackathon_roi_calculator_Application;
 
 namespace microsoft_hackathon_roi_calculator.Application.UseCases;
 
+/// <summary>
+/// Application service implementing ROI calculation use cases, ML failure rate estimation, and Markdown reporting.
+/// </summary>
 public class ROICalculatorService : IROICalculatorService
 {
+    private static readonly CultureInfo BrazilianCulture = new("pt-BR");
+
+    public ROICalculationResult Calculate(FinancialModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+        return ROICalculator.Calculate(model);
+    }
+
     public ROICalculationResults CalculateROI(ROIInputParameters input)
     {
-        // Validação básica dos parâmetros
+        ArgumentNullException.ThrowIfNull(input);
+
+        // Validation for negative or zero values
         if (input.ProjectBudget <= 0 || input.NumberOfEmployees <= 0 || input.ProjectDurationMonths <= 0)
-            throw new ArgumentException("Os valores de orçamento, funcionários e duração devem ser maiores que zero.");
+            throw new ArgumentException("Budget, employees and duration must be greater than zero.");
 
         if (input.BudgetLossRate < 0 || input.FailureRate < 0 || input.ExpectedDisengagementRate < 0 ||
             input.ExpectedProductivityGain < 0 || input.ProjectedRiskReduction < 0 || input.ExpectedSuccessBenefit < 0)
-            throw new ArgumentException("Taxas e ganhos não podem ser negativos.");
+            throw new ArgumentException("Rates and multipliers cannot be negative.");
 
-        // Cálculo dos benefícios
-
-        //Custo médio mensal por funcionário
-        double averageEmployeeCostPerMonth = CalculateAverageEmployeeCostPerMonth(input);
-
-        // 1. Economia por Produtividade Aumentada
-        double productivityGainValue = CalculateProductivityGain(input, averageEmployeeCostPerMonth);
-        double adjustedProductivityGain = productivityGainValue * (1 - input.ExpectedDisengagementRate);
-
-        // 2. Redução de Risco
-        double riskReductionValue = CalculateRiskReduction(input);
-        double adjustedRiskReduction = riskReductionValue * (1 - input.FailureRate);
-
-        // 3. Benefício de Sucesso
-        double successBenefitValue = CalculateSuccessBenefit(input);
-        double adjustedSuccessBenefit = successBenefitValue * (1 - input.FailureRate);
-
-        // Soma dos benefícios ajustados
-        double totalBenefits = adjustedProductivityGain + adjustedRiskReduction + adjustedSuccessBenefit;
-
-        // Calcular o Investimento Total (neste caso, apenas o orçamento do projeto)
-        double totalInvestment = input.ProjectBudget;
-
-        // Calcular o ROI
-        double roiPercentage = (totalBenefits - totalInvestment) / totalInvestment * 100;
-
-        // Resultado final
-        return new ROICalculationResults
-        {
-            TotalInvestment = totalInvestment,
-            TotalBenefits = totalBenefits,
-            RoiPercentage = roiPercentage,
-            ProductivityGainValue = productivityGainValue,
-            AdjustedProductivityGainValue = adjustedProductivityGain,
-            RiskReductionValue = riskReductionValue,
-            AdjustedRiskReduction = adjustedRiskReduction,
-            SuccessBenefitValue = successBenefitValue,
-            AdjustedSuccessBenefit = adjustedSuccessBenefit
-        };
-    }
-
-    private double CalculateAverageEmployeeCostPerMonth(ROIInputParameters input)
-    {
-        return input.ProjectBudget / input.NumberOfEmployees / input.ProjectDurationMonths;
-    }
-
-    private double CalculateProductivityGain(ROIInputParameters input, double averageEmployeeCostPerMonth)
-    {
-        // Calcula o ganho de produtividade com base no custo dos funcionários, ganho esperado e duração
-        double monthlyProductivityGainPerEmployee = averageEmployeeCostPerMonth * (input.ExpectedProductivityGain - 1); // Ganho acima do baseline (1)
-        double totalProductivityGain = monthlyProductivityGainPerEmployee * input.NumberOfEmployees * input.ProjectDurationMonths;
-        return totalProductivityGain;
-    }
-
-    private double CalculateRiskReduction(ROIInputParameters input)
-    {
-        // Calcula o valor do risco evitado (percentual do orçamento que seria perdido)
-        double potentialLoss = input.ProjectBudget * input.BudgetLossRate;
-        double riskReduction = potentialLoss * input.ProjectedRiskReduction;
-        return riskReduction;
-    }
-
-    private double CalculateSuccessBenefit(ROIInputParameters input)
-    {
-        // Calcula o benefício do sucesso como um múltiplo do orçamento
-        double successBenefit = input.ProjectBudget * input.ExpectedSuccessBenefit;
-        return successBenefit;
+        var model = FinancialModel.FromInputParameters(input);
+        var result = ROICalculator.Calculate(model);
+        return result.ToLegacyModel();
     }
 
     public double EstimateFailureRate(ROIInputParameters input)
     {
-        double expectedROIValue = MLModel.Predict(new MLModel.ModelInput
+        ArgumentNullException.ThrowIfNull(input);
+
+        try
         {
-            ProjectBudget = (float)input.ProjectBudget,
-            NumberOfEmployees = input.NumberOfEmployees,
-            ProjectDurationMonths = input.ProjectDurationMonths,
-            ROI = 0
-        }).Score;
+            var model = FinancialModel.FromInputParameters(input);
 
-        double averageEmployeeCostPerMonth = CalculateAverageEmployeeCostPerMonth(input);
+            double predictedROI = MLModel.Predict(new MLModel.ModelInput
+            {
+                ProjectBudget = (float)input.ProjectBudget,
+                NumberOfEmployees = input.NumberOfEmployees,
+                ProjectDurationMonths = input.ProjectDurationMonths,
+                ROI = 0
+            }).Score;
 
-        double productivityGainValue = CalculateProductivityGain(input, averageEmployeeCostPerMonth);
-        double adjustedProductivityGain = productivityGainValue * (1 - input.ExpectedDisengagementRate);
+            double grossProductivity = model.Inputs.ProjectBudget * (model.Assumptions.ExpectedProductivityGain - 1.0);
+            double adjustedProductivity = RiskModel.AdjustProductivity(grossProductivity, model.Risk.ExpectedDisengagementRate);
 
-        double riskReduction = CalculateRiskReduction(input);
-        double successBenefit = CalculateSuccessBenefit(input);
+            double grossRisk = model.Inputs.ProjectBudget * model.Assumptions.BudgetLossRate * model.Assumptions.ProjectedRiskReduction;
+            double grossSuccess = model.Inputs.ProjectBudget * model.Assumptions.ExpectedSuccessBenefit;
 
-        double totalBenefits = expectedROIValue * input.ProjectBudget + input.ProjectBudget;
-        double benefitsToAdjust = riskReduction + successBenefit;
+            double benefitsToAdjust = grossRisk + grossSuccess;
+            if (benefitsToAdjust <= 0)
+                return 0.50;
 
-        double failureRate = (benefitsToAdjust - totalBenefits + adjustedProductivityGain) / benefitsToAdjust;
+            double totalBenefits = (predictedROI * model.Inputs.ProjectBudget) + model.Inputs.ProjectBudget;
+            double failureRate = (benefitsToAdjust - totalBenefits + adjustedProductivity) / benefitsToAdjust;
 
-        return failureRate;
+            if (double.IsNaN(failureRate) || double.IsInfinity(failureRate))
+                return 0.50;
+
+            return Math.Clamp(failureRate, 0.05, 0.95);
+        }
+        catch
+        {
+            return 0.50;
+        }
     }
 
-    // Método para gerar relatório detalhado
     public string GenerateReport(ROICalculationResults result, ROIInputParameters input)
     {
-        return $@"
-## Relatório de ROI do Projeto
--------------------------
+        ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(input);
 
-*Orçamento do Projeto:* R$ {input.ProjectBudget:N2}  
-*Funcionários Impactados:* {input.NumberOfEmployees}  
-*Duração:* {input.ProjectDurationMonths} meses  
+        double averageCostPerEmployeeMonth = (input.NumberOfEmployees > 0 && input.ProjectDurationMonths > 0)
+            ? input.ProjectBudget / (input.NumberOfEmployees * input.ProjectDurationMonths)
+            : 0;
 
-### Parâmetros de Risco e Benefício:
-- *Taxa de Falha do Projeto:* {input.FailureRate:P2}  
-- *Taxa de Desengajamento Esperada:* {input.ExpectedDisengagementRate:P2}  
-- *Percentual de Perda Orçamentária em Caso de Falha:* {input.BudgetLossRate:P2}  
-- *Ganho de Produtividade Esperado:* {input.ExpectedProductivityGain:F2}x  
-- *Redução de Risco Projetada:* {input.ProjectedRiskReduction:P2}  
-- *Benefício de Sucesso:* {input.ExpectedSuccessBenefit:F2}x o orçamento  
+        string viability = result.RoiPercentage > 0 ? "Positiva (Viável)" : "Negativa (Atenção / Risco Elevado)";
 
-#### Detalhamento dos Cálculos:
-- *Custo Médio Mensal por Funcionário:* R$ {input.ProjectBudget / input.      NumberOfEmployees /           input.ProjectDurationMonths:N2}  
+        return $"""
+## Relatório de ROI do Projeto — InovaROI
+--------------------------------------------------
 
-### Passos para Calcular os Valores Ajustados:
+### 1. Parâmetros do Projeto (Inputs)
+- **Orçamento Total:** {input.ProjectBudget.ToString("C", BrazilianCulture)}
+- **Colaboradores Impactados:** {input.NumberOfEmployees}
+- **Duração Estimada:** {input.ProjectDurationMonths} meses
+- **Custo Médio Mensal por Colaborador:** {averageCostPerEmployeeMonth.ToString("C", BrazilianCulture)}
 
-#### 1. Ganho de Produtividade:
-- *Ganho de Produtividade Inicial:* R$ {result.ProductivityGainValue:N2}  
-- *Ajuste por Desengajamento:* R$ {result.ProductivityGainValue *             input.ExpectedDisengagementRate:N2}  
-- *Ganho de Produtividade Ajustado:* R$ {result.AdjustedProductivityGainValue:N2}  
+### 2. Premissas e Fatores de Risco
+- **Probabilidade de Falha (Benchmark):** {input.FailureRate:P1}
+- **Perda Estimada por Desengajamento:** {input.ExpectedDisengagementRate:P1}
+- **Risco Orçamentário em Caso de Falha:** {input.BudgetLossRate:P1}
+- **Multiplicador de Produtividade Esperado:** {input.ExpectedProductivityGain:F2}x
+- **Mitigação Projetada de Risco:** {input.ProjectedRiskReduction:P1}
+- **Upside de Sucesso:** {input.ExpectedSuccessBenefit:F2}x o orçamento
 
-#### 2. Redução de Risco:
-- *Valor de Redução de Risco Inicial:* R$ {result.RiskReductionValue:N2}  
-- *Ajuste por Taxa de Falha:* R$ {result.RiskReductionValue * input.FailureRate:N2}  
-- *Redução de Risco Ajustada:* R$ {result.AdjustedRiskReduction:N2}  
+### 3. Detalhamento dos Benefícios Ajustados por Risco
 
-#### 3. Benefício de Sucesso:
-- *Valor de Benefício de Sucesso Inicial:* R$ {result.SuccessBenefitValue:N2}  
-- *Ajuste por Taxa de Falha:* R$ {result.SuccessBenefitValue * input.FailureRate:N2}  
-- *Benefício de Sucesso Ajustado:* R$ {result.AdjustedSuccessBenefit:N2}  
+#### A. Ganho de Produtividade:
+- **Ganho Bruto:** {result.ProductivityGainValue.ToString("C", BrazilianCulture)}
+- **Ajuste por Desengajamento (-{input.ExpectedDisengagementRate:P0}):** -{(result.ProductivityGainValue * input.ExpectedDisengagementRate).ToString("C", BrazilianCulture)}
+- **Ganho Ajustado:** {result.AdjustedProductivityGainValue.ToString("C", BrazilianCulture)}
 
-### Benefícios Totais:
-- **Benefícios Totais Ajustados:** R$ {result.TotalBenefits:N2}  
+#### B. Redução de Risco:
+- **Redução Bruta:** {result.RiskReductionValue.ToString("C", BrazilianCulture)}
+- **Ajuste por Taxa de Falha (-{input.FailureRate:P0}):** -{(result.RiskReductionValue * input.FailureRate).ToString("C", BrazilianCulture)}
+- **Redução Ajustada:** {result.AdjustedRiskReduction.ToString("C", BrazilianCulture)}
 
-### Resultado Final:
-- *Investimento Total:* R$ {input.ProjectBudget:N2}  
-- *Retorno sobre Investimento (ROI):* {result.RoiPercentage:F2}%  
-- *Viabilidade:* {(result.RoiPercentage > 0 ? "Positiva" : "Negativa")}  
--------------------------
-         ";
+#### C. Benefício de Sucesso:
+- **Benefício Bruto:** {result.SuccessBenefitValue.ToString("C", BrazilianCulture)}
+- **Ajuste por Taxa de Falha (-{input.FailureRate:P0}):** -{(result.SuccessBenefitValue * input.FailureRate).ToString("C", BrazilianCulture)}
+- **Benefício Ajustado:** {result.AdjustedSuccessBenefit.ToString("C", BrazilianCulture)}
+
+---
+
+### 4. Resultado Consolidado
+- **Investimento Total:** {result.TotalInvestment.ToString("C", BrazilianCulture)}
+- **Benefícios Totais Ajustados:** {result.TotalBenefits.ToString("C", BrazilianCulture)}
+- **Retorno sobre o Investimento (ROI):** **{result.RoiPercentage:F2}%**
+- **Diagnóstico de Viabilidade:** **{viability}**
+--------------------------------------------------
+""";
     }
 }

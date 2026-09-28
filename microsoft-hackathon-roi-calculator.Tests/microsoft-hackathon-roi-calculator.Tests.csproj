@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.AppHost\microsoft-hackathon-roi-calculator.AppHost.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Domain\microsoft-hackathon-roi-calculator.Domain.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Application\microsoft-hackathon-roi-calculator.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

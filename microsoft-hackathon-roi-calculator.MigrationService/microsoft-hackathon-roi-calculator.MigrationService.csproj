@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-microsoft_hackathon_roi_calculator.MigrationService-6bc63673-609a-4628-bd92-b09e4c54303f</UserSecretsId>
@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Domain\microsoft-hackathon-roi-calculator.Domain.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Persistence\microsoft-hackathon-roi-calculator.Persistence.csproj" />
   </ItemGroup>
 </Project>

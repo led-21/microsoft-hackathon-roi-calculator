@@ -1,132 +1,218 @@
-# Microsoft Hackathon ROI Calculator
-Quando as empresas precisam se adaptar, a mudança geralmente traz riscos substanciais, e 70% dos projetos de transformação falham. Estamos procurando mudar essa estatística usando IA para permitir que os líderes tomem decisões mais inteligentes. A prontidão para a transformação é fundamental. Se as equipes não estiverem preparadas, as iniciativas enfrentam lançamentos atrasados, desperdício de recursos e funcionários frustrados e desengajados. 
+# InovaROI - Enterprise Transformation ROI & Risk Prediction Platform
 
-## Desafio 
-Construir uma calculadora de ROI para ajudar os líderes a se prepararem para a mudança com insights preditivos, recomendações acionáveis para iniciativas de mudança, visualizações e relatórios. Entradas de amostra incluiriam orçamento do projeto, número de funcionários impactados e duração do projeto. Considere os riscos financeiros de falha do projeto e desengajamento dos funcionários, bem como as economias potenciais de produtividade aumentada, redução de risco e entrega bem-sucedida do projeto.
+[![.NET 10](https://img.shields.io/badge/.NET-10.0%20LTS-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![Blazor WASM](https://img.shields.io/badge/Blazor-WebAssembly-512BD4?logo=blazor&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
+[![.NET Aspire](https://img.shields.io/badge/.NET%20Aspire-Orchestration-512BD4?logo=dotnet&logoColor=white)](https://learn.microsoft.com/dotnet/aspire/)
+[![ML.NET](https://img.shields.io/badge/ML.NET-Predictive%20Analytics-blue?logo=dotnet)](https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet)
+[![Azure OpenAI](https://img.shields.io/badge/Azure%20OpenAI-GPT--4o%20%7C%20Local%20Fallback-0078D4?logo=microsoftazure&logoColor=white)](https://azure.microsoft.com/products/ai-services/openai-service)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests Passing](https://img.shields.io/badge/Tests-36%20Passing-brightgreen?logo=xunit)](microsoft-hackathon-roi-calculator.Tests)
 
-# Projeto InovaROI
-O projeto inova ao combinar tecnologias de ponta (Azure Machine Learning, OpenAI e Azure Functions) com uma abordagem centrada no usuário, focada em resolver o alto índice de falhas em transformações empresariais. Ele não apenas calcula o ROI, mas também prepara as empresas para a mudança, oferecendo uma solução preditiva, escalável e responsável.
-![Tela aplicativo](docs/tela-app.png)
+> **Executive Overview**: Over 70% of organizational transformation initiatives fail due to miscalculated risks, employee disengagement, and cost overruns. **InovaROI** bridges the gap between raw financial metrics and executive decision-making by combining **pure deterministic financial modeling**, **machine learning risk forecasting**, and **generative AI narrative synthesis** into a cohesive enterprise solution.
 
-## Retorno sobre Investimento (ROI)
+---
 
-O ROI é uma métrica financeira usada para avaliar a eficiência ou lucratividade de um investimento, comparando os benefícios gerados (ganhos ou economias) com o custo do investimento.
+## Authorship & Hackathon Origins
 
-### Fórmula do ROI
+This project was originally designed and built for the **Microsoft Innovation Challenge Hackathon (March 2025)** by:
 
-$$\text{ROI \%)} = \left[\frac{\text{Benefícios Totais} - \text{Investimento Total}}{\text{Investimento Total}}\right] \times 100$$
+| Engineer | GitHub | Core Focus |
+| :--- | :--- | :--- |
+| **Adriano Godoy** | [@led-21](https://github.com/led-21) | Solution Architecture, Backend Engine, Distributed Services, Cloud Resilience |
+| **Danillo Silva** | [@DanilloAraujo](https://github.com/DanilloAraujo) | Frontend Experience (Blazor / Fluent UI), Data Visualizations, UX Integration |
 
-#### Onde:
-- **Benefícios Totais**: Soma das economias projetadas (aumento de produtividade, redução de riscos e sucesso do projeto).
-- **Investimento Total**: Custo total do projeto, incluindo orçamento, mitigação de riscos e outros gastos relacionados.
+### What this project demonstrates:
+- **High-Velocity Teamwork**: Architecting and delivering a functional, multi-tier enterprise solution under intensive hackathon time constraints.
+- **Enterprise Engineering Principles**: Evolving an agile hackathon prototype into a resilient, production-ready portfolio case using **.NET 10 LTS**, Clean Architecture, and **100% offline fallback capabilities**.
+- **Modern Microsoft Technology Stack**: Seamless cross-cutting integration of **Blazor WebAssembly**, **.NET Aspire**, **ML.NET**, **Azure OpenAI**, **Entity Framework Core**, and **Fluent UI**.
 
-[Métodos de Cálculos Utilizados no Aplicativo](docs/componentes-de-calculo.md)
+---
 
-# Arquitetura de Serviços Azure
-![Arquitetura de Serviços](docs/arquitetura.gif)
+## Key Architectural Highlights
 
-## Componentes Principais
+```mermaid
+flowchart TD
+    subgraph ClientLayer["Frontend Client (Blazor WebAssembly)"]
+        UI["Blazor WASM UI (Fluent UI + Radzen Charts)"]
+        WasmFallback["In-Browser Offline Calculation Engine"]
+        State["AppStateService (Scoped DI State)"]
+    end
 
-### Orquestrador
-- **.NET Aspire**:  
-  Atua como o orquestrador central da aplicação, gerenciando a integração e a comunicação entre todos os componentes distribuídos. Simplifica o desenvolvimento, teste e deploy ao coordenar o frontend, backend, serviços serverless e conexões com o Azure.
+    subgraph ApiLayer["API & Orchestration Layer (.NET 10)"]
+        Aspire["Aspire Orchestrator (AppHost)"]
+        Api["InovaROI Minimal API"]
+        ServiceDefaults["OpenTelemetry & Health Checks"]
+    end
 
-### Frontend
-- **Blazor**:  
-  Responsável pela interface de usuário (UI). Utilizado para:  
-  - Entrada de dados e exibição dos resultados de cálculo da calculadora de ROI.  
-  - Cadastro de resultados de projetos concluídos para alimentar os modelos de Machine Learning.  
-  - Visualização interativa e dinâmica de gráficos, dados de projetos e relatórios personalizados, proporcionando uma experiência rica e intuitiva ao usuário.
+    subgraph CoreLayer["Domain & Application Core (Clean Architecture)"]
+        FinEngine["ROICalculator (Pure Deterministic Domain Engine)"]
+        MLModel["ML.NET Risk Prediction Pipeline"]
+        AIService["Hybrid Report Engine (Azure OpenAI / Local Synthetic Engine)"]
+    end
 
-### Backend
-- **C# / .NET**:  
-  Camada responsável por processar a lógica de negócios. Realiza operações CRUD (Create, Read, Update, Delete) no banco de dados Azure SQL, garantindo a integridade e consistência dos dados.
+    subgraph DataLayer["Storage & Cache (Hybrid Cloud / Offline)"]
+        SQL[("Azure SQL / Local SQLite Fallback")]
+        Cache[("Redis / In-Memory Distributed Cache")]
+    end
 
-### Secredos
-- **Azure Key Vault**:  
-  Armazena as chaves e segredos necessários para que apenas usuários ou aplicativos autorizados tenham o acesso aos recursos Azure de forma segura.
+    UI -->|HTTP / REST| Api
+    UI -.->|Network Disconnected| WasmFallback
+    WasmFallback --> FinEngine
+    Api --> FinEngine
+    Api --> MLModel
+    Api --> AIService
+    Api --> SQL
+    Api --> Cache
+    Aspire -.-> Api
+    Aspire -.-> UI
+```
 
-### Banco de Dados
-- **Azure SQL Database**:  
-  Central de armazenamento de dados da aplicação. Armazena informações sobre projetos, incluindo:
-  - **Identificação e Descrição**:  
-    - `id`: Chave primária única para cada projeto.  
-    - `project_name`: Nome do projeto (obrigatório).  
-    - `description`: Descrição detalhada do projeto (opcional).  
-  - **Financeiro e Temporal**:  
-    - `project_budget`: Orçamento do projeto.  
-    - `start_date`: Data de início do projeto.  
-    - `project_duration_months`: Duração estimada do projeto em meses.  
-    - `roi`: Retorno sobre o investimento calculado.  
-  - **Equipe e Impacto**:  
-    - `number_of_employees`: Número de funcionários impactados pelo projeto.  
-    - `employees_using_new_tool`: Quantidade de funcionários utilizando novas ferramentas introduzidas.
-    - `total_hours_worked_weekly`: Total de horas trabalhadas por semana pelos funcionários no projeto.  
-    - `completed_training`: Número de treinamentos concluídos pelos funcionários no projeto.  
-  - **Métricas de Mundaças**:  
-    - `total_change_implementation_time`: Tempo total de implementação de mudanças.  
-    - `total_planned_implementation_time`: Tempo planejado para implementação.  
-  - **Qualidade e Conformidade**:  
-    - `total_processes`: Total de processos envolvidos no projeto.  
-    - `compliant_processes`: Número de processos em conformidade.  
-  - **Avaliação do Projeto**:  
-    - `project_evaluation_total_responses`: Total de respostas na avaliação do projeto.  
-    - `project_evaluation_positive_responses`: Número de respostas positivas na avaliação.  
-    - `project_evaluation_sum_of_all_scores`: Soma de todas as pontuações da avaliação.  
-### Machine Learning
-- **Azure Machine Learning**:  
-  Consome os dados do Azure SQL Database para treinar modelos preditivos. Esses modelos são utilizados para:
-  - Estimar o ROI e calcular o risco do projeto.
-  
-  Os modelos são ajustados dinamicamente conforme novos dados são incorporados, assegurando relevância e precisão contínuas nas previsões.
+### 1. Pure Deterministic Financial Engine (`Domain.Financial`)
+Financial math is strictly isolated from presentation, framework code, and external I/O:
+- Immutable domain models (`FinancialModel`, `FinancialInputs`, `RiskParameters`).
+- Pure functional calculations with zero side-effects.
+- Solves for **Net Benefit**, **Benefit-Cost Ratio (BCR)**, and **Break-Even Failure Rate**.
+- Covered by comprehensive unit tests with strict boundary validations.
 
-### Funções Serverless
-- **Azure Functions**:  
-  Implementa cálculos de ROI em tempo real de forma eficiente e escalável. Além disso, integra-se ao OpenAI para a geração de relatórios personalizados sob demanda.
+### 2. Machine Learning vs. Generative AI (Clear Boundaries)
+- **Predictive Analytics (ML.NET)**: Predicts project failure probability based on empirical regression against team scale, duration, and budget. Features domain-informed fallback bounds when training data is sparse.
+- **Generative AI (Azure OpenAI GPT-4o)**: Translates quantitative financial outputs and risk scores into actionable, C-level executive briefs and change-management roadmaps.
 
-### Relatórios Personalizados
-- **OpenAI**:  
-  Utilizado para criar relatórios detalhados e análises interpretativas baseadas nos dados processados, oferecendo insights valiosos aos usuários em linguagem natural.
+### 3. 100% Offline Capability (Zero Cloud Lock-in)
+The application runs locally without any cloud subscription, API key, or active network connection:
+- **Persistence**: Automatically switches between Azure SQL Database / SQL Server container and a lightweight local **SQLite** (`roidb.db`) database.
+- **Distributed Cache**: Gracefully falls back from Redis to an **in-memory distributed cache**.
+- **Executive AI Reporting**: When Azure OpenAI endpoints or keys are omitted, the built-in **`LocalTemplateReportService`** produces structured, deterministic executive analysis locally.
+- **Frontend Autonomy**: If the backend API service is offline, Blazor WASM executes the domain calculations in-browser directly via compiled WebAssembly.
 
-### Hospedagem
-- **Azure Web App**:  
-  Plataforma de hospedagem da aplicação web. Garante:
-  - Escalabilidade automática.
-  - Alta disponibilidade.
-  - Estabilidade do ambiente de produção.
+---
 
-## Fluxo Geral
-1. O usuário interage com a interface em **Blazor** para inserir dados de cálculo e projetos.
-2. O backend em **C# / .NET** processa as informações e realiza operações no **Azure SQL Database**.
-3. O **Azure Machine Learning** utiliza os dados armazenados para treinar e ajustar modelos preditivos.
-4. O **Azure Functions** calcula o ROI e outros indices em tempo real e aciona o **OpenAI** para gerar relatórios personalizados.
-5. Os resultados são exibidos ao usuário na interface **Blazor**, hospedada no **Azure Web App**.
+## Financial Methodology & Formulas
 
-## Benefícios da Arquitetura
-- **Escalabilidade**: Uso de serviços Azure como Web App e Functions permite lidar com picos de demanda.
-- **Flexibilidade**: Integração com Machine Learning e OpenAI possibilita adaptação a diferentes casos de uso.
-- **Eficiência**: Funções serverless reduzem custos operacionais ao executar apenas sob demanda.
-- **Manutenção Simplificada**: Banco de dados e hospedagem gerenciados pelo Azure minimizam a necessidade de gerenciamento manual.
+The platform evaluates transformation initiatives across four interconnected economic vectors:
 
-## Princípios de IA Responsável no Treinamento dos Modelos de Machine Learning
-- **Qualidade e Integridade dos Dados:** Os dados do Azure SQL Database precisam ser consistentes, completos e livres de vieses significativos. A IA responsável exige que os dados sejam validados antes do treinamento, evitando que informações incorretas ou enviesadas.
-- **Transparência:** Os modelos preditivos devem ser compreensíveis para os usuários finais. Por exemplo, ao estimar o ROI ou o risco de um projeto, o sistema deve fornecer explicações simples sobre quais variáveis mais influenciaram a previsão. Isso aumenta a confiança do usuário nos resultados.
-- **Atualização Contínua:** Os modelos devem ser ajustados dinamicamente com a entrada de novos dados no Azure SQL. A IA responsável garante que esse processo seja monitorado para evitar "drift" (desvio de desempenho) e que os modelos permaneçam relevantes e precisos ao longo do tempo.
-- **Mitigação de Riscos:** Ao calcular riscos de projetos, o modelo deve ser projetado para evitar discriminação ou decisões injustas. A IA responsável inclui auditorias regulares dos modelos para identificar e corrigir possíveis vieses.
-- **Eficiência e Escalabilidade:** O uso de recursos computacionais no Azure Machine Learning é otimizado para treinar modelos, alinhando-se aos princípios de sustentabilidade. Isso é complementado pela integração com Azure Functions, que executa cálculos em tempo real de forma eficiente.
-  
-## Limitações Uso
-- Os dados atualmente utilizados são gerados de forma aleatória apenas para fins de teste de implementação do aplicativo em um curto espaço de tempo, apresentando baixa significância estatística e não refletindo cenários reais de uso.
-  
-## Próximos Passos
-- Implementar autenticação e autorização para garantir segurança dos dados.
-- Adicionar dados reais de projeto para o treinamento dos modelos de Machine Learning.
-- Adicionar testes automatizados para validar os modelos de Machine Learning.
+```
+ROI (%) = [(Total Adjusted Benefits - Total Investment) / Total Investment] * 100
+```
 
-## Equipe do Projeto
+### 1. Average Monthly Employee Cost
+$$\text{Cost}_{\text{employee}} = \frac{\text{Budget}}{\text{Employees} \times \text{Duration (months)}}$$
 
-Desenvolvida por uma equipe dedicada para competir no **Microsoft Innovation Challenge Hackathon March 2025**, esta aplicação visa transformar a estatística de fracasso em sucesso, capacitando empresas a se adaptarem com confiança e eficiência.
+### 2. Productivity Gains (Adjusted for Disengagement)
+$$\text{Productivity Gain} = (\text{Cost}_{\text{employee}} \times (\text{Gain Multiplier} - 1)) \times \text{Employees} \times \text{Duration}$$
+$$\text{Adjusted Productivity} = \text{Productivity Gain} \times (1 - \text{Disengagement Rate})$$
 
-### Membros
-- **Adriano Godoy** [led-21](https://github.com/led-21/)  
-- **Danillo Silva** [DanilloAraujo](https://github.com/DanilloAraujo)  
+### 3. Risk Mitigation Benefits
+$$\text{Risk Reduction} = (\text{Budget} \times \text{Loss Rate}) \times \text{Projected Risk Reduction}$$
+$$\text{Adjusted Risk Reduction} = \text{Risk Reduction} \times (1 - \text{Failure Probability})$$
+
+### 4. Successful Delivery Benefit
+$$\text{Success Benefit} = \text{Budget} \times \text{Success Multiplier}$$
+$$\text{Adjusted Success Benefit} = \text{Success Benefit} \times (1 - \text{Failure Probability})$$
+
+### 5. Break-Even Failure Rate
+The critical threshold where project benefits equal costs ($\text{ROI} = 0\%$):
+$$\text{Failure Rate}_{\text{break-even}} = 1 - \frac{\text{Budget} - \text{Adjusted Productivity}}{\text{Risk Reduction} + \text{Success Benefit}}$$
+
+---
+
+## Solution Structure
+
+```
+microsoft-hackathon-roi-calculator/
+├── .github/workflows/                 # CI/CD (GitHub Actions)
+│   ├── ci.yml                         # Automated build & unit test pipeline
+│   └── azure-static-web-apps-*.yml    # Static Web Apps deployment workflow
+├── docs/                              # Architecture diagrams & design artifacts
+├── microsoft-hackathon-roi-calculator.Domain/
+│   ├── Financial/                     # Pure financial & risk calculation engine
+│   └── Models/                        # Domain entities & shared contracts
+├── microsoft-hackathon-roi-calculator.Application/
+│   ├── Configuration/                 # Strongly-typed options (AzureOpenAIOptions)
+│   ├── Interfaces/                    # IROICalculatorService, IAssistantReportService
+│   ├── Services/                      # AzureOpenAIReportService, LocalTemplateReportService
+│   └── UseCases/                      # Core business use cases & ML estimators
+├── microsoft-hackathon-roi-calculator.Persistence/
+│   └── Data/                          # CalculatorDbContext (EF Core SQL Server / SQLite)
+├── microsoft-hackathon-roi-calculator.Api/
+│   ├── Endpoints/                     # Minimal API endpoints (/api/roi/...)
+│   └── Program.cs                     # API bootstrapper with hybrid cloud/local DI
+├── microsoft-hackathon-roi-calculator.Web/
+│   ├── Pages/                         # Blazor WASM pages (Calculator, Dashboard, Projects, Report)
+│   └── Services/                      # AppStateService, RoiApiClient, MarkdownService
+├── microsoft-hackathon-roi-calculator.AppHost/ # .NET Aspire distributed orchestrator
+├── microsoft-hackathon-roi-calculator.ServiceDefaults/ # Telemetry, health checks, discovery
+├── microsoft-hackathon-roi-calculator.Functions/ # Serverless calculation worker
+└── microsoft-hackathon-roi-calculator.Tests/   # Unit & regression test suite (xUnit)
+```
+
+---
+
+## Security Audit & Credential Hygiene
+
+As part of transforming this hackathon project into an enterprise portfolio case:
+- **Credential Revocation**: Pre-release hackathon Azure OpenAI endpoints and API keys previously committed in git history were permanently revoked in the Azure Portal.
+- **Zero Committed Secrets**: All configuration is read via environment variables, `appsettings.json`, and `.env` files.
+- **Template Configuration**: A sanitized [`.env.example`](file:///.env.example) is provided for configuring local or cloud environments.
+
+---
+
+## Quickstart & Local Execution
+
+### Prerequisites
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (or [.NET 9 / 8](https://dotnet.microsoft.com/download) compatible)
+- *Optional*: Docker Desktop (only if running SQL Server / Redis / Ollama via Aspire)
+
+### 1. Clone & Run Automated Tests
+```bash
+git clone https://github.com/led-21/microsoft-hackathon-roi-calculator.git
+cd microsoft-hackathon-roi-calculator
+
+# Run all unit tests
+dotnet test --filter "Category!=Integration"
+```
+
+### 2. Run in Standalone Local Mode (Zero Configuration)
+The system runs immediately out-of-the-box using local SQLite, in-memory cache, and local AI synthesis:
+
+**Terminal 1 (Backend API):**
+```bash
+cd microsoft-hackathon-roi-calculator.Api
+dotnet run
+# API running at https://localhost:7288 | Swagger at https://localhost:7288/swagger
+```
+
+**Terminal 2 (Blazor WebAssembly Frontend):**
+```bash
+cd microsoft-hackathon-roi-calculator.Web
+dotnet run
+# Frontend running at https://localhost:7197
+```
+
+### 3. Run with .NET Aspire (Full Distributed Experience)
+To run with unified telemetry, dashboards, and distributed orchestration:
+```bash
+cd microsoft-hackathon-roi-calculator.AppHost
+dotnet run
+```
+Navigate to the Aspire dashboard URL printed in the console to inspect logs, traces, metrics, and connected services.
+
+---
+
+## Evolution: Hackathon Prototype vs. Portfolio Standard
+
+| Dimension | Hackathon Prototype (March 2025) | Portfolio Edition (.NET 10) |
+| :--- | :--- | :--- |
+| **Target Framework** | .NET 8 / 9 mixed versions | **.NET 10 LTS Unified** across all projects |
+| **Financial Engine** | Coupled inline procedural logic | **Pure Functional Domain Engine (`ROICalculator`)** |
+| **Test Coverage** | 1 sample Aspire test | **36 Comprehensive Unit Tests** (100% pass rate) |
+| **Cloud Dependency** | Required active Azure SQL & Azure OpenAI | **100% Offline Capability** (SQLite + In-Memory + Local Engine) |
+| **Frontend State** | Unsafe static shared variables | **Scoped DI State Management (`AppStateService`)** |
+| **Resilience** | Failed without internet connection | **Graceful In-Browser WebAssembly Fallback** |
+| **CI/CD** | Single deployment workflow | **Automated GitHub Actions CI Pipeline** (build + test) |
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

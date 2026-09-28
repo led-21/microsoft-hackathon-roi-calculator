@@ -1,170 +1,219 @@
-﻿@page "/calculator"
+@page "/calculator"
 @using System.Globalization
-@using System.Text.Json
+@using microsoft_hackathon_roi_calculator.Domain.Models
+@using microsoft_hackathon_roi_calculator.Web.Services
 
 @inject IToastService ToastService
-@inject HttpClient Http
+@inject RoiApiClient ApiClient
+@inject AppStateService AppState
 @inject MarkdownService Markdown
 
 <FluentLabel Typo="Typography.H3">Calculadora de ROI</FluentLabel>
 
-@if (isLoading)
+@if (isCalculating)
 {
-    <FluentCard>
-        <h3>
-            <FluentSkeleton Shape="SkeletonShape.Rect"
-            Width="150px"
-            Height="20px" />
-        </h3>
-        <h3>
-            <FluentSkeleton Shape="SkeletonShape.Rect"
-            Width="100%"
-            Height="400px" />
-        </h3>
+    <FluentCard Style="margin-top: 1rem; padding: 2rem;">
+        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+            <FluentProgressRing Size="ProgressRingSize.Medium" />
+            <FluentLabel Typo="Typography.H4">Processando simulação financeira e projeção de riscos...</FluentLabel>
+            <FluentLabel Typo="Typography.Body">Avaliando curva de adoção, taxa de desengajamento e retorno esperado.</FluentLabel>
+        </FluentStack>
     </FluentCard>
 }
 else
 {
     <FluentGrid>
-        <FluentGridItem>
-            <FluentStack Orientation="Microsoft.FluentUI.AspNetCore.Components.Orientation.Horizontal">
-                <FluentCard xs="12" Height="auto" style="padding: 20px; max-height: 725px; margin: 20px;">
+        <FluentGridItem xs="12" md="6">
+            <FluentCard xs="12" Height="auto" Style="padding: 20px; margin: 10px;">
+                <FluentLabel Typo="Typography.H5" Style="margin-bottom: 12px;">Parâmetros da Iniciativa</FluentLabel>
 
-                    <FluentTextField Label="Orçamento do Projeto (R$)"
-                    @bind-Value="formattedBudget" />
-                    <FluentNumberField Label="Número de Funcionários Impactados"
-                    Type="number"
-                    @bind-Value="inputParameters.NumberOfEmployees" />
-                    <FluentNumberField Label="Duração do Projeto (meses)"
-                    Type="number"
-                    @bind-Value="inputParameters.ProjectDurationMonths" />
-                    <FluentNumberField Label="Probabilidade de Falha (%)"
-                    Type="number"
-                    @bind-Value="@inputParameters.FailureRate"
-                    @onclick="DetermineProbability" />
-                    <p>@failPropability</p>
+                <FluentTextField Label="Orçamento do Projeto (R$)"
+                                 @bind-Value="formattedBudget" />
 
-                    <FluentAccordion>
-                        <FluentAccordionItem Heading="Outros Parametros de Cálculo">
-                            <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
-                            <FluentNumberField Label="Percentual do Orçamento Perdido em Caso de Falha (%)"
-                            Type="number"
-                            @bind-Value="inputParameters.BudgetLossRate" />
-                            <FluentNumberField Label="Perda por Desengajamento (%)"
-                            Type="number"
-                            @bind-Value="inputParameters.ExpectedDisengagementRate" />
-                            <FluentNumberField Label="Ganho de Produtividade (%)"
-                            Type="number"
-                            @bind-Value="inputParameters.ExpectedProductivityGain" />
-                            <FluentNumberField Label="Redução do Risco de Falha (%)"
-                            Type="number"
-                            @bind-Value="inputParameters.ProjectedRiskReduction" />
-                            <FluentNumberField Label="Retorno no Sucesso (%)"
-                            Type="number"
-                            @bind-Value="inputParameters.ExpectedSuccessBenefit" />
-                        </FluentAccordionItem>
-                    </FluentAccordion>
+                <FluentNumberField Label="Número de Funcionários Impactados"
+                                   Type="number"
+                                   @bind-Value="AppState.CurrentInput.NumberOfEmployees" />
 
-                    <br />
-                    <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">Calcular</FluentButton>
-                    <br />
+                <FluentNumberField Label="Duração do Projeto (meses)"
+                                   Type="number"
+                                   @bind-Value="AppState.CurrentInput.ProjectDurationMonths" />
+
+                <FluentStack Orientation="Orientation.Vertical" Style="margin-top: 8px;">
+                    <FluentNumberField Label="Probabilidade de Falha Projetada (%)"
+                                       Type="number"
+                                       Step="0.01"
+                                       @bind-Value="@AppState.CurrentInput.FailureRate" />
+
+                    <FluentButton Appearance="Appearance.Outline"
+                                  Size="ButtonSize.Small"
+                                  Loading="isEstimatingML"
+                                  OnClick="DetermineProbability">
+                        Estimar Risco via Machine Learning (ML.NET)
+                    </FluentButton>
+
+                    @if (!string.IsNullOrEmpty(failProbabilityNotice))
+                    {
+                        <FluentMessageBar Intent="@(usedMlOffline ? MessageIntent.Warning : MessageIntent.Info)" Style="margin-top: 6px;">
+                            @failProbabilityNotice
+                        </FluentMessageBar>
+                    }
+                </FluentStack>
+
+                <FluentAccordion Style="margin-top: 15px;">
+                    <FluentAccordionItem Heading="Parâmetros Avançados e Premissas Financeiras">
+                        <FluentIcon Value="@(new Icons.Regular.Size24.AddSquareMultiple())" Color="@Color.Neutral" Slot="start" />
+                        
+                        <FluentNumberField Label="Taxa de Perda do Orçamento em Caso de Falha (%)"
+                                           Type="number"
+                                           Step="0.01"
+                                           @bind-Value="AppState.CurrentInput.BudgetLossRate" />
+
+                        <FluentNumberField Label="Taxa de Perda por Desengajamento (%)"
+                                           Type="number"
+                                           Step="0.01"
+                                           @bind-Value="AppState.CurrentInput.ExpectedDisengagementRate" />
+
+                        <FluentNumberField Label="Fator de Ganho de Produtividade (ex: 1.20 = +20%)"
+                                           Type="number"
+                                           Step="0.05"
+                                           @bind-Value="AppState.CurrentInput.ExpectedProductivityGain" />
+
+                        <FluentNumberField Label="Redução Projetada de Risco de Falha (%)"
+                                           Type="number"
+                                           Step="0.01"
+                                           @bind-Value="AppState.CurrentInput.ProjectedRiskReduction" />
+
+                        <FluentNumberField Label="Fator de Benefício de Sucesso (%)"
+                                           Type="number"
+                                           Step="0.01"
+                                           @bind-Value="AppState.CurrentInput.ExpectedSuccessBenefit" />
+                    </FluentAccordionItem>
+                </FluentAccordion>
+
+                <FluentStack Orientation="Orientation.Horizontal" Style="margin-top: 20px;">
+                    <FluentButton OnClick="SubmitForm" Appearance="Appearance.Accent">
+                        Calcular ROI e Projeções
+                    </FluentButton>
+                </FluentStack>
+            </FluentCard>
+        </FluentGridItem>
+
+        <!-- Relatório de ROI do Projeto -->
+        <FluentGridItem xs="12" md="6">
+            @if (AppState.HasCalculated)
+            {
+                <FluentCard Style="padding: 20px; margin: 10px; max-height: 780px; overflow-y: auto;">
+                    @if (usedOfflineCalculation)
+                    {
+                        <FluentBadge Appearance="Appearance.Neutral" Style="margin-bottom: 10px;">
+                            Modo Local / Offline Ativo
+                        </FluentBadge>
+                    }
+                    else
+                    {
+                        <FluentBadge Appearance="Appearance.Accent" Style="margin-bottom: 10px;">
+                            Calculado via InovaROI Service API
+                        </FluentBadge>
+                    }
+
+                    <div>
+                        @((MarkupString)AppState.CalculationResultHtml)
+                    </div>
                 </FluentCard>
-
-                <!-- Relatório de ROI do Projeto -->
-                @if (!string.IsNullOrEmpty(Result))
-                {
-                    <FluentCard style="padding: 20px; margin: 20px; height: 725px; overflow-y: scroll;">
-                        <p>@((MarkupString)Result)</p>
-                    </FluentCard>
-                }
-            </FluentStack>
-
+            }
+            else
+            {
+                <FluentCard Style="padding: 25px; margin: 10px; text-align: center;">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.BrainCircuit())" Color="@Color.Accent" />
+                    <FluentLabel Typo="Typography.H5" Style="margin-top: 10px;">Aguardando Parâmetros</FluentLabel>
+                    <FluentLabel Typo="Typography.Body">
+                        Preencha o orçamento, colaboradores e duração ao lado e clique em <strong>"Calcular ROI e Projeções"</strong> para gerar o balanço financeiro, relação benefício/custo e recomendações de governança.
+                    </FluentLabel>
+                </FluentCard>
+            }
         </FluentGridItem>
     </FluentGrid>
 }
 
-
 @code {
-
-    private bool isLoading = false;
-
-    private static ROIInputParameters inputParameters = new ROIInputParameters();
-    public static string Result = string.Empty;
-
-    string failPropability = "";
+    private bool isCalculating = false;
+    private bool isEstimatingML = false;
+    private bool usedOfflineCalculation = false;
+    private bool usedMlOffline = false;
+    private string failProbabilityNotice = string.Empty;
 
     private async Task SubmitForm()
     {
+        isCalculating = true;
         try
         {
-            var response = await Http.PostAsJsonAsync("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/calculator", inputParameters);
+            var (markdown, offline) = await ApiClient.CalculateRoiAsync(AppState.CurrentInput);
+            usedOfflineCalculation = offline;
 
-            if (response.IsSuccessStatusCode)
-                ToastService.ShowInfo($"Um relatorio detalhado será gerado por AI.");
+            var html = Markdown.ConvertToHtml(markdown);
+            AppState.SetCalculationResult(markdown, html);
 
-            Result = Markdown.ConvertToHtml(await response.Content.ReadAsStringAsync());
-            await InvokeAsync(StateHasChanged);
-
-            Report.DetailReport = Result;
-
-        }
-        catch (Exception ex)
-        {
-            ToastService.ShowWarning($"Falhou ao calcular o projeto. " + ex.Message);
-        }
-
-        try
-        {
-            string functionUrl = "https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/ai"; // http://localhost:7071/api/CalculateROI
-
-            HttpContent httpContent = new StringContent(Result);
-
-            var functionsResponse = await Http.PostAsync(functionUrl, httpContent);
-
-            if (functionsResponse.IsSuccessStatusCode)
+            if (offline)
             {
-                Report.DetailReport =  await functionsResponse.Content.ReadAsStringAsync();
-                ToastService.ShowSuccess($"Relatorio criado com sucesso.");
+                ToastService.ShowInfo("Simulação concluída com sucesso via motor financeiro nativo .NET!");
             }
+            else
+            {
+                ToastService.ShowSuccess("Simulação calculada com sucesso pela API InovaROI.");
+            }
+
+            // Generate detailed narrative report
+            var (aiReport, _) = await ApiClient.GenerateAiReportAsync(markdown);
+            AppState.SetDetailReport(aiReport);
         }
         catch (Exception ex)
         {
-            ToastService.ShowWarning($"Falhou em gerar o relatorio. " + ex.Message);
-            Console.WriteLine(ex.Message);
+            ToastService.ShowWarning($"Falha na simulação: {ex.Message}");
+        }
+        finally
+        {
+            isCalculating = false;
         }
     }
 
     private async Task DetermineProbability()
     {
-        if (inputParameters?.ProjectBudget != null &&
-            inputParameters?.NumberOfEmployees != null &&
-            inputParameters?.ProjectDurationMonths != null)
+        isEstimatingML = true;
+        try
         {
-            var response = await Http.PostAsJsonAsync("https://apiservice.victoriouscliff-1f6f6c97.eastus.azurecontainerapps.io/api/roi/estimate/failure-rate", inputParameters);
+            var (estimatedRate, offline) = await ApiClient.EstimateFailureRateAsync(AppState.CurrentInput);
+            AppState.CurrentInput.FailureRate = estimatedRate;
+            usedMlOffline = offline;
 
-            if (response.IsSuccessStatusCode)
-            {
-                try
-                {
-                    var failRate = await response.Content.ReadAsStringAsync();
-                    failPropability = "Probabilidade de falha estimada pelo modelo de Machine Learning: " + failRate;
-                }
-                catch
-                {
-                    failPropability = "Não foi possivel estimada a probabilidade de falha pelo modelo de Machine Learning";
-                }
-            }
+            var percentage = (estimatedRate * 100).ToString("F1", CultureInfo.InvariantCulture);
+            failProbabilityNotice = offline 
+                ? $"Probabilidade estimada pelo modelo heurístico offline: {percentage}%"
+                : $"Probabilidade de falha estimada pelo modelo ML.NET: {percentage}%";
+
+            ToastService.ShowInfo($"Taxa de falha atualizada para {percentage}%.");
+        }
+        catch
+        {
+            failProbabilityNotice = "Não foi possível estimar a probabilidade no momento.";
+        }
+        finally
+        {
+            isEstimatingML = false;
         }
     }
 
     private string formattedBudget
     {
-        get => inputParameters.ProjectBudget.ToString("C", new System.Globalization.CultureInfo("pt-BR"));
+        get => AppState.CurrentInput.ProjectBudget.ToString("C", new CultureInfo("pt-BR"));
         set
         {
-            if (double.TryParse(value, System.Globalization.NumberStyles.Currency, new System.Globalization.CultureInfo("pt-BR"), out var result))
+            if (double.TryParse(value, NumberStyles.Currency, new CultureInfo("pt-BR"), out var result))
             {
-                inputParameters.ProjectBudget = result;
+                AppState.CurrentInput.ProjectBudget = result;
+            }
+            else if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var invResult))
+            {
+                AppState.CurrentInput.ProjectBudget = invResult;
             }
         }
     }

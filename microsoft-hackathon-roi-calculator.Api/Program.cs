@@ -1,6 +1,9 @@
+ï»¿using Microsoft.EntityFrameworkCore;
 using microsoft_hackathon_roi_calculator.Persistence.Data;
 using microsoft_hackathon_roi_calculator.Application.Interfaces;
 using microsoft_hackathon_roi_calculator.Application.UseCases;
+using microsoft_hackathon_roi_calculator.Application.Services;
+using microsoft_hackathon_roi_calculator.Application.Configuration;
 using microsoft_hackathon_roi_calculator.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,66 +11,101 @@ var builder = WebApplication.CreateBuilder(args);
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
-// Add services to the container.
 builder.Services.AddProblemDetails();
-
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.AddRedisDistributedCache("cache");
-builder.AddSqlServerDbContext<CalculatorDbContext>("roidb");
+// Hybrid / Offline Persistence configuration
+var sqlConnection = builder.Configuration.GetConnectionString("roidb");
+if (!string.IsNullOrWhiteSpace(sqlConnection))
+{
+    builder.AddSqlServerDbContext<CalculatorDbContext>("roidb");
+}
+else
+{
+    // Local SQLite fallback when Azure SQL / SQL Server container is unavailable
+    builder.Services.AddDbContext<CalculatorDbContext>(options =>
+    {
+        options.UseSqlite("Data Source=roidb.db");
+    });
+}
 
+// Hybrid / Offline Cache configuration
+var redisConnection = builder.Configuration.GetConnectionString("cache");
+if (!string.IsNullOrWhiteSpace(redisConnection))
+{
+    builder.AddRedisDistributedCache("cache");
+}
+else
+{
+    // In-memory cache fallback when Redis container is unavailable
+    builder.Services.AddDistributedMemoryCache();
+}
+
+// Core calculation engine
 builder.Services.AddSingleton<IROICalculatorService, ROICalculatorService>();
 
-builder.AddOllamaApiClient("phi4");
+// Hybrid AI Report Services (Azure OpenAI with automatic local fallback)
+builder.Services.Configure<AzureOpenAIOptions>(builder.Configuration.GetSection(AzureOpenAIOptions.SectionName));
+builder.Services.AddSingleton<LocalTemplateReportService>();
+builder.Services.AddSingleton<IAssistantReportService, AzureOpenAIReportService>();
 
-// Add Swagger services
+// Optional Ollama Client (supported when running locally via Aspire)
+if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("phi4")))
+{
+    builder.AddOllamaApiClient("phi4");
+}
+
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "ROI Calculator API", Version = "v1" });
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo 
+    { 
+        Title = "InovaROI Platform API", 
+        Version = "v1",
+        Description = "ROI Calculation, Machine Learning Risk Estimation, and Generative Reporting API."
+    });
 });
 
-// Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAnyLocalhostPort",
-       builder =>
-       {
-           builder.SetIsOriginAllowed(origin =>
-           {
-               // Permite qualquer porta do localhost (HTTP ou HTTPS)
-               return new Uri(origin).Host == "localhost";
-           })
-           .AllowAnyHeader()
-           .AllowAnyMethod();
-       });
-
+    options.AddPolicy("AllowLocalhostAndClients", policy =>
+    {
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+            {
+                return uri.Host == "localhost" || uri.Host == "127.0.0.1";
+            }
+            return false;
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowAnyLocalhostPort");
-
-// Configure the HTTP request pipeline.
+app.UseCors("AllowLocalhostAndClients");
 app.UseExceptionHandler();
+
+// Ensure database schema is created for local/standalone execution
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CalculatorDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-
-    // Enable middleware to serve generated Swagger as a JSON endpoint.
     app.UseSwagger();
-    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-    // specifying the Swagger JSON endpoint.
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ROI Calculator API v1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "InovaROI API v1");
+        c.RoutePrefix = "swagger";
     });
 }
 
 app.AddROIEndpoint();
-
 app.MapDefaultEndpoints();
 
 app.Run();

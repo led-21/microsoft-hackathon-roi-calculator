@@ -1,31 +1,65 @@
-﻿@page "/report"
+@page "/report"
+@using microsoft_hackathon_roi_calculator.Web.Services
+
+@inject AppStateService AppState
+@inject RoiApiClient ApiClient
 @inject MarkdownService Markdown
+@inject NavigationManager Navigation
 
-<h3>Relatório</h3>
+<FluentLabel Typo="Typography.H3">Relatório Executivo de Transformação</FluentLabel>
 
-<FluentGridItem xs="12" md="8" lg="9">
-    @if (DetailReport == string.Empty)
-    {
-        <FluentCard>
-            <h3>
-                <FluentSkeleton Shape="SkeletonShape.Rect"
-                Width="150px"
-                Height="20px" />
-            </h3>
-            <FluentSkeleton Shape="SkeletonShape.Rect"
-            Width="100%"
-            Height="600px" />
-        </FluentCard>
-    }else
-    {
-        <FluentCard Height="auto" Style="padding: 20px; margin: 20px;">
-               @((MarkupString)Markdown.ConvertToHtml(DetailReport))
-        </FluentCard>
-    }
-</FluentGridItem>
+<FluentGrid Style="margin-top: 1rem;">
+    <FluentGridItem xs="12" lg="10">
+        @if (string.IsNullOrWhiteSpace(AppState.DetailReport))
+        {
+            <FluentCard Style="padding: 30px; text-align: center;">
+                <FluentIcon Value="@(new Icons.Regular.Size32.DocumentText())" Color="@Color.Neutral" />
+                <FluentLabel Typo="Typography.H5" Style="margin-top: 12px;">Nenhum Relatório Gerado Ainda</FluentLabel>
+                <p style="color: var(--neutral-foreground-rest); max-width: 600px; margin: 10px auto 20px auto;">
+                    Execute uma simulação na Calculadora de ROI para gerar automaticamente a análise executiva detalhada com projeções de risco e retorno.
+                </p>
+                <FluentStack HorizontalAlignment="HorizontalAlignment.Center">
+                    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => Navigation.NavigateTo("/calculator"))">
+                        Ir para a Calculadora
+                    </FluentButton>
+                    <FluentButton Appearance="Appearance.Outline" OnClick="GenerateDemoReport">
+                        Gerar Relatório de Exemplo
+                    </FluentButton>
+                </FluentStack>
+            </FluentCard>
+        }
+        else
+        {
+            <FluentCard Height="auto" Style="padding: 24px; line-height: 1.6;">
+                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.End" Style="margin-bottom: 12px;">
+                    <FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => Navigation.NavigateTo("/calculator"))">
+                        Editar Parâmetros
+                    </FluentButton>
+                </FluentStack>
+
+                <div>
+                    @((MarkupString)Markdown.ConvertToHtml(AppState.DetailReport))
+                </div>
+            </FluentCard>
+        }
+    </FluentGridItem>
+</FluentGrid>
 
 @code {
+    protected override void OnInitialized()
+    {
+        AppState.OnChange += StateHasChanged;
+    }
 
-    public static string DetailReport = string.Empty;
+    private async Task GenerateDemoReport()
+    {
+        var (markdown, _) = await ApiClient.CalculateRoiAsync(AppState.CurrentInput);
+        var (aiReport, _) = await ApiClient.GenerateAiReportAsync(markdown);
+        AppState.SetDetailReport(aiReport);
+    }
 
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+    }
 }

@@ -1,8 +1,9 @@
-using System.Diagnostics;
-
+ï»¿using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Trace;
+using microsoft_hackathon_roi_calculator.Domain.Financial;
 using microsoft_hackathon_roi_calculator.Domain.Models;
+using microsoft_hackathon_roi_calculator.Persistence.Data;
 
 namespace microsoft_hackathon_roi_calculator.MigrationService;
 
@@ -39,37 +40,55 @@ public class Worker(
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            // Run migration in a transaction to avoid partial migration if it fails.
             await dbContext.Database.MigrateAsync(cancellationToken);
         });
     }
 
     private static async Task SeedDataAsync(CalculatorDbContext dbContext, CancellationToken cancellationToken)
     {
-        var random = new Random();
+        if (await dbContext.ProjectROIs.AnyAsync(cancellationToken))
+        {
+            return;
+        }
+
+        var random = new Random(42);
         var projects = new List<ProjectROI>();
 
-        List<string> names = new List<string>
+        List<string> names = new()
         {
             "Aurora", "Nexus", "Zenith", "Quantum", "Vanguarda",
-            "Épica", "Horizonte", "Prisma", "Fênix", "Nova Era",
-            "Inovação", "Pioneiro", "Estrela", "Orion", "Galáxia",
-            "Infinito","Explorador", "Eclipse", "Miragem", "Cosmos"
+            "Epica", "Horizonte", "Prisma", "Fenix", "Nova Era",
+            "Inovacao", "Pioneiro", "Estrela", "Orion", "Galaxia",
+            "Infinito", "Explorador", "Eclipse", "Miragem", "Cosmos"
         };
 
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= 50; i++)
         {
-            int employeeNumber = random.Next(1, 100);
-            double projectBudget = random.Next(1_000, 10_000_000);
-            int projectDuration = random.Next(1, 36);
+            int employeeNumber = random.Next(5, 120);
+            double projectBudget = random.Next(20_000, 2_000_000);
+            int projectDuration = random.Next(3, 24);
+
+            double estimatedRoi = CalculateConsistentROI(projectBudget, employeeNumber, projectDuration);
 
             projects.Add(new ProjectROI
             {
-                ProjectName = $"Projeto {names[random.Next(0, names.Count - 1)]} {names[random.Next(0, names.Count - 1)]} {random.Next(0, 20)}",
+                ProjectName = $"Projeto {names[random.Next(0, names.Count)]} {names[random.Next(0, names.Count)]} #{i}",
+                Description = "Iniciativa de transformacao e adocao de novas tecnologias.",
                 ProjectBudget = projectBudget,
                 NumberOfEmployees = employeeNumber,
+                StartDate = DateTime.UtcNow.AddMonths(-random.Next(1, 12)),
                 ProjectDurationMonths = projectDuration,
-                ROI = EstimateROI(projectBudget, employeeNumber, projectDuration)
+                ROI = estimatedRoi,
+                TotalHoursWorkedWeekly = employeeNumber * 40,
+                CompletedTraining = random.Next(1, employeeNumber),
+                EmployeesUsingNewTool = random.Next(1, employeeNumber),
+                TotalChangeImplementationTime = projectDuration * 4,
+                TotalPlannedImplementationTime = projectDuration * 4,
+                TotalProcesses = random.Next(5, 30),
+                CompliantProcesses = random.Next(3, 25),
+                ProjectEvaluationTotalResponses = employeeNumber,
+                ProjectEvaluationPositiveResponses = (int)(employeeNumber * (0.6 + (random.NextDouble() * 0.35))),
+                ProjectEvaluationSumOfAllScores = employeeNumber * random.Next(7, 10)
             });
         }
 
@@ -77,25 +96,24 @@ public class Worker(
         await strategy.ExecuteAsync(async () =>
         {
             await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-
             await dbContext.ProjectROIs.AddRangeAsync(projects, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         });
     }
 
-    private static double EstimateROI(double projectBudget, int numberOfEmployees, int projectDurationMonths)
+    private static double CalculateConsistentROI(double projectBudget, int numberOfEmployees, int projectDurationMonths)
     {
-        // Quadratic estimation formula for ROI
-        // Coefficients a, b, c, and d are assumed for estimation purposes
-        const double a = 0.00000001;
-        const double b = 0.0001;
-        const double c = 0.0005;
-        const double d = -0.5;
-
-        double roi = a * projectBudget + b * numberOfEmployees + c * projectDurationMonths + d;
-
-        // Clamp ROI to be within the range of -0.5 to 1.5
-        return new Random().NextDouble() * 2 - 0.5;
+        try
+        {
+            var inputs = new FinancialInputs(projectBudget, numberOfEmployees, projectDurationMonths);
+            var model = new FinancialModel(inputs);
+            var result = ROICalculator.Calculate(model);
+            return Math.Round(result.RoiPercentage / 100.0, 2);
+        }
+        catch
+        {
+            return 0.15;
+        }
     }
 }

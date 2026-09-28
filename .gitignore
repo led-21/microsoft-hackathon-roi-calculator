@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local SQLite, Environment, and Azure Functions local settings
+*.db
+*.db-shm
+*.db-wal
+roidb.db*
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+local.settings.json
