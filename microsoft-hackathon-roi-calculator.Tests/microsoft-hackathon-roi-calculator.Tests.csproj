@@ -21,6 +21,7 @@
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.AppHost\microsoft-hackathon-roi-calculator.AppHost.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Domain\microsoft-hackathon-roi-calculator.Domain.csproj" />
     <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Application\microsoft-hackathon-roi-calculator.Application.csproj" />
+    <ProjectReference Include="..\microsoft-hackathon-roi-calculator.Web\microsoft-hackathon-roi-calculator.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
